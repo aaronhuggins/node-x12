@@ -14,9 +14,9 @@ const ELEMENT_DELIMITER_POS: number = 3;
 const INTERCHANGE_CACHE_SIZE: number = 10;
 
 export class X12Parser {
-    constructor() { }
+    constructor(private _strict: boolean) { }
     
-    parseX12(edi: string, strict?: boolean): X12Interchange {
+    parseX12(edi: string): X12Interchange {
         if (!edi) {
             throw new ArgumentNullError('edi');
         }
@@ -26,7 +26,7 @@ export class X12Parser {
         if (edi.length < DOCUMENT_MIN_LENGTH) {
             let errorMessage = `X12 Standard: Document is too short. Document must be at least ${DOCUMENT_MIN_LENGTH} characters long to be well-formed X12.`;
             
-            if (strict) {
+            if (this._strict) {
                 throw new ParserError(errorMessage);
             }
             
@@ -39,7 +39,7 @@ export class X12Parser {
         if (edi.charAt(103) !== elementDelimiter) {
             let errorMessage = 'X12 Standard: The ISA segment is not the correct length (106 characters, including segment terminator).';
             
-            if (strict) {
+            if (this._strict) {
                 throw new ParserError(errorMessage);
             }
             
@@ -72,7 +72,7 @@ export class X12Parser {
                 if (!group) {
                     let errorMessage = 'X12 Standard: Missing GS segment!';
                     
-                    if (strict) {
+                    if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
                     
@@ -87,7 +87,7 @@ export class X12Parser {
                 if (!group) {
                     let errorMessage = `X12 Standard: ${seg.tag} segment cannot appear outside of a functional group.`;
                     
-                    if (strict) {
+                    if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
                     
@@ -104,7 +104,7 @@ export class X12Parser {
                 if (!group) {
                     let errorMessage = `X12 Standard: ${seg.tag} segment cannot appear outside of a functional group.`;
                     
-                    if (strict) {
+                    if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
                 }
@@ -112,7 +112,7 @@ export class X12Parser {
                 if (!transaction) {
                     let errorMessage = 'X12 Standard: Missing ST segment!';
                     
-                    if (strict) {
+                    if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
                 }
@@ -125,7 +125,7 @@ export class X12Parser {
                 if (!group) {
                     let errorMessage = `X12 Standard: ${seg.tag} segment cannot appear outside of a functional group.`;
                     
-                    if (strict) {
+                    if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
                 }
@@ -133,7 +133,7 @@ export class X12Parser {
                 if (!transaction) {
                     let errorMessage = `X12 Standard: ${seg.tag} segment cannot appear outside of a transaction.`;
                     
-                    if (strict) {
+                    if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
                 }
@@ -215,26 +215,96 @@ export class X12Parser {
     }
     
     private _processISA(interchange: X12Interchange, segment: X12Segment): void {
-        
+        interchange.headerRange.start = segment.range.start;
+		interchange.headerRange.end = segment.range.end;
+				
+		interchange.senderQualifier = segment.valueOf(5).trim();
+		interchange.senderId = segment.valueOf(6).trim();
+		interchange.receiverQualifier = segment.valueOf(7).trim();
+		interchange.receiverId = segment.valueOf(8).trim();
+		interchange.controlVersionNumber = segment.valueOf(12).trim();
+		interchange.controlNumber = segment.valueOf(13).trim();
     }
     
     private _processIEA(interchange: X12Interchange, segment: X12Segment): void {
-        
+        interchange.trailerRange.start = segment.range.start;
+		interchange.trailerRange.end = segment.range.end;
+
+		if (parseInt(segment.valueOf(1)) !== interchange.functionalGroups.length) {
+			let errorMessage = `X12 Standard: The value in IEA01 (${segment.valueOf(1)}) does not match the number of GS segments in the interchange (${interchange.functionalGroups.length}).`;
+			
+            if (this._strict) {
+                throw new ParserError(errorMessage);
+            }
+		}
+				
+		if (segment.valueOf(2) !== interchange.controlNumber) {
+			let errorMessage = `X12 Standard: The value in IEA02 (${segment.valueOf(2)}) does not match the value in ISA13 (${interchange.controlNumber}).`;
+			
+            if (this._strict) {
+                throw new ParserError(errorMessage);
+            }
+		}
     }
     
     private _processGS(group: X12FunctionalGroup, segment: X12Segment): void {
-        
+        group.headerRange.start = segment.range.start;
+		group.headerRange.end = segment.range.end;
+				
+		group.senderCode = segment.valueOf(2);
+		group.receiverCode = segment.valueOf(3);
+		group.controlNumber = segment.valueOf(6);
     }
     
     private _processGE(group: X12FunctionalGroup, segment: X12Segment): void {
-        
+        group.trailerRange.start = segment.range.start;
+		group.trailerRange.end = segment.range.end;
+				
+		if (parseInt(segment.valueOf(1)) !== group.transactions.length) {
+			let errorMessage = `X12 Standard: The value in GE01 (${segment.valueOf(1)}) does not match the number of ST segments in the functional group (${group.transactions.length}).`;
+			
+            if (this._strict) {
+                throw new ParserError(errorMessage);
+            }
+		}
+				
+		if (segment.valueOf(2) !== group.controlNumber) {
+			let errorMessage = `X12 Standard: The value in GE02 (${segment.valueOf(2)}) does not match the value in GS06 (${group.controlNumber}).`;
+			
+            if (this._strict) {
+                throw new ParserError(errorMessage);
+            }
+		}
     }
     
     private _processST(transaction: X12Transaction, segment: X12Segment): void {
-        
+        transaction.headerRange.start = segment.range.start;
+		transaction.headerRange.end = segment.range.end;
+				
+		transaction.transactionSet = segment.valueOf(1);
+		transaction.controlNumber = segment.valueOf(2);
     }
     
     private _processSE(transaction: X12Transaction, segment: X12Segment): void {
-        
+        transaction.trailerRange.start = segment.range.start;
+		transaction.trailerRange.end = segment.range.end;
+				
+		let expectedNumberOfSegments = (transaction.segments.length + 2);
+				
+		if (parseInt(segment.valueOf(1)) !== expectedNumberOfSegments) {
+			let errorMessage = `X12 Standard: The value in SE01 (${segment.valueOf(1)}) does not match the number of segments in the transaction (${expectedNumberOfSegments}).`;
+			
+            if (this._strict) {
+                throw new ParserError(errorMessage);
+            }
+		}
+				
+		if (segment.valueOf(2) !== transaction.controlNumber) {
+			let errorMessage = `X12 Standard: The value in SE02 (${segment.valueOf(2)}) does not match the value in ST02 (${transaction.controlNumber}).`;
+			
+            if (this._strict) {
+                throw new ParserError(errorMessage);
+            }
+		}
     }
 }

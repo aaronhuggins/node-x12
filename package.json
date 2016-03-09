@@ -31,7 +31,7 @@
     },
     
     "scripts": {
-        
+        "postinstall": "./mode_modules/.bin/typings install"
     },
     
     "dependencies": {

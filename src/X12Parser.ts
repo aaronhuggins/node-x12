@@ -1,7 +1,8 @@
 'use strict';
 
 import { ArgumentNullError, ParserError } from './Errors';
-import { Position } from './Positioning';
+import { Range, Position } from './Positioning';
+import { X12Diagnostic, X12DiagnosticLevel } from './X12Diagnostic';
 import { X12Interchange } from './X12Interchange';
 import { X12FunctionalGroup } from './X12FunctionalGroup';
 import { X12Transaction } from './X12Transaction';
@@ -14,13 +15,18 @@ const ELEMENT_DELIMITER_POS: number = 3;
 const INTERCHANGE_CACHE_SIZE: number = 10;
 
 export class X12Parser {
-    constructor(private _strict: boolean) { }
+    constructor(private _strict: boolean) {
+        this.diagnostics = new Array<X12Diagnostic>();
+    }
+    
+    diagnostics: X12Diagnostic[];
     
     parseX12(edi: string): X12Interchange {
         if (!edi) {
             throw new ArgumentNullError('edi');
         }
         
+        this.diagnostics.splice(0);
         edi = edi.trim();
         
         if (edi.length < DOCUMENT_MIN_LENGTH) {
@@ -30,7 +36,7 @@ export class X12Parser {
                 throw new ParserError(errorMessage);
             }
             
-            // TODO: append diagnostic
+            this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, new Range(0, 0, 0, edi.length - 1)));
         }
         
         let segmentTerminator = edi.charAt(SEGMENT_TERMINATOR_POS);
@@ -43,7 +49,7 @@ export class X12Parser {
                 throw new ParserError(errorMessage);
             }
             
-            // TODO: append diagnostic
+            this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, new Range(0, 0, 0, 2)));
         }
         
         let interchange = new X12Interchange(segmentTerminator, elementDelimiter);
@@ -76,7 +82,7 @@ export class X12Parser {
                         throw new ParserError(errorMessage);
                     }
                     
-                    // TODO: append diagnostic
+                    this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, seg.range));
                 }
                 
                 this._processGE(group, seg);
@@ -91,7 +97,7 @@ export class X12Parser {
                         throw new ParserError(errorMessage);
                     }
                     
-                    // TODO: append diagnostic
+                    this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, seg.range));
                 }
                 
                 transaction = new X12Transaction();
@@ -107,6 +113,8 @@ export class X12Parser {
                     if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
+                    
+                    this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, seg.range));
                 }
                 
                 if (!transaction) {
@@ -115,6 +123,8 @@ export class X12Parser {
                     if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
+                    
+                    this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, seg.range));
                 }
                 
                 this._processSE(transaction, seg);
@@ -128,6 +138,8 @@ export class X12Parser {
                     if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
+                    
+                    this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, seg.range));
                 }
                 
                 if (!transaction) {
@@ -136,6 +148,8 @@ export class X12Parser {
                     if (this._strict) {
                         throw new ParserError(errorMessage);
                     }
+                    
+                    this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, seg.range));
                 }
                 
                 else {
@@ -236,6 +250,8 @@ export class X12Parser {
             if (this._strict) {
                 throw new ParserError(errorMessage);
             }
+            
+            this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[0].range));
 		}
 				
 		if (segment.valueOf(2) !== interchange.controlNumber) {
@@ -244,6 +260,8 @@ export class X12Parser {
             if (this._strict) {
                 throw new ParserError(errorMessage);
             }
+            
+            this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[1].range));
 		}
     }
     
@@ -266,6 +284,8 @@ export class X12Parser {
             if (this._strict) {
                 throw new ParserError(errorMessage);
             }
+            
+            this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[0].range));
 		}
 				
 		if (segment.valueOf(2) !== group.controlNumber) {
@@ -274,6 +294,8 @@ export class X12Parser {
             if (this._strict) {
                 throw new ParserError(errorMessage);
             }
+            
+            this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[1].range));
 		}
     }
     
@@ -297,6 +319,8 @@ export class X12Parser {
             if (this._strict) {
                 throw new ParserError(errorMessage);
             }
+            
+            this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[0].range));
 		}
 				
 		if (segment.valueOf(2) !== transaction.controlNumber) {
@@ -305,6 +329,8 @@ export class X12Parser {
             if (this._strict) {
                 throw new ParserError(errorMessage);
             }
+            
+            this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[1].range));
 		}
     }
 }

@@ -1,6 +1,7 @@
 'use strict';
 
 import { Range } from './Positioning';
+import { X12Transaction } from './X12Transaction';
 import { X12Element } from './X12Element';
 
 export class X12Segment {
@@ -8,6 +9,8 @@ export class X12Segment {
         this.elements = new Array<X12Element>();
         this.range = new Range();
     }
+    
+    transaction: X12Transaction;
     
     tag: string;
     elements: X12Element[];

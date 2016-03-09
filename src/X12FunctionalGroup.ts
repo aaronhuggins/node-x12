@@ -1,6 +1,7 @@
 'use strict';
 
 import { Range } from './Positioning';
+import { X12Interchange } from './X12Interchange';
 import { X12Transaction } from './X12Transaction';
 
 export class X12FunctionalGroup {
@@ -9,6 +10,8 @@ export class X12FunctionalGroup {
         this.headerRange = new Range();
         this.trailerRange = new Range();
     }
+    
+    interchange: X12Interchange;
     
     senderCode: string;
 	receiverCode: string;

@@ -71,6 +71,7 @@ export class X12Parser {
                 group = new X12FunctionalGroup();
                 
                 this._processGS(group, seg);
+                group.interchange = interchange;
                 interchange.functionalGroups.push(group);
             }
             
@@ -103,6 +104,7 @@ export class X12Parser {
                 transaction = new X12Transaction();
                 
                 this._processST(transaction, seg);
+                transaction.functionalGroup = group;
                 group.transactions.push(transaction);
             }
             
@@ -153,6 +155,7 @@ export class X12Parser {
                 }
                 
                 else {
+                    seg.transaction = transaction;
                     transaction.segments.push(seg);
                 }
             }
@@ -211,6 +214,7 @@ export class X12Parser {
 			// element delimiter
 			else if (tagged && (edi[i] == elementDelimiter)) {
                 currentElement.range.end = new Position(l, (c - 1));
+                currentElement.segment = currentSegment;
 				currentSegment.elements.push(currentElement);
 				
 				currentElement = new X12Element();

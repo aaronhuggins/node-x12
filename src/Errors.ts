@@ -19,3 +19,13 @@ export class ParserError implements Error {
     name: string;
     message: string;
 }
+
+export class QuerySyntaxError implements Error {
+    constructor(message?: string) {
+        this.name = 'QuerySyntaxError';
+        this.message = message;
+    }
+    
+    name: string;
+    message: string;
+}

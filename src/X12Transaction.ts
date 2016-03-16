@@ -11,8 +11,6 @@ export class X12Transaction {
         this.segments = new Array<X12Segment>();
     }
     
-    functionalGroup: X12FunctionalGroup;
-    
     transactionSet: string;
 	controlNumber: string;
     segments: X12Segment[];

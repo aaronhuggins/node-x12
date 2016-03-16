@@ -16,7 +16,7 @@ export class X12QueryEngine {
         
         let hlPathMatch = reference.match(/HL\+(\w\+?)+/g); // ex. HL+O+P+I
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g); // ex. PO1-N9-
-        let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]/g); // ex. REF02; need to remove trailing ":" if exists
+        let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g); // ex. REF02; need to remove trailing ":" if exists
         let qualMatch = reference.match(/(:[A-Z0-9]{2,3}[0-9]{2}\[".*"\])+/g); // ex. :REF01["PO"]
         
         let segments = this._getSegmentsForInterchange(interchange);

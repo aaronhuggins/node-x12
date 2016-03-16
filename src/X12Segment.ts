@@ -11,8 +11,6 @@ export class X12Segment {
         this.range = new Range();
     }
     
-    transaction: X12Transaction;
-    
     tag: string;
     elements: X12Element[];
     range: Range;

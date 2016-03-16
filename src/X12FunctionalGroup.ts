@@ -11,8 +11,6 @@ export class X12FunctionalGroup {
         this.trailerRange = new Range();
     }
     
-    interchange: X12Interchange;
-    
     senderCode: string;
 	receiverCode: string;
 	controlNumber: string;

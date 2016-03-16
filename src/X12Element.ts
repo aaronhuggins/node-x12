@@ -9,8 +9,6 @@ export class X12Element {
         this.value = '';
     }
     
-    segment: X12Segment;
-    
     range: Range;
     value: string;
 }

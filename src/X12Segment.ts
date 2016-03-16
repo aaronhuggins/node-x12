@@ -6,6 +6,7 @@ import { X12Element } from './X12Element';
 
 export class X12Segment {
     constructor() {
+        this.tag = '';
         this.elements = new Array<X12Element>();
         this.range = new Range();
     }

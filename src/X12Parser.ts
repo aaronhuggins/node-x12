@@ -175,7 +175,7 @@ export class X12Parser {
 			if (!tagged && (edi[i].search(/\s/) == -1) && (edi[i] !== elementDelimiter) && (edi[i] !== segmentTerminator)) {
 				currentSegment.tag += edi[i];
 				
-                if (currentSegment.range.start == null) {
+                if (!currentSegment.range.start) {
                     currentSegment.range.start = new Position(l, c);
                 }
 			}
@@ -214,7 +214,7 @@ export class X12Parser {
 				currentSegment.elements.push(currentElement);
 				
 				currentElement = new X12Element();
-                currentElement.range.start = new Position(l, c);
+                currentElement.range.start = new Position(l, c + 1);
 			}
 			
 			// element data

@@ -58,18 +58,25 @@ export class X12QueryEngine {
     
     private _evaluateHLQueryPart(transaction: X12Transaction, hlPath: string): X12Segment[] {
         let qualified = false;
-        let pathParts = hlPath.split('+').filter((value, index, array) => { return (value !== 'HL' && value !== '' && value !== null); });
+        let pathParts = hlPath.replace('-', '').split('+').filter((value, index, array) => { return (value !== 'HL' && value !== '' && value !== null); })
         let matches = new Array<X12Segment>();
+
+        let lastParentIndex = -1;
 
         for (let i = 0, j = 0; i < transaction.segments.length; i++) {
             let segment = transaction.segments[i];
-            
+
             if (qualified && segment.tag === 'HL') {
-                j = 0;
-                qualified = false;
+                let parentIndex = parseInt(segment.valueOf(2, '-1'));
+                
+                if (parentIndex !== lastParentIndex) {
+                    j = 0;
+                    qualified = false;
+                }
             }
             
             if (!qualified && transaction.segments[i].tag === 'HL' && transaction.segments[i].valueOf(3) == pathParts[j]) {
+                lastParentIndex = parseInt(segment.valueOf(2, '-1'));
                 j++;
                 
                 if (j == pathParts.length) {
@@ -81,7 +88,7 @@ export class X12QueryEngine {
                 matches.push(transaction.segments[i]);
             }
         }
-
+        
         return matches;
     }
     

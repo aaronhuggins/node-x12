@@ -55,4 +55,27 @@ describe('X12QueryEngine', () => {
             throw new Error('Expected two matching elements for HL+S+O+I-LIN03.');
         }
     });
+    
+    it('should return valid range information for segments and elements', () => {
+        let edi = fs.readFileSync('tests/test-data/850.edi', 'utf8');
+        let parser = new X12Parser(true);
+        let engine = new X12QueryEngine(parser);
+        let result = engine.querySingle(edi, 'BEG03');
+        
+        if (result.segment.range.start.line !== 3) {
+            throw new Error(`Start line for segment is incorrect; found ${result.segment.range.start.line}, expected 3.`);
+        }
+        
+        if (result.segment.range.start.character !== 0) {
+            throw new Error(`Start char for segment is incorrect; found ${result.segment.range.start.character}, expected 0.`);
+        }
+        
+        if (result.element.range.start.line !== 3) {
+            throw new Error(`Start line for element is incorrect; found ${result.element.range.start.line}, expected 3.`);
+        }
+        
+        if (result.element.range.start.character !== 10) {
+            throw new Error(`Start char for element is incorrect; found ${result.element.range.start.character}, expected 10.`);
+        }
+    });
 });

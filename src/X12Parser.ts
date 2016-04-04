@@ -200,7 +200,7 @@ export class X12Parser {
 			else if (edi[i] == segmentTerminator) {
                 currentElement.range.end = new Position(l, (c - 1));
                 currentSegment.elements.push(currentElement);
-                currentSegment.range.end = new Position(l, (c - 1));
+                currentSegment.range.end = new Position(l, c);
                 
 				segments.push(currentSegment);
 				

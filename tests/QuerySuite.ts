@@ -77,5 +77,21 @@ describe('X12QueryEngine', () => {
         if (result.element.range.start.character !== 10) {
             throw new Error(`Start char for element is incorrect; found ${result.element.range.start.character}, expected 10.`);
         }
+        
+        if (result.segment.range.end.line !== 3) {
+            throw new Error(`End line for segment is incorrect; found ${result.segment.range.start.line}, expected 3.`);
+        }
+        
+        if (result.segment.range.end.character !== 41) {
+            throw new Error(`End char for segment is incorrect; found ${result.segment.range.start.character}, expected 41.`);
+        }
+        
+        if (result.element.range.end.line !== 3) {
+            throw new Error(`End line for element is incorrect; found ${result.element.range.start.line}, expected 3.`);
+        }
+        
+        if (result.element.range.end.character !== 20) {
+            throw new Error(`End char for element is incorrect; found ${result.element.range.start.character}, expected 20.`);
+        }
     });
 });

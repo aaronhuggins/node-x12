@@ -13,6 +13,7 @@ export class X12Transaction {
     
     transactionSet: string;
 	controlNumber: string;
+    conventionReference: string;
     segments: X12Segment[];
     
     headerRange: Range;

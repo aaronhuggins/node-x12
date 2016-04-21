@@ -11,9 +11,14 @@ export class X12FunctionalGroup {
         this.trailerRange = new Range();
     }
     
+    functionalIdentifierCode: string;
     senderCode: string;
 	receiverCode: string;
 	controlNumber: string;
+    date: string;
+    time: string;
+    agencyCode: string;
+    version: string;
     
     transactions: X12Transaction[];
     

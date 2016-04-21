@@ -38,6 +38,12 @@ export class X12Interchange {
     trailerRange: Range;
     
     toString(format?: boolean, endOfLine?: string): string {
+        endOfLine = endOfLine || '\n';
+        
+        if (this.segmentTerminator === '\n') {
+            endOfLine = '';
+        }
+        
         let edi = 'ISA';
         edi += this.elementDelimiter;
         edi += this._padRight(this.authorizationInfoQualifier, 2);
@@ -74,7 +80,7 @@ export class X12Interchange {
         edi += this.segmentTerminator;
         
         if (format) {
-            edi += endOfLine || '\n';
+            edi += endOfLine;
         }
         
         for (let i = 0; i < this.functionalGroups.length; i++) {
@@ -100,7 +106,7 @@ export class X12Interchange {
             edi += this.segmentTerminator;
             
             if (format) {
-                edi += endOfLine || '\n';
+                edi += endOfLine;
             }
             
             for (let j = 0; j < group.transactions.length; j++) {
@@ -120,7 +126,7 @@ export class X12Interchange {
                 edi += this.segmentTerminator;
                 
                 if (format) {
-                    edi += endOfLine || '\n';
+                    edi += endOfLine;
                 }
                 
                 for (let k = 0; k < transaction.segments.length; k++) {
@@ -138,7 +144,7 @@ export class X12Interchange {
                     edi += this.segmentTerminator;
                     
                     if (format) {
-                        edi += endOfLine || '\n';
+                        edi += endOfLine;
                     }
                 }
                 
@@ -150,7 +156,7 @@ export class X12Interchange {
                 edi += this.segmentTerminator;
                 
                 if (format) {
-                    edi += endOfLine || '\n';
+                    edi += endOfLine;
                 }
             }
             
@@ -162,7 +168,7 @@ export class X12Interchange {
             edi += this.segmentTerminator;
             
             if (format) {
-                edi += endOfLine || '\n';
+                edi += endOfLine;
             }
         }
         

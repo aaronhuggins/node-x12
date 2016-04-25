@@ -229,30 +229,11 @@ export class X12Parser {
     }
     
     private _processISA(interchange: X12Interchange, segment: X12Segment): void {
-        interchange.headerRange.start = segment.range.start;
-		interchange.headerRange.end = segment.range.end;
-				
-        interchange.authorizationInfoQualifier = segment.valueOf(1).trim();
-        interchange.authorizationInfo = segment.valueOf(2).trim();
-        interchange.securityInfoQualifier = segment.valueOf(3).trim();
-        interchange.securityInfo = segment.valueOf(4).trim();
-		interchange.senderQualifier = segment.valueOf(5).trim();
-		interchange.senderId = segment.valueOf(6).trim();
-		interchange.receiverQualifier = segment.valueOf(7).trim();
-		interchange.receiverId = segment.valueOf(8).trim();
-        interchange.interchangeDate = segment.valueOf(9).trim();
-        interchange.interchangeTime = segment.valueOf(10).trim();
-        interchange.repetitionSeparator = segment.valueOf(11).trim();
-		interchange.controlVersionNumber = segment.valueOf(12).trim();
-		interchange.controlNumber = segment.valueOf(13).trim();
-        interchange.acknowledgementRequested = (segment.valueOf(14).trim() === '1');
-        interchange.usageIndicator = segment.valueOf(15).trim();
-        interchange.componentElementSeparator = segment.valueOf(16).trim();
+        interchange.header = segment;
     }
     
     private _processIEA(interchange: X12Interchange, segment: X12Segment): void {
-        interchange.trailerRange.start = segment.range.start;
-		interchange.trailerRange.end = segment.range.end;
+        interchange.trailer = segment;
 
 		if (parseInt(segment.valueOf(1)) !== interchange.functionalGroups.length) {
 			let errorMessage = `X12 Standard: The value in IEA01 (${segment.valueOf(1)}) does not match the number of GS segments in the interchange (${interchange.functionalGroups.length}).`;
@@ -264,8 +245,8 @@ export class X12Parser {
             this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[0].range));
 		}
 				
-		if (segment.valueOf(2) !== interchange.controlNumber) {
-			let errorMessage = `X12 Standard: The value in IEA02 (${segment.valueOf(2)}) does not match the value in ISA13 (${interchange.controlNumber}).`;
+		if (segment.valueOf(2) !== interchange.header.valueOf(13)) {
+			let errorMessage = `X12 Standard: The value in IEA02 (${segment.valueOf(2)}) does not match the value in ISA13 (${interchange.header.valueOf(13)}).`;
 			
             if (this._strict) {
                 throw new ParserError(errorMessage);
@@ -276,22 +257,11 @@ export class X12Parser {
     }
     
     private _processGS(group: X12FunctionalGroup, segment: X12Segment): void {
-        group.headerRange.start = segment.range.start;
-		group.headerRange.end = segment.range.end;
-			
-        group.functionalIdentifierCode = segment.valueOf(1);	
-		group.senderCode = segment.valueOf(2);
-		group.receiverCode = segment.valueOf(3);
-        group.date = segment.valueOf(4);
-        group.time = segment.valueOf(5);
-		group.controlNumber = segment.valueOf(6);
-        group.agencyCode = segment.valueOf(7);
-        group.version = segment.valueOf(8);
+        group.header = segment;
     }
     
     private _processGE(group: X12FunctionalGroup, segment: X12Segment): void {
-        group.trailerRange.start = segment.range.start;
-		group.trailerRange.end = segment.range.end;
+        group.trailer = segment;
 				
 		if (parseInt(segment.valueOf(1)) !== group.transactions.length) {
 			let errorMessage = `X12 Standard: The value in GE01 (${segment.valueOf(1)}) does not match the number of ST segments in the functional group (${group.transactions.length}).`;
@@ -303,8 +273,8 @@ export class X12Parser {
             this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[0].range));
 		}
 				
-		if (segment.valueOf(2) !== group.controlNumber) {
-			let errorMessage = `X12 Standard: The value in GE02 (${segment.valueOf(2)}) does not match the value in GS06 (${group.controlNumber}).`;
+		if (segment.valueOf(2) !== group.header.valueOf(6)) {
+			let errorMessage = `X12 Standard: The value in GE02 (${segment.valueOf(2)}) does not match the value in GS06 (${group.header.valueOf(6)}).`;
 			
             if (this._strict) {
                 throw new ParserError(errorMessage);
@@ -315,17 +285,11 @@ export class X12Parser {
     }
     
     private _processST(transaction: X12Transaction, segment: X12Segment): void {
-        transaction.headerRange.start = segment.range.start;
-		transaction.headerRange.end = segment.range.end;
-				
-		transaction.transactionSet = segment.valueOf(1);
-		transaction.controlNumber = segment.valueOf(2);
-        transaction.conventionReference = segment.valueOf(3);
+        transaction.header = segment;
     }
     
     private _processSE(transaction: X12Transaction, segment: X12Segment): void {
-        transaction.trailerRange.start = segment.range.start;
-		transaction.trailerRange.end = segment.range.end;
+        transaction.trailer = segment;
 				
 		let expectedNumberOfSegments = (transaction.segments.length + 2);
 				
@@ -339,8 +303,8 @@ export class X12Parser {
             this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[0].range));
 		}
 				
-		if (segment.valueOf(2) !== transaction.controlNumber) {
-			let errorMessage = `X12 Standard: The value in SE02 (${segment.valueOf(2)}) does not match the value in ST02 (${transaction.controlNumber}).`;
+		if (segment.valueOf(2) !== transaction.header.valueOf(2)) {
+			let errorMessage = `X12 Standard: The value in SE02 (${segment.valueOf(2)}) does not match the value in ST02 (${transaction.header.valueOf(2)}).`;
 			
             if (this._strict) {
                 throw new ParserError(errorMessage);

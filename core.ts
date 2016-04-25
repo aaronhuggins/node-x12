@@ -7,3 +7,4 @@ export * from './src/X12Parser';
 export * from './src/X12Segment';
 export * from './src/X12Transaction';
 export * from './src/X12QueryEngine';
+export * from './src/X12SerializationOptions';

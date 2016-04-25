@@ -94,4 +94,21 @@ describe('X12QueryEngine', () => {
             throw new Error(`End char for element is incorrect; found ${result.element.range.end.character}, expected 20.`);
         }
     });
+    
+    it('should handle envelope queries', () => {
+        let edi = fs.readFileSync('tests/test-data/850.edi', 'utf8');
+        let parser = new X12Parser(true);
+        let engine = new X12QueryEngine(parser);
+        let results = engine.query(edi, 'ISA06');
+        
+        if (results.length === 1) {
+            if (results[0].element.value.trim() !== '4405197800') {
+                throw new Error(`Expected 4405197800, found ${results[0].element.value}.`);
+            }
+        }
+        
+        else {
+            throw new Error(`Expected exactly one result. Found ${results.length}.`);
+        }
+    });
 });

@@ -130,6 +130,10 @@ export class X12QueryEngine {
         for (let i = 0; i < segments.length; i++) {
             let segment = segments[i];
             
+            if (!segment) {
+                continue;
+            }
+
             if (segment.tag !== tag) {
                 continue;
             }

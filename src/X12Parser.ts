@@ -224,7 +224,7 @@ export class X12Parser {
 			
 			c++;
 		}
-        
+
         return segments;
     }
     

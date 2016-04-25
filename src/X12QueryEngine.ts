@@ -40,7 +40,7 @@ export class X12QueryEngine {
                     throw new QuerySyntaxError('Element reference queries must contain an element reference!');
                 }
                 
-                let txnResults = this._evaluateElementReferenceQueryPart(interchange, group, txn, segments, elmRefMatch[0], qualMatch);
+                let txnResults = this._evaluateElementReferenceQueryPart(interchange, group, txn, [].concat(segments, [interchange.header, group.header, txn.header, txn.trailer, group.trailer, interchange.trailer]), elmRefMatch[0], qualMatch);
                 
                 txnResults.forEach((res) => {
                     results.push(res);

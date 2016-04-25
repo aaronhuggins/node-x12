@@ -23,7 +23,7 @@ describe('X12QueryEngine', () => {
         let parser = new X12Parser(true);
         let engine = new X12QueryEngine(parser);
         let results = engine.query(edi, 'REF02:REF01["DP"]');
-        
+
         if (results.length !== 1) {
             throw new Error('Expected one matching element for REF02:REF01["DP"].');
         }
@@ -117,6 +117,23 @@ describe('X12QueryEngine', () => {
         let parser = new X12Parser(true);
         let engine = new X12QueryEngine(parser);
         let results = engine.query(edi, 'REF02:REF01["DP"]');
+        
+        if (results.length === 1) {
+            if (results[0].element.value.trim() !== '038') {
+                throw new Error(`Expected 038, found ${results[0].element.value}.`);
+            }
+        }
+        
+        else {
+            throw new Error(`Expected exactly one result. Found ${results.length}.`);
+        }
+    });
+    
+    it('should handle chained qualifiers', () => {
+        let edi = fs.readFileSync('tests/test-data/850.edi', 'utf8');
+        let parser = new X12Parser(true);
+        let engine = new X12QueryEngine(parser);
+        let results = engine.query(edi, 'REF02:REF01["DP"]:BEG02["SA"]');
         
         if (results.length === 1) {
             if (results[0].element.value.trim() !== '038') {

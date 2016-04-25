@@ -17,7 +17,7 @@ export class X12QueryEngine {
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g); // ex. HL+O+P+I
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g); // ex. PO1-N9-
         let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g); // ex. REF02; need to remove trailing ":" if exists
-        let qualMatch = reference.match(/(:[A-Z0-9]{2,3}[0-9]{2}\[".*"\])+/g); // ex. :REF01["PO"]
+        let qualMatch = reference.match(/:[A-Za-z]{2,3}[0-9]{2,}\[\"[^\[\]\"\"]+\"\]/g); // ex. :REF01["PO"]
         
         let results = new Array<X12QueryResult>();
         
@@ -160,15 +160,16 @@ export class X12QueryEngine {
             let tag = elementReference.substr(0, elementReference.length - 2);
             let pos = elementReference.substr(elementReference.length - 2, 2);
             let posint = parseInt(pos);
-            
+
             for (let j = transaction.segments.indexOf(segment); j > -1; j--) {
                 let seg = transaction.segments[j];
+                let value = seg.valueOf(posint);
                 
-                if (seg.tag == tag) {
-                    if (seg.valueOf(posint) !== elementValue) {
-                        return false;
-                    }
-                    
+                if (seg.tag === tag && seg.tag === segment.tag && value !== elementValue) {
+                    return false;
+                }
+                
+                else if (seg.tag === tag && value === elementValue) {
                     break;
                 }
                 
@@ -177,7 +178,7 @@ export class X12QueryEngine {
                 }
             }
         }
-        
+
         return true;
     }
 }

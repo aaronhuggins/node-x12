@@ -27,7 +27,6 @@ export class X12Parser {
         }
         
         this.diagnostics.splice(0);
-        edi = edi.trim();
         
         if (edi.length < DOCUMENT_MIN_LENGTH) {
             let errorMessage = `X12 Standard: Document is too short. Document must be at least ${DOCUMENT_MIN_LENGTH} characters long to be well-formed X12.`;
@@ -169,7 +168,7 @@ export class X12Parser {
         let currentElement: X12Element;
         
         currentSegment = new X12Segment();
-        
+
         for (let i = 0, l = 0, c = 0; i < edi.length; i++) {
 			// segment not yet named and not whitespace or delimiter - begin naming segment
 			if (!tagged && (edi[i].search(/\s/) == -1) && (edi[i] !== elementDelimiter) && (edi[i] !== segmentTerminator)) {

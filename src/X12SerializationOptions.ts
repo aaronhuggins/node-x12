@@ -15,5 +15,9 @@ export function defaultSerializationOptions(options?: X12SerializationOptions): 
     options.format = options.format || false;
     options.segmentTerminator = options.segmentTerminator || '~';
     
+    if (this.segmentTerminator === '\n') {
+        options.endOfLine = '';
+    }
+    
     return options;
 }

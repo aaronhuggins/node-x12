@@ -23,10 +23,6 @@ export class X12Interchange {
     toString(options?: X12SerializationOptions): string {
         options = defaultSerializationOptions(options);
         
-        if (this.segmentTerminator === '\n') {
-            options.endOfLine = '';
-        }
-        
         let edi = this.header.toString(options);
         
         if (options.format) {

@@ -205,6 +205,11 @@ export class X12Parser {
 				
 				currentSegment = new X12Segment();
 				tagged = false;
+                
+                if (segmentTerminator === '\n') {
+                    l++;
+                    c = -1;
+                }
 			}
 			
 			// element delimiter

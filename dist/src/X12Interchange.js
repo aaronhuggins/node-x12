@@ -4,9 +4,21 @@ const X12SerializationOptions_1 = require("./X12SerializationOptions");
 class X12Interchange {
     constructor(segmentTerminator, elementDelimiter, options) {
         this.functionalGroups = new Array();
-        this.segmentTerminator = segmentTerminator;
-        this.elementDelimiter = elementDelimiter;
-        this.options = X12SerializationOptions_1.defaultSerializationOptions(options);
+        if (typeof segmentTerminator === 'string') {
+            this.segmentTerminator = segmentTerminator;
+            if (typeof elementDelimiter === 'string') {
+                this.elementDelimiter = elementDelimiter;
+            }
+            else {
+                throw new TypeError('Parameter "elementDelimiter" must be type of string.');
+            }
+        }
+        else {
+            this.options = X12SerializationOptions_1.defaultSerializationOptions(segmentTerminator);
+        }
+        if (this.options === undefined) {
+            this.options = X12SerializationOptions_1.defaultSerializationOptions(options);
+        }
     }
     toString(options) {
         options = options

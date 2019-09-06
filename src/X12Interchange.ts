@@ -6,11 +6,23 @@ import { X12Segment } from './X12Segment';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Interchange {
-    constructor(segmentTerminator: string, elementDelimiter: string, options?: X12SerializationOptions) {
+    constructor(segmentTerminator: string | X12SerializationOptions, elementDelimiter?: string, options?: X12SerializationOptions) {
         this.functionalGroups = new Array<X12FunctionalGroup>();
-        this.segmentTerminator = segmentTerminator;
-        this.elementDelimiter = elementDelimiter;
-        this.options = defaultSerializationOptions(options);
+
+        if (typeof segmentTerminator === 'string') {
+            this.segmentTerminator = segmentTerminator;
+            if (typeof elementDelimiter === 'string') {
+                this.elementDelimiter = elementDelimiter;
+            } else {
+                throw new TypeError('Parameter "elementDelimiter" must be type of string.')
+            }
+        } else {
+            this.options = defaultSerializationOptions(segmentTerminator);
+        }
+
+        if (this.options === undefined) {
+            this.options = defaultSerializationOptions(options);
+        }
     }
     
     header: X12Segment;

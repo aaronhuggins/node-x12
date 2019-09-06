@@ -6,17 +6,32 @@ import { X12Segment } from './X12Segment';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Transaction {
-    constructor() {
+    constructor(options?: X12SerializationOptions) {
         this.segments = new Array<X12Segment>();
+        this.options = defaultSerializationOptions(options);
     }
     
     header: X12Segment;
     trailer: X12Segment;
     
     segments: X12Segment[];
+
+    options: X12SerializationOptions
+
+    setHeader(tag: string, elements: string[], options?: X12SerializationOptions) {
+        this.header = new X12Segment(tag, options)
+        this.header.setElements(elements)
+    }
+
+    setTrailer(tag: string, elements: string[], options?: X12SerializationOptions) {
+        this.trailer = new X12Segment(tag, options)
+        this.trailer.setElements(elements)
+    }
     
     toString(options?: X12SerializationOptions): string {
-        options = defaultSerializationOptions(options);
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
         
         let edi = this.header.toString(options);
         

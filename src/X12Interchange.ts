@@ -51,21 +51,21 @@ export class X12Interchange {
             ? defaultSerializationOptions(options)
             : this.options;
         
-        let edi = this.header.toString();
+        let edi = this.header.toString(options);
         
         if (options.format) {
             edi += options.endOfLine;
         }
         
         for (let i = 0; i < this.functionalGroups.length; i++) {
-            edi += this.functionalGroups[i].toString();
+            edi += this.functionalGroups[i].toString(options);
             
             if (options.format) {
                 edi += options.endOfLine;
             }
         }
         
-        edi += this.trailer.toString();
+        edi += this.trailer.toString(options);
         
         return edi;
     }

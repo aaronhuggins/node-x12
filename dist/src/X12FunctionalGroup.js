@@ -2,11 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const X12SerializationOptions_1 = require("./X12SerializationOptions");
 class X12FunctionalGroup {
-    constructor() {
+    constructor(options) {
         this.transactions = new Array();
+        this.options = options || X12SerializationOptions_1.defaultSerializationOptions(options);
     }
     toString(options) {
-        options = X12SerializationOptions_1.defaultSerializationOptions(options);
+        options = options || this.options;
         let edi = this.header.toString(options);
         if (options.format) {
             edi += options.endOfLine;

@@ -7,17 +7,20 @@ import { X12Transaction } from './X12Transaction';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12FunctionalGroup {
-    constructor() {
+    constructor(options?: X12SerializationOptions) {
         this.transactions = new Array<X12Transaction>();
+        this.options = options || defaultSerializationOptions(options);
     }
     
     header: X12Segment;
     trailer: X12Segment;
     
     transactions: X12Transaction[];
+
+    options: X12SerializationOptions
     
     toString(options?: X12SerializationOptions): string {
-        options = defaultSerializationOptions(options);
+        options = options || this.options;
         
         let edi = this.header.toString(options);
         

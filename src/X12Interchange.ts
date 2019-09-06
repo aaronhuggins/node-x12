@@ -6,10 +6,11 @@ import { X12Segment } from './X12Segment';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Interchange {
-    constructor(segmentTerminator: string, elementDelimiter: string) {
+    constructor(segmentTerminator: string, elementDelimiter: string, options?: X12SerializationOptions) {
         this.functionalGroups = new Array<X12FunctionalGroup>();
         this.segmentTerminator = segmentTerminator;
         this.elementDelimiter = elementDelimiter;
+        this.options = options || defaultSerializationOptions(options);
     }
     
     header: X12Segment;
@@ -19,9 +20,10 @@ export class X12Interchange {
     
     segmentTerminator: string;
     elementDelimiter: string;
+    options: X12SerializationOptions;
     
     toString(options?: X12SerializationOptions): string {
-        options = defaultSerializationOptions(options);
+        options = options || this.options;
         
         let edi = this.header.toString(options);
         

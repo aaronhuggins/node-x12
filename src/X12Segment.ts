@@ -6,15 +6,17 @@ import { X12Element } from './X12Element';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Segment {
-    constructor(tag: string = '') {
+    constructor(tag: string = '', options?: X12SerializationOptions) {
         this.tag = tag;
         this.elements = new Array<X12Element>();
         this.range = new Range();
+        this.options = options || defaultSerializationOptions(options);
     }
     
     tag: string;
     elements: X12Element[];
     range: Range;
+    options: X12SerializationOptions;
 
     arrayToElements(values: string[]) {
         this.elements = new Array<X12Element>();
@@ -64,8 +66,18 @@ export class X12Segment {
         return this.elements.splice(index, 1).length === 1;
     }
     
+    valueOf(segmentPosition: number, defaultValue?: string): string {
+        let index = segmentPosition - 1;
+        
+        if (this.elements.length <= index) {
+            return defaultValue || null;
+        }
+        
+        return this.elements[index].value || defaultValue || null;
+    }
+
     toString(options?: X12SerializationOptions): string {
-        options = defaultSerializationOptions(options);
+        options = options || this.options;
         
         let edi = this.tag;
         
@@ -77,15 +89,5 @@ export class X12Segment {
         edi += options.segmentTerminator;
         
         return edi;
-    }
-    
-    valueOf(segmentPosition: number, defaultValue?: string): string {
-        let index = segmentPosition - 1;
-        
-        if (this.elements.length <= index) {
-            return defaultValue || null;
-        }
-        
-        return this.elements[index].value || defaultValue || null;
     }
 }

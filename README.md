@@ -1,4 +1,4 @@
-:exclamation: **NOTE: This project is no longer being maintained!** :exclamation:
+:exclamation: **NOTE: This project is a fork of an unmaintained project. Use at your own risk.** :exclamation:
 
 # X12
 A simple ASC X12 parser for NodeJS. Created originally for the [TC Toolbox](https://github.com/TrueCommerce/vscode-tctoolbox) project.

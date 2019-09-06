@@ -7,6 +7,13 @@ class ArgumentNullError {
     }
 }
 exports.ArgumentNullError = ArgumentNullError;
+class GeneratorError {
+    constructor(message) {
+        this.name = 'GeneratorError';
+        this.message = message;
+    }
+}
+exports.GeneratorError = GeneratorError;
 class ParserError {
     constructor(message) {
         this.name = 'ParserError';

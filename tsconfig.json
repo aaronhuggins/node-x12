@@ -4,7 +4,8 @@
         "moduleResolution": "node",
         "noImplicitAny": true,
         "removeComments": true,
-        "target": "es6",
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "es2017",
         "experimentalDecorators": true,
         "outDir": "dist"
     },

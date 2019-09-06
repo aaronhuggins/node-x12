@@ -10,6 +10,16 @@ export class ArgumentNullError implements Error {
     message: string;
 }
 
+export class GeneratorError implements Error {
+    constructor(message?: string) {
+        this.name = 'GeneratorError';
+        this.message = message;
+    }
+    
+    name: string;
+    message: string;
+}
+
 export class ParserError implements Error {
     constructor(message?: string) {
         this.name = 'ParserError';

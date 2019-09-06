@@ -8,6 +8,7 @@ const X12FunctionalGroup_1 = require("./X12FunctionalGroup");
 const X12Transaction_1 = require("./X12Transaction");
 const X12Segment_1 = require("./X12Segment");
 const X12Element_1 = require("./X12Element");
+const X12SerializationOptions_1 = require("./X12SerializationOptions");
 const DOCUMENT_MIN_LENGTH = 113;
 const SEGMENT_TERMINATOR_POS = 105;
 const ELEMENT_DELIMITER_POS = 3;
@@ -17,7 +18,7 @@ class X12Parser {
         this._strict = _strict;
         this.diagnostics = new Array();
     }
-    parseX12(edi) {
+    parseX12(edi, options) {
         if (!edi) {
             throw new Errors_1.ArgumentNullError('edi');
         }
@@ -31,6 +32,11 @@ class X12Parser {
         }
         let segmentTerminator = edi.charAt(SEGMENT_TERMINATOR_POS);
         let elementDelimiter = edi.charAt(ELEMENT_DELIMITER_POS);
+        if (options) {
+            options = X12SerializationOptions_1.defaultSerializationOptions(options);
+            segmentTerminator = options.segmentTerminator;
+            elementDelimiter = options.elementDelimiter;
+        }
         if (edi.charAt(103) !== elementDelimiter) {
             let errorMessage = 'X12 Standard: The ISA segment is not the correct length (106 characters, including segment terminator).';
             if (this._strict) {

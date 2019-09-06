@@ -25,10 +25,17 @@ class X12Interchange {
         }
     }
     setHeader(elements, options) {
+        options = options
+            ? X12SerializationOptions_1.defaultSerializationOptions(options)
+            : this.options;
         this.header = new X12Segment_1.X12Segment(X12Enumerables_1.X12SupportedSegments.ISA, options);
         this.header.setElements(elements);
+        this._setTrailer(options);
     }
-    setTrailer(options) {
+    _setTrailer(options) {
+        options = options
+            ? X12SerializationOptions_1.defaultSerializationOptions(options)
+            : this.options;
         this.trailer = new X12Segment_1.X12Segment(X12Enumerables_1.X12SupportedSegments.IEA, options);
         this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)]);
     }

@@ -38,11 +38,18 @@ export class X12Interchange {
     options: X12SerializationOptions;
 
     setHeader(elements: string[], options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
         this.header = new X12Segment(X12SupportedSegments.ISA, options)
         this.header.setElements(elements)
+        this._setTrailer(options);
     }
 
-    setTrailer(options?: X12SerializationOptions) {
+    private _setTrailer(options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
         this.trailer = new X12Segment(X12SupportedSegments.IEA, options)
         this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)])
     }

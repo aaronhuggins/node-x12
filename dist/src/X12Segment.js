@@ -10,7 +10,7 @@ class X12Segment {
         this.range = new Positioning_1.Range();
         this.options = X12SerializationOptions_1.defaultSerializationOptions(options);
     }
-    arrayToElements(values) {
+    setElements(values) {
         this.elements = new Array();
         values.forEach((value) => {
             this.elements.push(new X12Element_1.X12Element(value));

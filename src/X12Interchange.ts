@@ -35,6 +35,16 @@ export class X12Interchange {
     segmentTerminator: string;
     elementDelimiter: string;
     options: X12SerializationOptions;
+
+    setHeader(tag: string, elements: string[], options?: X12SerializationOptions) {
+        this.header = new X12Segment(tag, options)
+        this.header.setElements(elements)
+    }
+
+    setTrailer(tag: string, elements: string[], options?: X12SerializationOptions) {
+        this.trailer = new X12Segment(tag, options)
+        this.trailer.setElements(elements)
+    }
     
     toString(options?: X12SerializationOptions): string {
         options = options

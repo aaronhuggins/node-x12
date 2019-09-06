@@ -18,7 +18,7 @@ export class X12Segment {
     range: Range;
     options: X12SerializationOptions;
 
-    arrayToElements(values: string[]) {
+    setElements(values: string[]) {
         this.elements = new Array<X12Element>();
 
         values.forEach((value) => {

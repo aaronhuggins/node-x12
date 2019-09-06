@@ -10,7 +10,7 @@ export class X12Segment {
         this.tag = tag;
         this.elements = new Array<X12Element>();
         this.range = new Range();
-        this.options = options || defaultSerializationOptions(options);
+        this.options = defaultSerializationOptions(options);
     }
     
     tag: string;
@@ -77,7 +77,9 @@ export class X12Segment {
     }
 
     toString(options?: X12SerializationOptions): string {
-        options = options || this.options;
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
         
         let edi = this.tag;
         

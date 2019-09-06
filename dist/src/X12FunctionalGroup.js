@@ -4,10 +4,12 @@ const X12SerializationOptions_1 = require("./X12SerializationOptions");
 class X12FunctionalGroup {
     constructor(options) {
         this.transactions = new Array();
-        this.options = options || X12SerializationOptions_1.defaultSerializationOptions(options);
+        this.options = X12SerializationOptions_1.defaultSerializationOptions(options);
     }
     toString(options) {
-        options = options || this.options;
+        options = options
+            ? X12SerializationOptions_1.defaultSerializationOptions(options)
+            : this.options;
         let edi = this.header.toString(options);
         if (options.format) {
             edi += options.endOfLine;

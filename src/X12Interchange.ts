@@ -10,7 +10,7 @@ export class X12Interchange {
         this.functionalGroups = new Array<X12FunctionalGroup>();
         this.segmentTerminator = segmentTerminator;
         this.elementDelimiter = elementDelimiter;
-        this.options = options || defaultSerializationOptions(options);
+        this.options = defaultSerializationOptions(options);
     }
     
     header: X12Segment;
@@ -23,23 +23,25 @@ export class X12Interchange {
     options: X12SerializationOptions;
     
     toString(options?: X12SerializationOptions): string {
-        options = options || this.options;
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
         
-        let edi = this.header.toString(options);
+        let edi = this.header.toString();
         
         if (options.format) {
             edi += options.endOfLine;
         }
         
         for (let i = 0; i < this.functionalGroups.length; i++) {
-            edi += this.functionalGroups[i].toString(options);
+            edi += this.functionalGroups[i].toString();
             
             if (options.format) {
                 edi += options.endOfLine;
             }
         }
         
-        edi += this.trailer.toString(options);
+        edi += this.trailer.toString();
         
         return edi;
     }

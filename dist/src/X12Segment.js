@@ -8,7 +8,7 @@ class X12Segment {
         this.tag = tag;
         this.elements = new Array();
         this.range = new Positioning_1.Range();
-        this.options = options || X12SerializationOptions_1.defaultSerializationOptions(options);
+        this.options = X12SerializationOptions_1.defaultSerializationOptions(options);
     }
     arrayToElements(values) {
         this.elements = new Array();
@@ -53,7 +53,9 @@ class X12Segment {
         return this.elements[index].value || defaultValue || null;
     }
     toString(options) {
-        options = options || this.options;
+        options = options
+            ? X12SerializationOptions_1.defaultSerializationOptions(options)
+            : this.options;
         let edi = this.tag;
         for (let i = 0; i < this.elements.length; i++) {
             edi += options.elementDelimiter;

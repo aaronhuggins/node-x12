@@ -6,21 +6,23 @@ class X12Interchange {
         this.functionalGroups = new Array();
         this.segmentTerminator = segmentTerminator;
         this.elementDelimiter = elementDelimiter;
-        this.options = options || X12SerializationOptions_1.defaultSerializationOptions(options);
+        this.options = X12SerializationOptions_1.defaultSerializationOptions(options);
     }
     toString(options) {
-        options = options || this.options;
-        let edi = this.header.toString(options);
+        options = options
+            ? X12SerializationOptions_1.defaultSerializationOptions(options)
+            : this.options;
+        let edi = this.header.toString();
         if (options.format) {
             edi += options.endOfLine;
         }
         for (let i = 0; i < this.functionalGroups.length; i++) {
-            edi += this.functionalGroups[i].toString(options);
+            edi += this.functionalGroups[i].toString();
             if (options.format) {
                 edi += options.endOfLine;
             }
         }
-        edi += this.trailer.toString(options);
+        edi += this.trailer.toString();
         return edi;
     }
     _padRight(input, width) {

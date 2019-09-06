@@ -9,7 +9,7 @@ import { defaultSerializationOptions, X12SerializationOptions } from './X12Seria
 export class X12FunctionalGroup {
     constructor(options?: X12SerializationOptions) {
         this.transactions = new Array<X12Transaction>();
-        this.options = options || defaultSerializationOptions(options);
+        this.options = defaultSerializationOptions(options);
     }
     
     header: X12Segment;
@@ -20,7 +20,9 @@ export class X12FunctionalGroup {
     options: X12SerializationOptions
     
     toString(options?: X12SerializationOptions): string {
-        options = options || this.options;
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
         
         let edi = this.header.toString(options);
         

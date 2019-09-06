@@ -15,6 +15,9 @@ class X12Segment {
     setElements(values) {
         if (this._checkSupportedSegment()) {
             const enumerable = this._getX12Enumerable();
+            if (this.tag === X12Enumerables_1.X12SupportedSegments.ISA && this.options.subElementDelimiter.length === 1) {
+                values[15] = this.options.subElementDelimiter;
+            }
             if (values.length === enumerable.COUNT) {
                 for (let i = 0; i < values.length; i++) {
                     const name = `${this.tag}${String.prototype.padStart.call(i + 1, 2, '0')}`;

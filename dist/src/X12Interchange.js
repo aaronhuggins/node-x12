@@ -15,6 +15,8 @@ class X12Interchange {
         }
         else {
             this.options = X12SerializationOptions_1.defaultSerializationOptions(segmentTerminator);
+            this.segmentTerminator = this.options.segmentTerminator;
+            this.elementDelimiter = this.options.elementDelimiter;
         }
         if (this.options === undefined) {
             this.options = X12SerializationOptions_1.defaultSerializationOptions(options);

@@ -18,6 +18,8 @@ export class X12Interchange {
             }
         } else {
             this.options = defaultSerializationOptions(segmentTerminator);
+            this.segmentTerminator = this.options.segmentTerminator;
+            this.elementDelimiter = this.options.elementDelimiter;
         }
 
         if (this.options === undefined) {

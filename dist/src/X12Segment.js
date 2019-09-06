@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Positioning_1 = require("./Positioning");
 const X12SerializationOptions_1 = require("./X12SerializationOptions");
 class X12Segment {
-    constructor() {
-        this.tag = '';
+    constructor(tag = '') {
+        this.tag = tag;
         this.elements = new Array();
         this.range = new Positioning_1.Range();
     }

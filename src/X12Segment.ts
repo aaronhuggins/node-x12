@@ -6,8 +6,8 @@ import { X12Element } from './X12Element';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Segment {
-    constructor() {
-        this.tag = '';
+    constructor(tag: string = '') {
+        this.tag = tag;
         this.elements = new Array<X12Element>();
         this.range = new Range();
     }

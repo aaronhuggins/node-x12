@@ -19,7 +19,7 @@ class X12Segment {
                 for (let i = 0; i < values.length; i++) {
                     const name = `${this.tag}${String.prototype.padStart.call(i + 1, 2, '0')}`;
                     const max = enumerable[name];
-                    const min = enumerable[`${name}_MIN`] || max;
+                    const min = enumerable[`${name}_MIN`] || 0;
                     if (values[i].length > max && values[i].length !== 0) {
                         throw new Errors_1.GeneratorError(`Segment element "${name}" with value of "${values[i]}" exceeds maximum of ${max} characters.`);
                     }

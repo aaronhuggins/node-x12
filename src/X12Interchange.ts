@@ -3,6 +3,7 @@
 import { Range } from './Positioning';
 import { X12FunctionalGroup } from './X12FunctionalGroup';
 import { X12Segment } from './X12Segment';
+import { X12SupportedSegments } from './X12Enumerables';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Interchange {
@@ -36,14 +37,14 @@ export class X12Interchange {
     elementDelimiter: string;
     options: X12SerializationOptions;
 
-    setHeader(tag: string, elements: string[], options?: X12SerializationOptions) {
-        this.header = new X12Segment(tag, options)
+    setHeader(elements: string[], options?: X12SerializationOptions) {
+        this.header = new X12Segment(X12SupportedSegments.ISA, options)
         this.header.setElements(elements)
     }
 
-    setTrailer(tag: string, elements: string[], options?: X12SerializationOptions) {
-        this.trailer = new X12Segment(tag, options)
-        this.trailer.setElements(elements)
+    setTrailer(options?: X12SerializationOptions) {
+        this.trailer = new X12Segment(X12SupportedSegments.IEA, options)
+        this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)])
     }
     
     toString(options?: X12SerializationOptions): string {

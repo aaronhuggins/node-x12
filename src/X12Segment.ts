@@ -15,6 +15,54 @@ export class X12Segment {
     tag: string;
     elements: X12Element[];
     range: Range;
+
+    arrayToElements(values: string[]) {
+        this.elements = new Array<X12Element>();
+
+        values.forEach((value) => {
+            this.elements.push(new X12Element(value))
+        })
+    }
+
+    addElement(value: string = ''): X12Element {
+        const element = new X12Element(value);
+
+        this.elements.push(element);
+
+        return element;
+    }
+
+    replaceElement(value: string, segmentPosition: number): X12Element {
+        let index = segmentPosition - 1;
+
+        if (this.elements.length <= index) {
+            return null;
+        } else {
+            this.elements[index] = new X12Element(value);
+        }
+        
+        return this.elements[index];
+    }
+
+    insertElement(value: string = '', segmentPosition: number = 1): boolean {
+        let index = segmentPosition - 1;
+
+        if (this.elements.length <= index) {
+            return null;
+        }
+        
+        return this.elements.splice(index, 0, new X12Element(value)).length === 1;
+    }
+
+    removeElement(segmentPosition: number): boolean {
+        let index = segmentPosition - 1;
+
+        if (this.elements.length <= index) {
+            return null;
+        }
+        
+        return this.elements.splice(index, 1).length === 1;
+    }
     
     toString(options?: X12SerializationOptions): string {
         options = defaultSerializationOptions(options);

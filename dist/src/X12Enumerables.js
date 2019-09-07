@@ -25,13 +25,8 @@ exports.X12InterchangeControlHeader = {
     ISA14: 1,
     ISA15: 1,
     ISA16: 1,
-    COUNT: 16
-};
-exports.X12InterchangeControlTrailer = {
-    IEA01: 5,
-    IEA01_MIN: 1,
-    IEA02: 9,
-    COUNT: 2
+    COUNT: 16,
+    PADDING: true
 };
 exports.X12FunctionalGroupHeader = {
     GS01: 2,
@@ -48,25 +43,13 @@ exports.X12FunctionalGroupHeader = {
     GS07_MIN: 1,
     GS08: 12,
     GS08_MIN: 1,
-    COUNT: 8
-};
-exports.X12FunctionalGroupTrailer = {
-    GE01: 6,
-    GE01_MIN: 1,
-    GE02: 9,
-    GE02_MIN: 1,
-    COUNT: 2
+    COUNT: 8,
+    PADDING: false
 };
 exports.X12TransactionSetHeader = {
     ST01: 3,
     ST02: 9,
     ST02_MIN: 4,
-    COUNT: 2
-};
-exports.X12TransactionSetTrailer = {
-    SE01: 10,
-    SE01_MIN: 1,
-    SE02: 9,
-    SE02_MIN: 4,
-    COUNT: 2
+    COUNT: 2,
+    PADDING: false
 };

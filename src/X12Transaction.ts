@@ -3,6 +3,7 @@
 import { Range } from './Positioning';
 import { X12FunctionalGroup } from './X12FunctionalGroup';
 import { X12Segment } from './X12Segment';
+import { X12SupportedSegments } from './X12Enumerables';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Transaction {
@@ -18,14 +19,32 @@ export class X12Transaction {
 
     options: X12SerializationOptions
 
-    setHeader(tag: string, elements: string[], options?: X12SerializationOptions) {
-        this.header = new X12Segment(tag, options)
-        this.header.setElements(elements)
+    setHeader(elements: string[], options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
+
+        this.header = new X12Segment(X12SupportedSegments.ST, options);
+
+        this.header.setElements(elements);
+
+        this._setTrailer(options);
     }
 
-    setTrailer(tag: string, elements: string[], options?: X12SerializationOptions) {
-        this.trailer = new X12Segment(tag, options)
-        this.trailer.setElements(elements)
+    addSegment(tag: string, elements: string[], options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
+
+        const segment = new X12Segment(tag, options);
+
+        segment.setElements(elements);
+
+        this.segments.push(segment);
+
+        this.trailer.replaceElement(`${this.segments.length}`, 1);
+
+        return segment;
     }
     
     toString(options?: X12SerializationOptions): string {
@@ -50,5 +69,15 @@ export class X12Transaction {
         edi += this.trailer.toString(options);
         
         return edi;
+    }
+
+    private _setTrailer(options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
+
+        this.trailer = new X12Segment(X12SupportedSegments.SE, options);
+
+        this.trailer.setElements([`${this.segments.length}`, this.header.valueOf(6)]);
     }
 }

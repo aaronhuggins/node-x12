@@ -3,6 +3,7 @@
 import { Range } from './Positioning';
 import { X12Interchange } from './X12Interchange';
 import { X12Segment } from './X12Segment';
+import { X12SupportedSegments } from './X12Enumerables';
 import { X12Transaction } from './X12Transaction';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
@@ -19,14 +20,30 @@ export class X12FunctionalGroup {
 
     options: X12SerializationOptions
 
-    setHeader(tag: string, elements: string[], options?: X12SerializationOptions) {
-        this.header = new X12Segment(tag, options)
-        this.header.setElements(elements)
+    setHeader(elements: string[], options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
+
+        this.header = new X12Segment(X12SupportedSegments.GS, options);
+
+        this.header.setElements(elements);
+
+        this._setTrailer(options);
     }
 
-    setTrailer(tag: string, elements: string[], options?: X12SerializationOptions) {
-        this.trailer = new X12Segment(tag, options)
-        this.trailer.setElements(elements)
+    addTransaction(options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
+
+        const transaction = new X12Transaction(options);
+
+        this.transactions.push(transaction);
+
+        this.trailer.replaceElement(`${this.transactions.length}`, 1);
+
+        return transaction;
     }
     
     toString(options?: X12SerializationOptions): string {
@@ -51,5 +68,15 @@ export class X12FunctionalGroup {
         edi += this.trailer.toString(options);
         
         return  edi;
+    }
+
+    private _setTrailer(options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
+
+        this.trailer = new X12Segment(X12SupportedSegments.GE, options);
+
+        this.trailer.setElements([`${this.transactions.length}`, this.header.valueOf(6)]);
     }
 }

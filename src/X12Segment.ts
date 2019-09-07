@@ -5,7 +5,9 @@ import { X12Transaction } from './X12Transaction';
 import { X12Element } from './X12Element';
 import {
     X12SupportedSegments,
-    X12InterchangeControlHeader
+    X12InterchangeControlHeader,
+    X12FunctionalGroupHeader,
+    X12TransactionSetHeader
 } from './X12Enumerables';
 import {
     defaultSerializationOptions,
@@ -108,6 +110,12 @@ export class X12Segment {
             case X12SupportedSegments.ISA:
                 supported = true;
                 break;
+            case X12SupportedSegments.GS:
+                supported = true;
+                break;
+            case X12SupportedSegments.ST:
+                supported = true;
+                break;
         }
 
         return supported;
@@ -119,6 +127,12 @@ export class X12Segment {
         switch(this.tag) {
             case X12SupportedSegments.ISA:
                 enumerable = X12InterchangeControlHeader;
+                break;
+            case X12SupportedSegments.GS:
+                enumerable = X12FunctionalGroupHeader;
+                break;
+            case X12SupportedSegments.ST:
+                enumerable = X12TransactionSetHeader;
                 break;
         }
 
@@ -140,19 +154,19 @@ export class X12Segment {
                     const min = enumerable[`${name}_MIN`] || 0;
 
                     if (values[i].length > max && values[i].length !== 0) {
-                        throw new GeneratorError(`Segment element "${name}" with value of "${values[i]}" exceeds maximum of ${max} characters.`)
+                        throw new GeneratorError(`Segment element "${name}" with value of "${values[i]}" exceeds maximum of ${max} characters.`);
                     }
 
                     if (values[i].length < min && values[i].length !== 0) {
-                        throw new GeneratorError(`Segment element "${name}" with value of "${values[i]}" does not meet minimum of ${min} characters.`)
+                        throw new GeneratorError(`Segment element "${name}" with value of "${values[i]}" does not meet minimum of ${min} characters.`);
                     }
 
-                    if (values[i].length < max && values[i].length > min || values[i].length === 0) {
-                        values[i] = String.prototype.padEnd.call(values[i], max, ' ')
+                    if (enumerable.PADDING && ((values[i].length < max && values[i].length > min) || values[i].length === 0)) {
+                        values[i] = String.prototype.padEnd.call(values[i], max, ' ');
                     }
                 }
             } else {
-                throw new GeneratorError(`Segment "${this.tag}" with ${values.length} elements does meet the required count of ${enumerable.COUNT}.`)
+                throw new GeneratorError(`Segment "${this.tag}" with ${values.length} elements does meet the required count of ${enumerable.COUNT}.`);
             }
         }
     }

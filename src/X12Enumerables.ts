@@ -7,7 +7,7 @@ export const X12SupportedSegments = {
     SE: 'SE'
 }
 
-export const X12InterchangeControlHeader = {
+export const X12InterchangeControlHeader: any = {
     ISA01: 2,
     ISA02: 10,
     ISA03: 2,
@@ -24,17 +24,11 @@ export const X12InterchangeControlHeader = {
     ISA14: 1,
     ISA15: 1,
     ISA16: 1,
-    COUNT: 16
+    COUNT: 16,
+    PADDING: true
 }
 
-export const X12InterchangeControlTrailer = {
-    IEA01: 5,
-    IEA01_MIN: 1,
-    IEA02: 9,
-    COUNT: 2
-}
-
-export const X12FunctionalGroupHeader = {
+export const X12FunctionalGroupHeader: any = {
     GS01: 2,
     GS02: 15,
     GS02_MIN: 2,
@@ -49,28 +43,14 @@ export const X12FunctionalGroupHeader = {
     GS07_MIN: 1,
     GS08: 12,
     GS08_MIN: 1,
-    COUNT: 8
+    COUNT: 8,
+    PADDING: false
 }
 
-export const X12FunctionalGroupTrailer = {
-    GE01: 6,
-    GE01_MIN: 1,
-    GE02: 9,
-    GE02_MIN: 1,
-    COUNT: 2
-}
-
-export const X12TransactionSetHeader = {
+export const X12TransactionSetHeader: any = {
     ST01: 3,
     ST02: 9,
     ST02_MIN: 4,
-    COUNT: 2
-}
-
-export const X12TransactionSetTrailer = {
-    SE01: 10,
-    SE01_MIN: 1,
-    SE02: 9,
-    SE02_MIN: 4,
-    COUNT: 2
+    COUNT: 2,
+    PADDING: false
 }

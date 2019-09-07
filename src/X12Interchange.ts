@@ -41,17 +41,26 @@ export class X12Interchange {
         options = options
             ? defaultSerializationOptions(options)
             : this.options;
-        this.header = new X12Segment(X12SupportedSegments.ISA, options)
-        this.header.setElements(elements)
+
+        this.header = new X12Segment(X12SupportedSegments.ISA, options);
+
+        this.header.setElements(elements);
+
         this._setTrailer(options);
     }
 
-    private _setTrailer(options?: X12SerializationOptions) {
+    addFunctionalGroup(options?: X12SerializationOptions) {
         options = options
             ? defaultSerializationOptions(options)
             : this.options;
-        this.trailer = new X12Segment(X12SupportedSegments.IEA, options)
-        this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)])
+
+        const functionalGroup = new X12FunctionalGroup(options);
+
+        this.functionalGroups.push(functionalGroup);
+
+        this.trailer.replaceElement(`${this.functionalGroups.length}`, 1);
+
+        return functionalGroup;
     }
     
     toString(options?: X12SerializationOptions): string {
@@ -76,6 +85,16 @@ export class X12Interchange {
         edi += this.trailer.toString(options);
         
         return edi;
+    }
+
+    private _setTrailer(options?: X12SerializationOptions) {
+        options = options
+            ? defaultSerializationOptions(options)
+            : this.options;
+
+        this.trailer = new X12Segment(X12SupportedSegments.IEA, options);
+
+        this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)]);
     }
     
     private _padRight(input: string, width: number): string {

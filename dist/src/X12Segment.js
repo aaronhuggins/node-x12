@@ -73,6 +73,12 @@ class X12Segment {
             case X12Enumerables_1.X12SupportedSegments.ISA:
                 supported = true;
                 break;
+            case X12Enumerables_1.X12SupportedSegments.GS:
+                supported = true;
+                break;
+            case X12Enumerables_1.X12SupportedSegments.ST:
+                supported = true;
+                break;
         }
         return supported;
     }
@@ -81,6 +87,12 @@ class X12Segment {
         switch (this.tag) {
             case X12Enumerables_1.X12SupportedSegments.ISA:
                 enumerable = X12Enumerables_1.X12InterchangeControlHeader;
+                break;
+            case X12Enumerables_1.X12SupportedSegments.GS:
+                enumerable = X12Enumerables_1.X12FunctionalGroupHeader;
+                break;
+            case X12Enumerables_1.X12SupportedSegments.ST:
+                enumerable = X12Enumerables_1.X12TransactionSetHeader;
                 break;
         }
         return enumerable;
@@ -102,7 +114,7 @@ class X12Segment {
                     if (values[i].length < min && values[i].length !== 0) {
                         throw new Errors_1.GeneratorError(`Segment element "${name}" with value of "${values[i]}" does not meet minimum of ${min} characters.`);
                     }
-                    if (values[i].length < max && values[i].length > min || values[i].length === 0) {
+                    if (enumerable.PADDING && ((values[i].length < max && values[i].length > min) || values[i].length === 0)) {
                         values[i] = String.prototype.padEnd.call(values[i], max, ' ');
                     }
                 }

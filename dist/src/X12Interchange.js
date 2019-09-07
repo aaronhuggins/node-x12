@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
+const X12FunctionalGroup_1 = require("./X12FunctionalGroup");
 const X12Segment_1 = require("./X12Segment");
 const X12Enumerables_1 = require("./X12Enumerables");
 const X12SerializationOptions_1 = require("./X12SerializationOptions");
@@ -32,12 +33,14 @@ class X12Interchange {
         this.header.setElements(elements);
         this._setTrailer(options);
     }
-    _setTrailer(options) {
+    addFunctionalGroup(options) {
         options = options
             ? X12SerializationOptions_1.defaultSerializationOptions(options)
             : this.options;
-        this.trailer = new X12Segment_1.X12Segment(X12Enumerables_1.X12SupportedSegments.IEA, options);
-        this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)]);
+        const functionalGroup = new X12FunctionalGroup_1.X12FunctionalGroup(options);
+        this.functionalGroups.push(functionalGroup);
+        this.trailer.replaceElement(`${this.functionalGroups.length}`, 1);
+        return functionalGroup;
     }
     toString(options) {
         options = options
@@ -55,6 +58,13 @@ class X12Interchange {
         }
         edi += this.trailer.toString(options);
         return edi;
+    }
+    _setTrailer(options) {
+        options = options
+            ? X12SerializationOptions_1.defaultSerializationOptions(options)
+            : this.options;
+        this.trailer = new X12Segment_1.X12Segment(X12Enumerables_1.X12SupportedSegments.IEA, options);
+        this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)]);
     }
     _padRight(input, width) {
         while (input.length < width) {

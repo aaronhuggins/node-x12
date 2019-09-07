@@ -42,7 +42,7 @@ export class X12Transaction {
 
         this.segments.push(segment);
 
-        this.trailer.replaceElement(`${this.segments.length}`, 1);
+        this.trailer.replaceElement(`${this.segments.length + 2}`, 1);
 
         return segment;
     }
@@ -78,6 +78,6 @@ export class X12Transaction {
 
         this.trailer = new X12Segment(X12SupportedSegments.SE, options);
 
-        this.trailer.setElements([`${this.segments.length}`, this.header.valueOf(6)]);
+        this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(6)]);
     }
 }

@@ -23,7 +23,7 @@ class X12Transaction {
         const segment = new X12Segment_1.X12Segment(tag, options);
         segment.setElements(elements);
         this.segments.push(segment);
-        this.trailer.replaceElement(`${this.segments.length}`, 1);
+        this.trailer.replaceElement(`${this.segments.length + 2}`, 1);
         return segment;
     }
     toString(options) {
@@ -48,7 +48,7 @@ class X12Transaction {
             ? X12SerializationOptions_1.defaultSerializationOptions(options)
             : this.options;
         this.trailer = new X12Segment_1.X12Segment(X12Enumerables_1.X12SupportedSegments.SE, options);
-        this.trailer.setElements([`${this.segments.length}`, this.header.valueOf(6)]);
+        this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(6)]);
     }
 }
 exports.X12Transaction = X12Transaction;

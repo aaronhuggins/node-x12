@@ -48,7 +48,7 @@ class X12Transaction {
             ? X12SerializationOptions_1.defaultSerializationOptions(options)
             : this.options;
         this.trailer = new X12Segment_1.X12Segment(X12Enumerables_1.X12SupportedSegments.SE, options);
-        this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(6)]);
+        this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(2)]);
     }
 }
 exports.X12Transaction = X12Transaction;

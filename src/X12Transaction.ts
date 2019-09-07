@@ -78,6 +78,6 @@ export class X12Transaction {
 
         this.trailer = new X12Segment(X12SupportedSegments.SE, options);
 
-        this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(6)]);
+        this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(2)]);
     }
 }

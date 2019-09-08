@@ -1,7 +1,5 @@
 'use strict';
 
-import { Range } from './Positioning';
-import { X12Interchange } from './X12Interchange';
 import { X12Segment } from './X12Segment';
 import { X12SupportedSegments } from './X12Enumerables';
 import { X12Transaction } from './X12Transaction';

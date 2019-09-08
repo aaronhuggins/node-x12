@@ -1,7 +1,6 @@
 'use strict';
 
 import { Range } from './Positioning';
-import { X12Transaction } from './X12Transaction';
 import { X12Element } from './X12Element';
 import {
     X12SupportedSegments,

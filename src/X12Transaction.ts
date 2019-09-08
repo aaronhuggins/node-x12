@@ -1,7 +1,5 @@
 'use strict';
 
-import { Range } from './Positioning';
-import { X12FunctionalGroup } from './X12FunctionalGroup';
 import { X12Segment } from './X12Segment';
 import { X12SupportedSegments } from './X12Enumerables';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';

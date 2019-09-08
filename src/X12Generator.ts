@@ -20,9 +20,35 @@ export class X12Generator {
         this.interchange = new X12Interchange(this.options);
     }
     
-    jsen: JSEDINotation;
-    interchange: X12Interchange;
-    options: X12SerializationOptions;
+    private jsen: JSEDINotation;
+    private interchange: X12Interchange;
+    private options: X12SerializationOptions;
+
+    setJSEDINotation(jsen: JSEDINotation) {
+        this.jsen = jsen;
+    }
+
+    getJSEDINotation() {
+        return this.jsen;
+    }
+
+    setOptions(options: X12SerializationOptions) {
+        this.options = options;
+    }
+
+    getOptions() {
+        return this.options;
+    }
+
+    validate() {
+        this._generate();
+
+        return (new X12Parser(true)).parseX12(this.interchange.toString(this.options))
+    }
+
+    toString() {
+        return this.validate().toString(this.options);
+    }
 
     private _generate() {
         const genInterchange = new X12Interchange(this.options);
@@ -46,15 +72,5 @@ export class X12Generator {
         })
 
         this.interchange = genInterchange;
-    }
-
-    validate() {
-        this._generate();
-
-        return (new X12Parser(true)).parseX12(this.interchange.toString(this.options))
-    }
-
-    toString() {
-        return this.validate().toString(this.options);
     }
 }

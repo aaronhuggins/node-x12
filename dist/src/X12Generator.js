@@ -14,6 +14,25 @@ class X12Generator {
         }
         this.interchange = new X12Interchange_1.X12Interchange(this.options);
     }
+    setJSEDINotation(jsen) {
+        this.jsen = jsen;
+    }
+    getJSEDINotation() {
+        return this.jsen;
+    }
+    setOptions(options) {
+        this.options = options;
+    }
+    getOptions() {
+        return this.options;
+    }
+    validate() {
+        this._generate();
+        return (new X12Parser_1.X12Parser(true)).parseX12(this.interchange.toString(this.options));
+    }
+    toString() {
+        return this.validate().toString(this.options);
+    }
     _generate() {
         const genInterchange = new X12Interchange_1.X12Interchange(this.options);
         genInterchange.setHeader(this.jsen.header);
@@ -29,13 +48,6 @@ class X12Generator {
             });
         });
         this.interchange = genInterchange;
-    }
-    validate() {
-        this._generate();
-        return (new X12Parser_1.X12Parser(true)).parseX12(this.interchange.toString(this.options));
-    }
-    toString() {
-        return this.validate().toString(this.options);
     }
 }
 exports.X12Generator = X12Generator;

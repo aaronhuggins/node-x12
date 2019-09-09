@@ -58,7 +58,7 @@ export class X12Parser {
             this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, new Range(0, 0, 0, 2)));
         }
         
-        let interchange = new X12Interchange(segmentTerminator, elementDelimiter);
+        let interchange = new X12Interchange(segmentTerminator, elementDelimiter, options);
         let group: X12FunctionalGroup;
         let transaction: X12Transaction;
         

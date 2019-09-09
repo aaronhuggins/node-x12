@@ -44,7 +44,7 @@ class X12Parser {
             }
             this.diagnostics.push(new X12Diagnostic_1.X12Diagnostic(X12Diagnostic_1.X12DiagnosticLevel.Error, errorMessage, new Positioning_1.Range(0, 0, 0, 2)));
         }
-        let interchange = new X12Interchange_1.X12Interchange(segmentTerminator, elementDelimiter);
+        let interchange = new X12Interchange_1.X12Interchange(segmentTerminator, elementDelimiter, options);
         let group;
         let transaction;
         let segments = this._parseSegments(edi, segmentTerminator, elementDelimiter);

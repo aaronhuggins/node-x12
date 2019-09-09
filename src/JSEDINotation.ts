@@ -13,8 +13,12 @@ export class JSEDINotation {
     header: Array<string>;
     functionalGroups: Array<JSEDIFunctionalGroup>;
 
-    addFunctionalGroup(functionalGroup: JSEDIFunctionalGroup) {
+    addFunctionalGroup(header: Array<string>) {
+        const functionalGroup = new JSEDIFunctionalGroup(header);
+
         this.functionalGroups.push(functionalGroup);
+
+        return functionalGroup;
     }
 }
 
@@ -27,8 +31,12 @@ export class JSEDIFunctionalGroup {
     header: Array<string>;
     transactions: Array<JSEDITransaction>;
 
-    addTransaction(transaction: JSEDITransaction) {
+    addTransaction(header: Array<string>) {
+        const transaction = new JSEDITransaction(header);
+
         this.transactions.push(transaction);
+
+        return transaction;
     }
 }
 
@@ -41,8 +49,12 @@ export class JSEDITransaction {
     header: Array<string>;
     segments: Array<JSEDISegment>;
 
-    addSegment(segment: JSEDISegment) {
+    addSegment(tag: string, elements: Array<string>) {
+        const segment = new JSEDISegment(tag, elements);
+
         this.segments.push(segment);
+
+        return segment;
     }
 }
 

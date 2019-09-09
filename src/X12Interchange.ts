@@ -1,5 +1,6 @@
 'use strict';
 
+import { JSEDINotation } from './JSEDINotation';
 import { X12FunctionalGroup } from './X12FunctionalGroup';
 import { X12Segment } from './X12Segment';
 import { X12SupportedSegments } from './X12Enumerables';
@@ -84,6 +85,24 @@ export class X12Interchange {
         edi += this.trailer.toString(options);
         
         return edi;
+    }
+
+    toJSON() {
+        const jsen = new JSEDINotation(this.header.elements.map(x => x.value), this.options);
+
+        this.functionalGroups.forEach((functionalGroup) => {
+            const jsenFunctionalGroup = jsen.addFunctionalGroup(functionalGroup.header.elements.map(x => x.value));
+
+            functionalGroup.transactions.forEach((transaction) => {
+                const jsenTransaction = jsenFunctionalGroup.addTransaction(transaction.header.elements.map(x => x.value));
+
+                transaction.segments.forEach((segment) => {
+                    jsenTransaction.addSegment(segment.tag, segment.elements.map(x => x.value));
+                });
+            });
+        });
+
+        return jsen;
     }
 
     private _setTrailer(options?: X12SerializationOptions) {

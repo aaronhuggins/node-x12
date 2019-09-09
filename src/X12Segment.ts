@@ -1,5 +1,6 @@
 'use strict';
 
+import { JSEDISegment } from './JSEDINotation';
 import { Range } from './Positioning';
 import { X12Element } from './X12Element';
 import {
@@ -100,6 +101,10 @@ export class X12Segment {
         edi += options.segmentTerminator;
         
         return edi;
+    }
+
+    toJSON() {
+        return new JSEDISegment(this.tag, this.elements.map(x => x.value));
     }
 
     private _checkSupportedSegment() {

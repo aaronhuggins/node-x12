@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
+const JSEDINotation_1 = require("./JSEDINotation");
 const X12Segment_1 = require("./X12Segment");
 const X12Enumerables_1 = require("./X12Enumerables");
 const X12SerializationOptions_1 = require("./X12SerializationOptions");
@@ -42,6 +43,13 @@ class X12Transaction {
         }
         edi += this.trailer.toString(options);
         return edi;
+    }
+    toJSON() {
+        const jsen = new JSEDINotation_1.JSEDITransaction(this.header.elements.map(x => x.value));
+        this.segments.forEach((segment) => {
+            jsen.addSegment(segment.tag, segment.elements.map(x => x.value));
+        });
+        return jsen;
     }
     _setTrailer(options) {
         options = options

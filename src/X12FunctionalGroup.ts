@@ -1,5 +1,6 @@
 'use strict';
 
+import { JSEDIFunctionalGroup } from './JSEDINotation';
 import { X12Segment } from './X12Segment';
 import { X12SupportedSegments } from './X12Enumerables';
 import { X12Transaction } from './X12Transaction';
@@ -66,6 +67,20 @@ export class X12FunctionalGroup {
         edi += this.trailer.toString(options);
         
         return  edi;
+    }
+
+    toJSON() {
+        const jsen = new JSEDIFunctionalGroup(this.header.elements.map(x => x.value));
+
+        this.transactions.forEach((transaction) => {
+            const jsenTransaction = jsen.addTransaction(transaction.header.elements.map(x => x.value));
+
+            transaction.segments.forEach((segment) => {
+                jsenTransaction.addSegment(segment.tag, segment.elements.map(x => x.value));
+            });
+        });
+
+        return jsen;
     }
 
     private _setTrailer(options?: X12SerializationOptions) {

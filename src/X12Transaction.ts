@@ -1,5 +1,6 @@
 'use strict';
 
+import { JSEDITransaction } from './JSEDINotation';
 import { X12Segment } from './X12Segment';
 import { X12SupportedSegments } from './X12Enumerables';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
@@ -67,6 +68,16 @@ export class X12Transaction {
         edi += this.trailer.toString(options);
         
         return edi;
+    }
+
+    toJSON() {
+        const jsen = new JSEDITransaction(this.header.elements.map(x => x.value));
+
+        this.segments.forEach((segment) => {
+            jsen.addSegment(segment.tag, segment.elements.map(x => x.value));
+        });
+
+        return jsen;
     }
 
     private _setTrailer(options?: X12SerializationOptions) {

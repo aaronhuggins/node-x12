@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
+const JSEDINotation_1 = require("./JSEDINotation");
 const X12Segment_1 = require("./X12Segment");
 const X12Enumerables_1 = require("./X12Enumerables");
 const X12Transaction_1 = require("./X12Transaction");
@@ -42,6 +43,16 @@ class X12FunctionalGroup {
         }
         edi += this.trailer.toString(options);
         return edi;
+    }
+    toJSON() {
+        const jsen = new JSEDINotation_1.JSEDIFunctionalGroup(this.header.elements.map(x => x.value));
+        this.transactions.forEach((transaction) => {
+            const jsenTransaction = jsen.addTransaction(transaction.header.elements.map(x => x.value));
+            transaction.segments.forEach((segment) => {
+                jsenTransaction.addSegment(segment.tag, segment.elements.map(x => x.value));
+            });
+        });
+        return jsen;
     }
     _setTrailer(options) {
         options = options

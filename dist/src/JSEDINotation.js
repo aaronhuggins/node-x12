@@ -6,8 +6,10 @@ class JSEDINotation {
         this.options = options || {};
         this.functionalGroups = new Array();
     }
-    addFunctionalGroup(functionalGroup) {
+    addFunctionalGroup(header) {
+        const functionalGroup = new JSEDIFunctionalGroup(header);
         this.functionalGroups.push(functionalGroup);
+        return functionalGroup;
     }
 }
 exports.JSEDINotation = JSEDINotation;
@@ -16,8 +18,10 @@ class JSEDIFunctionalGroup {
         this.header = header || new Array();
         this.transactions = new Array();
     }
-    addTransaction(transaction) {
+    addTransaction(header) {
+        const transaction = new JSEDITransaction(header);
         this.transactions.push(transaction);
+        return transaction;
     }
 }
 exports.JSEDIFunctionalGroup = JSEDIFunctionalGroup;
@@ -26,8 +30,10 @@ class JSEDITransaction {
         this.header = header || new Array();
         this.segments = new Array();
     }
-    addSegment(segment) {
+    addSegment(tag, elements) {
+        const segment = new JSEDISegment(tag, elements);
         this.segments.push(segment);
+        return segment;
     }
 }
 exports.JSEDITransaction = JSEDITransaction;

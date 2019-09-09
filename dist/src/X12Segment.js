@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
+const JSEDINotation_1 = require("./JSEDINotation");
 const Positioning_1 = require("./Positioning");
 const X12Element_1 = require("./X12Element");
 const X12Enumerables_1 = require("./X12Enumerables");
@@ -66,6 +67,9 @@ class X12Segment {
         }
         edi += options.segmentTerminator;
         return edi;
+    }
+    toJSON() {
+        return new JSEDINotation_1.JSEDISegment(this.tag, this.elements.map(x => x.value));
     }
     _checkSupportedSegment() {
         let supported = false;

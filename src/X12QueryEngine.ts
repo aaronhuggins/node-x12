@@ -9,10 +9,18 @@ import { X12Segment } from './X12Segment';
 import { X12Element } from './X12Element';
 
 export class X12QueryEngine {
-    constructor(private _parser: X12Parser) { }
+    constructor(parser: X12Parser | boolean) {
+        this._parser = typeof parser === 'boolean'
+            ? new X12Parser(parser)
+            : parser;
+    }
+
+    private _parser: X12Parser
     
-    query(rawEdi: string, reference: string): X12QueryResult[] {
-        let interchange = this._parser.parseX12(rawEdi);
+    query(rawEdi: string | X12Interchange, reference: string): X12QueryResult[] {
+        let interchange = typeof rawEdi === 'string'
+            ? this._parser.parseX12(rawEdi)
+            : rawEdi;
         
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g); // ex. HL+O+P+I
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g); // ex. PO1-N9-
@@ -190,6 +198,7 @@ export class X12QueryResult {
         this.transaction = transaction;
         this.segment = segment;
         this.element = element;
+        this.value = element.value;
     }
     
     interchange: X12Interchange;
@@ -197,4 +206,5 @@ export class X12QueryResult {
     transaction: X12Transaction;
     segment: X12Segment;
     element: X12Element;
+    value: string;
 }

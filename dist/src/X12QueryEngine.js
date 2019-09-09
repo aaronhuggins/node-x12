@@ -1,12 +1,17 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 const Errors_1 = require("./Errors");
+const X12Parser_1 = require("./X12Parser");
 class X12QueryEngine {
-    constructor(_parser) {
-        this._parser = _parser;
+    constructor(parser) {
+        this._parser = typeof parser === 'boolean'
+            ? new X12Parser_1.X12Parser(parser)
+            : parser;
     }
     query(rawEdi, reference) {
-        let interchange = this._parser.parseX12(rawEdi);
+        let interchange = typeof rawEdi === 'string'
+            ? this._parser.parseX12(rawEdi)
+            : rawEdi;
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g);
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g);
         let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g);
@@ -143,6 +148,7 @@ class X12QueryResult {
         this.transaction = transaction;
         this.segment = segment;
         this.element = element;
+        this.value = element.value;
     }
 }
 exports.X12QueryResult = X12QueryResult;

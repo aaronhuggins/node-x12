@@ -23,6 +23,11 @@ export class X12QueryEngine {
             : rawEdi;
         
         let forEachMatch = reference.match(/FOREACH\("[A-Z0-9]{2,3}"\)=>.+/g); // ex. FOREACH("LX")=>MAN02
+
+        if(forEachMatch) {
+            reference = this._evaluateForEachQueryPart(forEachMatch[0]);
+        }
+
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g); // ex. HL+O+P+I
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g); // ex. PO1-N9-
         let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g); // ex. REF02; need to remove trailing ":" if exists
@@ -36,10 +41,6 @@ export class X12QueryEngine {
             for (let j = 0; j < group.transactions.length; j++) {
                 let txn = group.transactions[j];
                 let segments = txn.segments;
-                
-                if(forEachMatch) {
-                    segments = this._evaluateForEachQueryPart(interchange, forEachMatch[0]);
-                }
 
                 if (hlPathMatch) {
                     segments = this._evaluateHLQueryPart(txn, hlPathMatch[0]);
@@ -79,18 +80,12 @@ export class X12QueryEngine {
         return (results.length == 0) ? null : results[0];
     }
 
-    private _evaluateForEachQueryPart(interchange: X12Interchange, forEachSegment: string): X12Segment[] {
+    private _evaluateForEachQueryPart(forEachSegment: string): string {
         const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf('=>'));
         const queryPart = forEachSegment.substr(forEachSegment.indexOf('=>') + 2);
         const selectedPath = forEachPart.split('"')[1];
-
-        let matches = new Array<X12Segment>();
-
-        const results = this.query(interchange, `${selectedPath}-${queryPart}`)
-
-        matches = results.map((result) => result.segment)
         
-        return matches;
+        return `${selectedPath}-${queryPart}`;
     }
     
     private _evaluateHLQueryPart(transaction: X12Transaction, hlPath: string): X12Segment[] {

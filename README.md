@@ -38,6 +38,16 @@ The query language makes it possible to directly select values from the class ob
 **Example 5: Select values from a loop series**<br />
 `FOREACH("LX")=>MAN02:MAN01["CP"]`
 
+### Gotchas
+Implementers of ASC X12 are not guaranteed to conform completely to spec. There are scenarios that this library WILL NOT be able to handle and WILL NEVER be added. Despite the addition of functionality beyond the base parser from the original libray, the goal of this library is to remain a simple implementation of the spec. Some examples of scenarios this library won't handle:
+- Control characters in the content of an element
+- Mixed encrypted/non-encrypted documents
+- Missing elements in XYZ tag
+
+Such issues should be resolved between a user of this library and the implementer of ASC X12 documents they are working with.
+
+A scenario we are looking to fix in the immediate future: fat EDI documents. These are documents we define as having multiple, complete, valid documents in a single file. This library will eventually split such a file into an array of X12Interchange objects. Currently, a user of this library will need to handle that logic on their own or work with their implementer.
+
 ## Documentation
 Additional documentation can be found in the wiki. Currently, it is out-of-date. Future documentation is slated to be self-hosted within the repository, and generated from JSDoc. Please keep an eye out for a documentation over-haul in the near future.
 

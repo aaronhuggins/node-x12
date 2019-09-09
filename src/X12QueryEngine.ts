@@ -59,7 +59,7 @@ export class X12QueryEngine {
         return results;
     }
     
-    querySingle(rawEdi: string, reference: string): X12QueryResult {
+    querySingle(rawEdi: string | X12Interchange, reference: string): X12QueryResult {
         let results = this.query(rawEdi, reference);
         return (results.length == 0) ? null : results[0];
     }

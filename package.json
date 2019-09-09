@@ -1,7 +1,7 @@
 {
     "name": "node-x12",
     "version": "1.0.5",
-    "description": "A simple ASC X12 parser for NodeJS.",
+    "description": "A simple ASC X12 parser, generator, query engine, and mapper for NodeJS.",
     "main": "dist/core.js",
     "keywords": [
         "x12",
@@ -14,7 +14,7 @@
     ],
     "homepage": "https://github.com/ahuggins-nhs/node-x12",
     "bugs": {
-        "url": "https://github.com/ahuggins-nhs/node-x12/wiki"
+        "url": "https://github.com/ahuggins-nhs/node-x12/issues"
     },
     "license": "MIT",
     "author": {

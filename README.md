@@ -1,5 +1,5 @@
 # Node-X12
-A simple ASC X12 parser, generator, and mapper for NodeJS. Created originally for the [TC Toolbox](https://github.com/TrueCommerce/vscode-tctoolbox) project by TrueCommerce; the public repository for TC Toolbox has been taken offline. The original, parser-only library may be found at [node-x12](https://github.com/TrueCommerce/node-x12), which is still public at this time but no longer maintained.
+A simple ASC X12 parser, generator, query engine, and mapper for NodeJS. Created originally for the [TC Toolbox](https://github.com/TrueCommerce/vscode-tctoolbox) project by TrueCommerce; the public repository for TC Toolbox has been taken offline. The original, parser-only library may be found at [node-x12](https://github.com/TrueCommerce/node-x12), which is still public at this time but no longer maintained.
 
 ## Features
 - Near-complete class object model of ASC X12 parts *

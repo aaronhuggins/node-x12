@@ -87,7 +87,7 @@ export class X12Interchange {
         return edi;
     }
 
-    toJSON() {
+    toJSEDINotation() {
         const jsen = new JSEDINotation(this.header.elements.map(x => x.value), this.options);
 
         this.functionalGroups.forEach((functionalGroup) => {
@@ -103,6 +103,10 @@ export class X12Interchange {
         });
 
         return jsen;
+    }
+
+    toJSON() {
+        return this.toJSEDINotation();
     }
 
     private _setTrailer(options?: X12SerializationOptions) {

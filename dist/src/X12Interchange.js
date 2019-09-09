@@ -60,7 +60,7 @@ class X12Interchange {
         edi += this.trailer.toString(options);
         return edi;
     }
-    toJSON() {
+    toJSEDINotation() {
         const jsen = new JSEDINotation_1.JSEDINotation(this.header.elements.map(x => x.value), this.options);
         this.functionalGroups.forEach((functionalGroup) => {
             const jsenFunctionalGroup = jsen.addFunctionalGroup(functionalGroup.header.elements.map(x => x.value));
@@ -72,6 +72,9 @@ class X12Interchange {
             });
         });
         return jsen;
+    }
+    toJSON() {
+        return this.toJSEDINotation();
     }
     _setTrailer(options) {
         options = options

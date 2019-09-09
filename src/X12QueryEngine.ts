@@ -9,7 +9,7 @@ import { X12Segment } from './X12Segment';
 import { X12Element } from './X12Element';
 
 export class X12QueryEngine {
-    constructor(parser: X12Parser | boolean) {
+    constructor(parser: X12Parser | boolean = true) {
         this._parser = typeof parser === 'boolean'
             ? new X12Parser(parser)
             : parser;
@@ -22,6 +22,7 @@ export class X12QueryEngine {
             ? this._parser.parse(rawEdi)
             : rawEdi;
         
+        let forEachMatch = reference.match(/FOREACH\[\"[A-Z0-9]{2,3}\"\]:.+/g); // ex. FOREACH["LX"]:MAN02
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g); // ex. HL+O+P+I
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g); // ex. PO1-N9-
         let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g); // ex. REF02; need to remove trailing ":" if exists
@@ -36,6 +37,10 @@ export class X12QueryEngine {
                 let txn = group.transactions[j];
                 let segments = txn.segments;
                 
+                if(forEachMatch) {
+                    segments = this._evaluateForEachQueryPart(interchange, forEachMatch[0]);
+                }
+
                 if (hlPathMatch) {
                     segments = this._evaluateHLQueryPart(txn, hlPathMatch[0]);
                 }
@@ -62,6 +67,20 @@ export class X12QueryEngine {
     querySingle(rawEdi: string | X12Interchange, reference: string): X12QueryResult {
         let results = this.query(rawEdi, reference);
         return (results.length == 0) ? null : results[0];
+    }
+
+    private _evaluateForEachQueryPart(interchange: X12Interchange, forEachSegment: string): X12Segment[] {
+        const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf(':'));
+        const queryPart = forEachSegment.substr(forEachSegment.indexOf(':') + 1);
+        const selectedPath = forEachPart.split('"')[1];
+
+        let matches = new Array<X12Segment>();
+
+        const results = this.query(interchange, `${selectedPath}-${queryPart}`)
+
+        matches = results.map((result) => result.segment)
+        
+        return matches;
     }
     
     private _evaluateHLQueryPart(transaction: X12Transaction, hlPath: string): X12Segment[] {

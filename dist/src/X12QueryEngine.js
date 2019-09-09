@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Errors_1 = require("./Errors");
 const X12Parser_1 = require("./X12Parser");
 class X12QueryEngine {
-    constructor(parser) {
+    constructor(parser = true) {
         this._parser = typeof parser === 'boolean'
             ? new X12Parser_1.X12Parser(parser)
             : parser;
@@ -12,6 +12,7 @@ class X12QueryEngine {
         let interchange = typeof rawEdi === 'string'
             ? this._parser.parse(rawEdi)
             : rawEdi;
+        let forEachMatch = reference.match(/FOREACH\[\"[A-Z0-9]{2,3}\"\]:.+/g);
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g);
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g);
         let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g);
@@ -22,6 +23,9 @@ class X12QueryEngine {
             for (let j = 0; j < group.transactions.length; j++) {
                 let txn = group.transactions[j];
                 let segments = txn.segments;
+                if (forEachMatch) {
+                    segments = this._evaluateForEachQueryPart(interchange, forEachMatch[0]);
+                }
                 if (hlPathMatch) {
                     segments = this._evaluateHLQueryPart(txn, hlPathMatch[0]);
                 }
@@ -42,6 +46,15 @@ class X12QueryEngine {
     querySingle(rawEdi, reference) {
         let results = this.query(rawEdi, reference);
         return (results.length == 0) ? null : results[0];
+    }
+    _evaluateForEachQueryPart(interchange, forEachSegment) {
+        const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf(':'));
+        const queryPart = forEachSegment.substr(forEachSegment.indexOf(':') + 1);
+        const selectedPath = forEachPart.split('"')[1];
+        let matches = new Array();
+        const results = this.query(interchange, `${selectedPath}-${queryPart}`);
+        matches = results.map((result) => result.segment);
+        return matches;
     }
     _evaluateHLQueryPart(transaction, hlPath) {
         let qualified = false;

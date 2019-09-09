@@ -10,5 +10,6 @@ __export(require("./src/X12Interchange"));
 __export(require("./src/X12Parser"));
 __export(require("./src/X12QueryEngine"));
 __export(require("./src/X12Segment"));
-__export(require("./src/X12Transaction"));
 __export(require("./src/X12SerializationOptions"));
+__export(require("./src/X12Transaction"));
+__export(require("./src/X12TransactionMap"));

@@ -3,6 +3,7 @@
 import { JSEDITransaction } from './JSEDINotation';
 import { X12Segment } from './X12Segment';
 import { X12SupportedSegments } from './X12Enumerables';
+import { X12TransactionMap } from './X12TransactionMap';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Transaction {
@@ -44,6 +45,12 @@ export class X12Transaction {
         this.trailer.replaceElement(`${this.segments.length + 2}`, 1);
 
         return segment;
+    }
+
+    toObject(map: object, helper?: Function) {
+        const mapper = new X12TransactionMap(map, this, helper);
+
+        return mapper.toObject();
     }
     
     toString(options?: X12SerializationOptions): string {

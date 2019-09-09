@@ -7,7 +7,7 @@ import { X12SupportedSegments } from './X12Enumerables';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12Interchange {
-    constructor(segmentTerminator: string | X12SerializationOptions, elementDelimiter?: string, options?: X12SerializationOptions) {
+    constructor(segmentTerminator?: string | X12SerializationOptions, elementDelimiter?: string, options?: X12SerializationOptions) {
         this.functionalGroups = new Array<X12FunctionalGroup>();
 
         if (typeof segmentTerminator === 'string') {

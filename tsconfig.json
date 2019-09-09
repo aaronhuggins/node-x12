@@ -7,9 +7,10 @@
         "suppressImplicitAnyIndexErrors": true,
         "target": "es2017",
         "experimentalDecorators": true,
-        "outDir": "dist"
+        "outDir": "dist",
+        "types": []
     },
-    
+
     "exclude": [
         "node_modules"
     ]

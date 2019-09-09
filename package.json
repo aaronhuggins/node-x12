@@ -26,10 +26,13 @@
         "url": "https://github.com/ahuggins-nhs/node-x12.git"
     },
     "scripts": {
-        "tsc": "tsc"
+        "tsc": "tsc",
+        "prepack": "tsc",
+        "postpack": "del-cli ./dist"
     },
     "dependencies": {},
     "devDependencies": {
+        "del-cli": "^3.0.0",
         "gulp": "^4.0.2",
         "gulp-mocha": "^7.0.1",
         "gulp-shell": "^0.5.2",

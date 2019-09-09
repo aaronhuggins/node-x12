@@ -46,7 +46,7 @@ export class X12TransactionMap {
                             } else if (result.value === null || Array.isArray(clone[key][0])) {
                                 if (result.value) {
                                     clone[key].forEach((array: Array<string>) => {
-                                        array.push(this.helper(result.value, query, callback))
+                                        array.push(this.helper(key, result.value, query, callback))
                                     })
                                 } else {
                                     let superArray = new Array<string[]>();
@@ -60,13 +60,13 @@ export class X12TransactionMap {
                                             superArray[index] = new Array<string>();
                                         }
 
-                                        superArray[index].push(this.helper(value, query, callback))
+                                        superArray[index].push(this.helper(key, value, query, callback))
                                     })
 
                                     newArray.push(...superArray);
                                 }
                             } else {
-                                newArray.push(this.helper(result.value, query, callback));
+                                newArray.push(this.helper(key, result.value, query, callback));
                             }
                         } catch (err) {
                             throw new QuerySyntaxError(`${err.message}; bad query in ${map[key]}`);
@@ -83,7 +83,7 @@ export class X12TransactionMap {
                         } else if (result.value === null || Array.isArray(clones)) {
                             if (result.value) {
                                 clones.forEach((cloned: Array<object>) => {
-                                    cloned[key] = this.helper(result.value, map[key], callback);
+                                    cloned[key] = this.helper(key, result.value, map[key], callback);
                                 })
                             } else {
                                 if (!Array.isArray(clones)) {
@@ -95,11 +95,11 @@ export class X12TransactionMap {
                                         clones[index] = JSON.parse(JSON.stringify(clone));
                                     }
 
-                                    clones[index][key] = this.helper(value, map[key], callback)
+                                    clones[index][key] = this.helper(key, value, map[key], callback)
                                 })
                             }
                         } else {
-                            clone[key] = this.helper(result.value, map[key], callback)
+                            clone[key] = this.helper(key, result.value, map[key], callback)
                         }
                     } catch (err) {
                         throw new QuerySyntaxError(`${err.message}; bad query in ${map[key]}`);
@@ -115,9 +115,9 @@ export class X12TransactionMap {
             : clone;
     }
 
-    private _helper(value: string, query?: string, callback?: Function): any {
+    private _helper(key: string, value: string, query?: string, callback?: Function): any {
         if (callback) {
-            callback(value, query);
+            callback(key, value, query);
         }
 
         return value;

@@ -22,7 +22,7 @@ export class X12QueryEngine {
             ? this._parser.parse(rawEdi)
             : rawEdi;
         
-        let forEachMatch = reference.match(/FOREACH\("[A-Z0-9]{2,3}"\)=>.+/g); // ex. FOREACH("LX")=>MAN02
+        let forEachMatch = reference.match(/FOREACH\([A-Z0-9]{2,3}\)=>.+/g); // ex. FOREACH(LX)=>MAN02
 
         if(forEachMatch) {
             reference = this._evaluateForEachQueryPart(forEachMatch[0]);
@@ -31,7 +31,7 @@ export class X12QueryEngine {
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g); // ex. HL+O+P+I
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g); // ex. PO1-N9-
         let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g); // ex. REF02; need to remove trailing ":" if exists
-        let qualMatch = reference.match(/:[A-Za-z]{2,3}[0-9]{2,}\[\"[^\[\]\"\"]+\"\]/g); // ex. :REF01["PO"]
+        let qualMatch = reference.match(/:[A-Z0-9]{2,3}[0-9]{2,}\[[\"\'][^\[\]\"\"\'\']+[\"\']\]/g); // ex. :REF01["PO"]
         
         let results = new Array<X12QueryResult>();
         
@@ -83,7 +83,7 @@ export class X12QueryEngine {
     private _evaluateForEachQueryPart(forEachSegment: string): string {
         const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf('=>'));
         const queryPart = forEachSegment.substr(forEachSegment.indexOf('=>') + 2);
-        const selectedPath = forEachPart.split('"')[1];
+        const selectedPath = forEachPart.substr(forEachPart.indexOf('(') + 1, forEachPart.length - forEachPart.indexOf('(') - 2);
         
         return `${selectedPath}-${queryPart}`;
     }

@@ -18,7 +18,7 @@ class X12Parser {
         this._strict = _strict;
         this.diagnostics = new Array();
     }
-    parseX12(edi, options) {
+    parse(edi, options) {
         if (!edi) {
             throw new Errors_1.ArgumentNullError('edi');
         }

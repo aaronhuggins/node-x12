@@ -11,7 +11,7 @@ import { X12Parser, X12QueryEngine } from 'x12/core';
 
 // parse (deserialize) X12 EDI
 let parser = new X12Parser(true);
-let interchange = parser.parseX12('...raw X12 data...');
+let interchange = parser.parse('...raw X12 data...');
 
 // OR use the query engine to query a document
 // Syntax Documentation: https://github.com/TrueCommerce/node-x12/wiki/x12queryengine-api#element-reference-syntax

@@ -19,7 +19,7 @@ export class X12QueryEngine {
     
     query(rawEdi: string | X12Interchange, reference: string): X12QueryResult[] {
         let interchange = typeof rawEdi === 'string'
-            ? this._parser.parseX12(rawEdi)
+            ? this._parser.parse(rawEdi)
             : rawEdi;
         
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g); // ex. HL+O+P+I

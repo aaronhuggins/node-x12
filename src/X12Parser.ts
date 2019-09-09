@@ -22,7 +22,7 @@ export class X12Parser {
     
     diagnostics: X12Diagnostic[];
     
-    parseX12(edi: string, options?: X12SerializationOptions): X12Interchange {
+    parse(edi: string, options?: X12SerializationOptions): X12Interchange {
         if (!edi) {
             throw new ArgumentNullError('edi');
         }

@@ -6,7 +6,7 @@ describe('X12Formatting', () => {
     it('should replicate the source data unless changes are made', () => {
         let edi = fs.readFileSync('tests/test-data/850.edi', 'utf8');
         let parser = new core_1.X12Parser(true);
-        let interchange = parser.parseX12(edi);
+        let interchange = parser.parse(edi);
         let options = {
             format: true,
             endOfLine: '\r\n'

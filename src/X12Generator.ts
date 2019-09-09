@@ -43,7 +43,7 @@ export class X12Generator {
     validate() {
         this._generate();
 
-        return (new X12Parser(true)).parseX12(this.interchange.toString(this.options))
+        return (new X12Parser(true)).parse(this.interchange.toString(this.options))
     }
 
     toString() {

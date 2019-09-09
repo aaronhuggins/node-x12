@@ -10,7 +10,7 @@ class X12QueryEngine {
     }
     query(rawEdi, reference) {
         let interchange = typeof rawEdi === 'string'
-            ? this._parser.parseX12(rawEdi)
+            ? this._parser.parse(rawEdi)
             : rawEdi;
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g);
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g);

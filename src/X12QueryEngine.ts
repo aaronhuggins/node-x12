@@ -66,6 +66,16 @@ export class X12QueryEngine {
     
     querySingle(rawEdi: string | X12Interchange, reference: string): X12QueryResult {
         let results = this.query(rawEdi, reference);
+
+        if (reference.match(/FOREACH\("[A-Z0-9]{2,3}"\)=>.+/g)) {
+            const values = results.map((result) => result.value);
+
+            if (values.length !== 0) {
+                results[0].value = null;
+                results[0].values = values;
+            }
+        }
+
         return (results.length == 0) ? null : results[0];
     }
 
@@ -218,6 +228,7 @@ export class X12QueryResult {
         this.segment = segment;
         this.element = element;
         this.value = element.value;
+        this.values = new Array<string | string[]>();
     }
     
     interchange: X12Interchange;
@@ -226,4 +237,5 @@ export class X12QueryResult {
     segment: X12Segment;
     element: X12Element;
     value: string;
+    values: Array<string | string[]>;
 }

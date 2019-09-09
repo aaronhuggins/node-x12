@@ -45,6 +45,13 @@ class X12QueryEngine {
     }
     querySingle(rawEdi, reference) {
         let results = this.query(rawEdi, reference);
+        if (reference.match(/FOREACH\("[A-Z0-9]{2,3}"\)=>.+/g)) {
+            const values = results.map((result) => result.value);
+            if (values.length !== 0) {
+                results[0].value = null;
+                results[0].values = values;
+            }
+        }
         return (results.length == 0) ? null : results[0];
     }
     _evaluateForEachQueryPart(interchange, forEachSegment) {
@@ -162,6 +169,7 @@ class X12QueryResult {
         this.segment = segment;
         this.element = element;
         this.value = element.value;
+        this.values = new Array();
     }
 }
 exports.X12QueryResult = X12QueryResult;

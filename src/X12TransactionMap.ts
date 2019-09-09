@@ -6,19 +6,22 @@ import { X12QueryEngine } from './X12QueryEngine';
 import { X12Transaction } from './X12Transaction';
 
 export class X12TransactionMap {
-    constructor(map: object, transaction?: X12Transaction) {
+    constructor(map: object, transaction?: X12Transaction, helper?: Function) {
         this.map = map;
         this.transaction = transaction;
+        this.helper = helper || this._helper;
     }
 
     map: object;
     transaction: X12Transaction;
+    helper: Function;
 
-    setTransaction(transaction: X12Transaction) {
+    setTransaction(transaction: X12Transaction, helper?: Function) {
         this.transaction = transaction;
+        this.helper = helper || this._helper;
     }
 
-    toObject(map?: object) {
+    toObject(map?: object, callback?: Function) {
         map = map || this.map;
 
         const clone = JSON.parse(JSON.stringify(map));
@@ -43,7 +46,7 @@ export class X12TransactionMap {
                             } else if (result.value === null || Array.isArray(clone[key][0])) {
                                 if (result.value) {
                                     clone[key].forEach((array: Array<string>) => {
-                                        array.push(result.value)
+                                        array.push(this.helper(result.value, query, callback))
                                     })
                                 } else {
                                     let superArray = new Array<string[]>();
@@ -57,13 +60,13 @@ export class X12TransactionMap {
                                             superArray[index] = new Array<string>();
                                         }
 
-                                        superArray[index].push(value)
+                                        superArray[index].push(this.helper(value, query, callback))
                                     })
 
                                     newArray.push(...superArray);
                                 }
                             } else {
-                                newArray.push(result.value);
+                                newArray.push(this.helper(result.value, query, callback));
                             }
                         } catch (err) {
                             throw new QuerySyntaxError(`${err.message}; bad query in ${map[key]}`);
@@ -80,7 +83,7 @@ export class X12TransactionMap {
                         } else if (result.value === null || Array.isArray(clones)) {
                             if (result.value) {
                                 clones.forEach((cloned: Array<object>) => {
-                                    cloned[key] = result.value;
+                                    cloned[key] = this.helper(result.value, map[key], callback);
                                 })
                             } else {
                                 if (!Array.isArray(clones)) {
@@ -92,11 +95,11 @@ export class X12TransactionMap {
                                         clones[index] = JSON.parse(JSON.stringify(clone));
                                     }
 
-                                    clones[index][key] = value
+                                    clones[index][key] = this.helper(value, map[key], callback)
                                 })
                             }
                         } else {
-                            clone[key] = result.value
+                            clone[key] = this.helper(result.value, map[key], callback)
                         }
                     } catch (err) {
                         throw new QuerySyntaxError(`${err.message}; bad query in ${map[key]}`);
@@ -110,5 +113,13 @@ export class X12TransactionMap {
         return Array.isArray(clones)
             ? clones
             : clone;
+    }
+
+    private _helper(value: string, query?: string, callback?: Function): any {
+        if (callback) {
+            callback(value, query);
+        }
+
+        return value;
     }
 }

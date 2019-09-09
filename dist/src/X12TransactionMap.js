@@ -4,14 +4,16 @@ const Errors_1 = require("./Errors");
 const X12Interchange_1 = require("./X12Interchange");
 const X12QueryEngine_1 = require("./X12QueryEngine");
 class X12TransactionMap {
-    constructor(map, transaction) {
+    constructor(map, transaction, helper) {
         this.map = map;
         this.transaction = transaction;
+        this.helper = helper || this._helper;
     }
-    setTransaction(transaction) {
+    setTransaction(transaction, helper) {
         this.transaction = transaction;
+        this.helper = helper || this._helper;
     }
-    toObject(map) {
+    toObject(map, callback) {
         map = map || this.map;
         const clone = JSON.parse(JSON.stringify(map));
         let clones = null;
@@ -32,7 +34,7 @@ class X12TransactionMap {
                             else if (result.value === null || Array.isArray(clone[key][0])) {
                                 if (result.value) {
                                     clone[key].forEach((array) => {
-                                        array.push(result.value);
+                                        array.push(this.helper(result.value, query, callback));
                                     });
                                 }
                                 else {
@@ -44,13 +46,13 @@ class X12TransactionMap {
                                         if (!Array.isArray(superArray[index])) {
                                             superArray[index] = new Array();
                                         }
-                                        superArray[index].push(value);
+                                        superArray[index].push(this.helper(value, query, callback));
                                     });
                                     newArray.push(...superArray);
                                 }
                             }
                             else {
-                                newArray.push(result.value);
+                                newArray.push(this.helper(result.value, query, callback));
                             }
                         }
                         catch (err) {
@@ -68,7 +70,7 @@ class X12TransactionMap {
                         else if (result.value === null || Array.isArray(clones)) {
                             if (result.value) {
                                 clones.forEach((cloned) => {
-                                    cloned[key] = result.value;
+                                    cloned[key] = this.helper(result.value, map[key], callback);
                                 });
                             }
                             else {
@@ -79,12 +81,12 @@ class X12TransactionMap {
                                     if (clones[index] === undefined) {
                                         clones[index] = JSON.parse(JSON.stringify(clone));
                                     }
-                                    clones[index][key] = value;
+                                    clones[index][key] = this.helper(value, map[key], callback);
                                 });
                             }
                         }
                         else {
-                            clone[key] = result.value;
+                            clone[key] = this.helper(result.value, map[key], callback);
                         }
                     }
                     catch (err) {
@@ -99,6 +101,12 @@ class X12TransactionMap {
         return Array.isArray(clones)
             ? clones
             : clone;
+    }
+    _helper(value, query, callback) {
+        if (callback) {
+            callback(value, query);
+        }
+        return value;
     }
 }
 exports.X12TransactionMap = X12TransactionMap;

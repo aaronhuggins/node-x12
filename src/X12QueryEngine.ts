@@ -16,13 +16,15 @@ export class X12QueryEngine {
     }
 
     private _parser: X12Parser
+
+    private _forEachPattern: RegExp = /FOREACH\([A-Z0-9]{2,3}\)=>.+/g;
     
     query(rawEdi: string | X12Interchange, reference: string): X12QueryResult[] {
         let interchange = typeof rawEdi === 'string'
             ? this._parser.parse(rawEdi)
             : rawEdi;
         
-        let forEachMatch = reference.match(/FOREACH\([A-Z0-9]{2,3}\)=>.+/g); // ex. FOREACH(LX)=>MAN02
+        let forEachMatch = reference.match(this._forEachPattern); // ex. FOREACH(LX)=>MAN02
 
         if(forEachMatch) {
             reference = this._evaluateForEachQueryPart(forEachMatch[0]);
@@ -68,7 +70,7 @@ export class X12QueryEngine {
     querySingle(rawEdi: string | X12Interchange, reference: string): X12QueryResult {
         let results = this.query(rawEdi, reference);
 
-        if (reference.match(/FOREACH\("[A-Z0-9]{2,3}"\)=>.+/g)) {
+        if (reference.match(this._forEachPattern)) {
             const values = results.map((result) => result.value);
 
             if (values.length !== 0) {

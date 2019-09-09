@@ -61,7 +61,6 @@ class X12TransactionMap {
                 }
                 else if (typeof map[key] === 'string') {
                     try {
-                        clone[key] = engine.querySingle(interchange, map[key]).value;
                         const result = engine.querySingle(interchange, map[key]);
                         if (result === null) {
                             clone[key] = null;
@@ -80,7 +79,7 @@ class X12TransactionMap {
                                     if (clones[index] === undefined) {
                                         clones[index] = JSON.parse(JSON.stringify(clone));
                                     }
-                                    clones[index][key] = result.value;
+                                    clones[index][key] = value;
                                 });
                             }
                         }

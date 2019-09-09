@@ -73,7 +73,6 @@ export class X12TransactionMap {
                     clone[key] = newArray;
                 } else if (typeof map[key] === 'string') {
                     try {
-                        clone[key] = engine.querySingle(interchange, map[key]).value;
                         const result = engine.querySingle(interchange, map[key]);
 
                         if (result === null) {
@@ -87,12 +86,13 @@ export class X12TransactionMap {
                                 if (!Array.isArray(clones)) {
                                     clones = new Array<object>();
                                 }
+
                                 result.values.forEach((value: string, index: number) => {
                                     if (clones[index] === undefined) {
                                         clones[index] = JSON.parse(JSON.stringify(clone));
                                     }
 
-                                    clones[index][key] = result.value
+                                    clones[index][key] = value
                                 })
                             }
                         } else {

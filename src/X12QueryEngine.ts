@@ -22,7 +22,7 @@ export class X12QueryEngine {
             ? this._parser.parse(rawEdi)
             : rawEdi;
         
-        let forEachMatch = reference.match(/FOREACH\[\"[A-Z0-9]{2,3}\"\]:.+/g); // ex. FOREACH["LX"]:MAN02
+        let forEachMatch = reference.match(/FOREACH\("[A-Z0-9]{2,3}"\)=>.+/g); // ex. FOREACH("LX")=>MAN02
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g); // ex. HL+O+P+I
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g); // ex. PO1-N9-
         let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g); // ex. REF02; need to remove trailing ":" if exists
@@ -70,8 +70,8 @@ export class X12QueryEngine {
     }
 
     private _evaluateForEachQueryPart(interchange: X12Interchange, forEachSegment: string): X12Segment[] {
-        const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf(':'));
-        const queryPart = forEachSegment.substr(forEachSegment.indexOf(':') + 1);
+        const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf('=>'));
+        const queryPart = forEachSegment.substr(forEachSegment.indexOf('=>') + 2);
         const selectedPath = forEachPart.split('"')[1];
 
         let matches = new Array<X12Segment>();

@@ -12,7 +12,7 @@ class X12QueryEngine {
         let interchange = typeof rawEdi === 'string'
             ? this._parser.parse(rawEdi)
             : rawEdi;
-        let forEachMatch = reference.match(/FOREACH\[\"[A-Z0-9]{2,3}\"\]:.+/g);
+        let forEachMatch = reference.match(/FOREACH\("[A-Z0-9]{2,3}"\)=>.+/g);
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g);
         let segPathMatch = reference.match(/([A-Z0-9]{2,3}-)+/g);
         let elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^\[]?/g);
@@ -48,8 +48,8 @@ class X12QueryEngine {
         return (results.length == 0) ? null : results[0];
     }
     _evaluateForEachQueryPart(interchange, forEachSegment) {
-        const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf(':'));
-        const queryPart = forEachSegment.substr(forEachSegment.indexOf(':') + 1);
+        const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf('=>'));
+        const queryPart = forEachSegment.substr(forEachSegment.indexOf('=>') + 2);
         const selectedPath = forEachPart.split('"')[1];
         let matches = new Array();
         const results = this.query(interchange, `${selectedPath}-${queryPart}`);

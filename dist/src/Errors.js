@@ -1,34 +1,30 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-class ArgumentNullError {
+class ArgumentNullError extends Error {
     constructor(argumentName) {
+        super(`The argument, '${argumentName}', cannot be null.`);
         this.name = 'ArgumentNullError';
-        this.message = `The argument, '${argumentName}', cannot be null.`;
-        this.stack = (new Error()).stack;
     }
 }
 exports.ArgumentNullError = ArgumentNullError;
-class GeneratorError {
+class GeneratorError extends Error {
     constructor(message) {
+        super(message);
         this.name = 'GeneratorError';
-        this.message = message;
-        this.stack = (new Error()).stack;
     }
 }
 exports.GeneratorError = GeneratorError;
-class ParserError {
+class ParserError extends Error {
     constructor(message) {
+        super(message);
         this.name = 'ParserError';
-        this.message = message;
-        this.stack = (new Error()).stack;
     }
 }
 exports.ParserError = ParserError;
-class QuerySyntaxError {
+class QuerySyntaxError extends Error {
     constructor(message) {
+        super(message);
         this.name = 'QuerySyntaxError';
-        this.message = message;
-        this.stack = (new Error()).stack;
     }
 }
 exports.QuerySyntaxError = QuerySyntaxError;

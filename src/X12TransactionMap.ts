@@ -22,7 +22,7 @@ export class X12TransactionMap {
         map = map || this.map;
 
         const clone = JSON.parse(JSON.stringify(map));
-        let clones = new Array<object>();
+        let clones: Array<object> = null;
         const engine = new X12QueryEngine(false);
         const interchange = new X12Interchange();
         interchange.setHeader(['00','','00','','ZZ','00000000','01','00000000','000000','0000','|','00000','00000000','0','P','>']);

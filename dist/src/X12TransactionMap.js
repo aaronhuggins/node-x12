@@ -14,7 +14,7 @@ class X12TransactionMap {
     toObject(map) {
         map = map || this.map;
         const clone = JSON.parse(JSON.stringify(map));
-        let clones = new Array();
+        let clones = null;
         const engine = new X12QueryEngine_1.X12QueryEngine(false);
         const interchange = new X12Interchange_1.X12Interchange();
         interchange.setHeader(['00', '', '00', '', 'ZZ', '00000000', '01', '00000000', '000000', '0000', '|', '00000', '00000000', '0', 'P', '>']);

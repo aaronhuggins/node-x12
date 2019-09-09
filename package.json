@@ -9,6 +9,9 @@
         "ansi",
         "asc"
     ],
+    "files": [
+        "/dist"
+    ],
     "homepage": "https://github.com/ahuggins-nhs/node-x12",
     "bugs": {
         "url": "https://github.com/ahuggins-nhs/node-x12/wiki"

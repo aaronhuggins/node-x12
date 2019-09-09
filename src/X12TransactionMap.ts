@@ -30,22 +30,26 @@ export class X12TransactionMap {
         Object.keys(clone).forEach((key) => {
 
             if (Object.prototype.hasOwnProperty.call(map, key)) {
-                try {
-                    if (Array.isArray(clone[key]) && typeof clone[key][0] === 'string') {
-                        const newArray = new Array<string>();
-    
-                        (clone[key] as Array<string>).forEach((query) => {
+                if (Array.isArray(clone[key]) && typeof clone[key][0] === 'string') {
+                    const newArray = new Array<string>();
+
+                    (clone[key] as Array<string>).forEach((query) => {
+                        try {
                             newArray.push(engine.querySingle(interchange, query).value);
-                        })
-    
-                        clone[key] = newArray;
-                    } else if (typeof clone[key] === 'string') {
+                        } catch (err) {
+                            throw new QuerySyntaxError(`${err.message}; bad query in ${clone[key]}`);
+                        }
+                    })
+
+                    clone[key] = newArray;
+                } else if (typeof clone[key] === 'string') {
+                    try {
                         clone[key] = engine.querySingle(interchange, clone[key]).value;
-                    } else {
-                        clone[key] = this.toObject(clone[key]);
+                    } catch (err) {
+                        throw new QuerySyntaxError(`${err.message}; bad query in ${clone[key]}`);
                     }
-                } catch (err) {
-                    throw new QuerySyntaxError(`${err.message}; bad query in ${clone[key]}`);
+                } else {
+                    clone[key] = this.toObject(clone[key]);
                 }
             }
         })

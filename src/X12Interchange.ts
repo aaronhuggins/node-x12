@@ -1,154 +1,154 @@
-'use strict';
+'use strict'
 
-import { JSEDINotation } from './JSEDINotation';
-import { X12FunctionalGroup } from './X12FunctionalGroup';
-import { X12Segment } from './X12Segment';
-import { X12SupportedSegments } from './X12Enumerables';
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
+import { JSEDINotation } from './JSEDINotation'
+import { X12FunctionalGroup } from './X12FunctionalGroup'
+import { X12Segment } from './X12Segment'
+import { X12SupportedSegments } from './X12Enumerables'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
 
 export class X12Interchange {
-    /**
+  /**
      * @description Create an interchange.
      * @param {string|X12SerializationOptions} [segmentTerminator] A character to terminate segments when serializing; or an instance of X12SerializationOptions.
      * @param {string} [elementDelimiter] A character to separate elements when serializing; only required when segmentTerminator is a character.
      * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
      */
-    constructor(segmentTerminator?: string | X12SerializationOptions, elementDelimiter?: string, options?: X12SerializationOptions) {
-        this.functionalGroups = new Array<X12FunctionalGroup>();
+  constructor (segmentTerminator?: string | X12SerializationOptions, elementDelimiter?: string, options?: X12SerializationOptions) {
+    this.functionalGroups = new Array<X12FunctionalGroup>()
 
-        if (typeof segmentTerminator === 'string') {
-            this.segmentTerminator = segmentTerminator;
-            if (typeof elementDelimiter === 'string') {
-                this.elementDelimiter = elementDelimiter;
-            } else {
-                throw new TypeError('Parameter "elementDelimiter" must be type of string.')
-            }
-        } else {
-            this.options = defaultSerializationOptions(segmentTerminator);
-            this.segmentTerminator = this.options.segmentTerminator;
-            this.elementDelimiter = this.options.elementDelimiter;
-        }
-
-        if (this.options === undefined) {
-            this.options = defaultSerializationOptions(options);
-        }
+    if (typeof segmentTerminator === 'string') {
+      this.segmentTerminator = segmentTerminator
+      if (typeof elementDelimiter === 'string') {
+        this.elementDelimiter = elementDelimiter
+      } else {
+        throw new TypeError('Parameter "elementDelimiter" must be type of string.')
+      }
+    } else {
+      this.options = defaultSerializationOptions(segmentTerminator)
+      this.segmentTerminator = this.options.segmentTerminator
+      this.elementDelimiter = this.options.elementDelimiter
     }
-    
-    header: X12Segment;
-    trailer: X12Segment;
-    
-    functionalGroups: X12FunctionalGroup[];
-    
-    segmentTerminator: string;
-    elementDelimiter: string;
-    options: X12SerializationOptions;
 
-    /**
+    if (this.options === undefined) {
+      this.options = defaultSerializationOptions(options)
+    }
+  }
+
+  header: X12Segment;
+  trailer: X12Segment;
+
+  functionalGroups: X12FunctionalGroup[];
+
+  segmentTerminator: string;
+  elementDelimiter: string;
+  options: X12SerializationOptions;
+
+  /**
      * @description Set an ISA header on this interchange.
      * @param {string[]} elements An array of elements for an ISA header.
      * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
      */
-    setHeader(elements: string[], options?: X12SerializationOptions) {
-        options = options
-            ? defaultSerializationOptions(options)
-            : this.options;
+  setHeader (elements: string[], options?: X12SerializationOptions): void {
+    options = options !== undefined
+      ? defaultSerializationOptions(options)
+      : this.options
 
-        this.header = new X12Segment(X12SupportedSegments.ISA, options);
+    this.header = new X12Segment(X12SupportedSegments.ISA, options)
 
-        this.header.setElements(elements);
+    this.header.setElements(elements)
 
-        this._setTrailer(options);
-    }
+    this._setTrailer(options)
+  }
 
-    /**
+  /**
      * @description Add a functional group to this interchange.
      * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
      * @returns {X12FunctionalGroup}
      */
-    addFunctionalGroup(options?: X12SerializationOptions): X12FunctionalGroup {
-        options = options
-            ? defaultSerializationOptions(options)
-            : this.options;
+  addFunctionalGroup (options?: X12SerializationOptions): X12FunctionalGroup {
+    options = options !== undefined
+      ? defaultSerializationOptions(options)
+      : this.options
 
-        const functionalGroup = new X12FunctionalGroup(options);
+    const functionalGroup = new X12FunctionalGroup(options)
 
-        this.functionalGroups.push(functionalGroup);
+    this.functionalGroups.push(functionalGroup)
 
-        this.trailer.replaceElement(`${this.functionalGroups.length}`, 1);
+    this.trailer.replaceElement(`${this.functionalGroups.length}`, 1)
 
-        return functionalGroup;
-    }
-    
-    /**
+    return functionalGroup
+  }
+
+  /**
      * @description Serialize interchange to EDI string.
      * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
      * @returns {string}
      */
-    toString(options?: X12SerializationOptions): string {
-        options = options
-            ? defaultSerializationOptions(options)
-            : this.options;
-        
-        let edi = this.header.toString(options);
-        
-        if (options.format) {
-            edi += options.endOfLine;
-        }
-        
-        for (let i = 0; i < this.functionalGroups.length; i++) {
-            edi += this.functionalGroups[i].toString(options);
-            
-            if (options.format) {
-                edi += options.endOfLine;
-            }
-        }
-        
-        edi += this.trailer.toString(options);
-        
-        return edi;
+  toString (options?: X12SerializationOptions): string {
+    options = options !== undefined
+      ? defaultSerializationOptions(options)
+      : this.options
+
+    let edi = this.header.toString(options)
+
+    if (options.format) {
+      edi += options.endOfLine
     }
 
-    /**
+    for (let i = 0; i < this.functionalGroups.length; i++) {
+      edi += this.functionalGroups[i].toString(options)
+
+      if (options.format) {
+        edi += options.endOfLine
+      }
+    }
+
+    edi += this.trailer.toString(options)
+
+    return edi
+  }
+
+  /**
      * @description Serialize interchange to JS EDI Notation object.
      * @returns {JSEDINotation}
      */
-    toJSEDINotation() {
-        const jsen = new JSEDINotation(this.header.elements.map(x => x.value), this.options);
+  toJSEDINotation (): JSEDINotation {
+    const jsen = new JSEDINotation(this.header.elements.map(x => x.value), this.options)
 
-        this.functionalGroups.forEach((functionalGroup) => {
-            const jsenFunctionalGroup = jsen.addFunctionalGroup(functionalGroup.header.elements.map(x => x.value));
+    this.functionalGroups.forEach((functionalGroup) => {
+      const jsenFunctionalGroup = jsen.addFunctionalGroup(functionalGroup.header.elements.map(x => x.value))
 
-            functionalGroup.transactions.forEach((transaction) => {
-                const jsenTransaction = jsenFunctionalGroup.addTransaction(transaction.header.elements.map(x => x.value));
+      functionalGroup.transactions.forEach((transaction) => {
+        const jsenTransaction = jsenFunctionalGroup.addTransaction(transaction.header.elements.map(x => x.value))
 
-                transaction.segments.forEach((segment) => {
-                    jsenTransaction.addSegment(segment.tag, segment.elements.map(x => x.value));
-                });
-            });
-        });
+        transaction.segments.forEach((segment) => {
+          jsenTransaction.addSegment(segment.tag, segment.elements.map(x => x.value))
+        })
+      })
+    })
 
-        return jsen;
-    }
+    return jsen
+  }
 
-    /**
+  /**
      * @description Serialize interchange to JSON object.
      * @returns {object}
      */
-    toJSON(): object {
-        return this.toJSEDINotation() as object;
-    }
+  toJSON (): object {
+    return this.toJSEDINotation() as object
+  }
 
-    /**
+  /**
      * @description Set an ISA trailer on this interchange.
      * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
      */
-    private _setTrailer(options?: X12SerializationOptions) {
-        options = options
-            ? defaultSerializationOptions(options)
-            : this.options;
+  private _setTrailer (options?: X12SerializationOptions): void {
+    options = options !== undefined
+      ? defaultSerializationOptions(options)
+      : this.options
 
-        this.trailer = new X12Segment(X12SupportedSegments.IEA, options);
+    this.trailer = new X12Segment(X12SupportedSegments.IEA, options)
 
-        this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)]);
-    }
+    this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)])
+  }
 }

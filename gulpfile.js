@@ -23,4 +23,12 @@ gulp.task('mocha', async (done) => {
     return done()
 });
 
+gulp.task('eslint', shell.task([
+    'eslint --ext .ts .'
+]));
+
+gulp.task('eslint:fix', shell.task([
+    'eslint --ext .ts --fix .'
+]));
+
 gulp.task('test', gulp.series('compile', 'mocha'));

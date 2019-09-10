@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 /**
  * @description Options for serializing to and from EDI.
@@ -10,11 +10,11 @@
  * @property {string} [subElementDelimiter]
  */
 export interface X12SerializationOptions {
-    elementDelimiter?: string;
-    endOfLine?: string;
-    format?: boolean;
-    segmentTerminator?: string;
-    subElementDelimiter?: string;
+  elementDelimiter?: string
+  endOfLine?: string
+  format?: boolean
+  segmentTerminator?: string
+  subElementDelimiter?: string
 }
 
 /**
@@ -22,18 +22,18 @@ export interface X12SerializationOptions {
  * @param {X12SerializationOptions} [options] Options for serializing to and from EDI.
  * @returns {X12SerializationOptions}
  */
-export function defaultSerializationOptions(options?: X12SerializationOptions): X12SerializationOptions {
-    options = options || {};
-    
-    options.elementDelimiter = options.elementDelimiter || '*';
-    options.endOfLine = options.endOfLine || '\n';
-    options.format = options.format || false;
-    options.segmentTerminator = options.segmentTerminator || '~';
-    options.subElementDelimiter = options.subElementDelimiter || '>';
-    
-    if (options.segmentTerminator === '\n') {
-        options.endOfLine = '';
-    }
-    
-    return options;
+export function defaultSerializationOptions (options?: X12SerializationOptions): X12SerializationOptions {
+  options = options === undefined ? {} : options
+
+  options.elementDelimiter = options.elementDelimiter === undefined ? '*' : options.elementDelimiter
+  options.endOfLine = options.endOfLine === undefined ? '\n' : options.endOfLine
+  options.format = options.format === undefined ? false : options.format
+  options.segmentTerminator = options.segmentTerminator === undefined ? '~' : options.segmentTerminator
+  options.subElementDelimiter = options.subElementDelimiter === undefined ? '>' : options.subElementDelimiter
+
+  if (options.segmentTerminator === '\n') {
+    options.endOfLine = ''
+  }
+
+  return options
 }

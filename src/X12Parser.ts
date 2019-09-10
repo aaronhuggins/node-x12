@@ -17,12 +17,24 @@ const ELEMENT_DELIMITER_POS: number = 3;
 const INTERCHANGE_CACHE_SIZE: number = 10;
 
 export class X12Parser {
-    constructor(private _strict: boolean) {
+    /**
+     * @description Factory for parsing EDI into interchange object.
+     * @param {boolean} [strict] Set true to strictly follow the EDI spec.
+     */
+    constructor(strict?: boolean) {
         this.diagnostics = new Array<X12Diagnostic>();
+        this._strict = strict;
     }
-    
+
+    private _strict: boolean;
     diagnostics: X12Diagnostic[];
-    
+
+    /**
+     * @description Parse an EDI document.
+     * @param {string} edi An ASCII or UTF8 string of EDI to parse.
+     * @param {X12SerializationOptions} [options] Options for serializing from EDI.
+     * @returns {X12Interchange|X12FatInterchange} An interchange or a fat interchange.
+     */
     parse(edi: string, options?: X12SerializationOptions): X12Interchange | X12FatInterchange {
         if (!edi) {
             throw new ArgumentNullError('edi');
@@ -192,7 +204,7 @@ export class X12Parser {
             ? fatInterchange
             : interchange;
     }
-    
+
     private _parseSegments(edi: string, segmentTerminator: string, elementDelimiter: string): X12Segment[] {
         let segments = new Array<X12Segment>();
         
@@ -264,11 +276,11 @@ export class X12Parser {
 
         return segments;
     }
-    
+
     private _processISA(interchange: X12Interchange, segment: X12Segment): void {
         interchange.header = segment;
     }
-    
+
     private _processIEA(interchange: X12Interchange, segment: X12Segment): void {
         interchange.trailer = segment;
 
@@ -292,7 +304,7 @@ export class X12Parser {
             this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[1].range));
 		}
     }
-    
+
     private _processGS(group: X12FunctionalGroup, segment: X12Segment): void {
         group.header = segment;
     }
@@ -320,11 +332,11 @@ export class X12Parser {
             this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, segment.elements[1].range));
 		}
     }
-    
+
     private _processST(transaction: X12Transaction, segment: X12Segment): void {
         transaction.header = segment;
     }
-    
+
     private _processSE(transaction: X12Transaction, segment: X12Segment): void {
         transaction.trailer = segment;
 				

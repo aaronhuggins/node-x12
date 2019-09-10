@@ -32,10 +32,17 @@
     },
     "dependencies": {},
     "devDependencies": {
+        "@babel/cli": "^7.6.0",
+        "@babel/core": "^7.6.0",
+        "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "@babel/preset-env": "^7.6.0",
+        "@babel/preset-typescript": "^7.6.0",
         "del-cli": "^3.0.0",
         "gulp": "^4.0.2",
         "gulp-mocha": "^7.0.1",
         "gulp-shell": "^0.7.1",
+        "jsdoc-babel": "^0.5.0",
+        "jsdoc-to-markdown": "^5.0.1",
         "mocha": "^6.2.0",
         "typescript": "^3.6.2"
     }

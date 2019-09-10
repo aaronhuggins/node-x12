@@ -16,6 +16,11 @@ import {
 import { GeneratorError } from './Errors';
 
 export class X12Segment {
+    /**
+     * @description Create a segment.
+     * @param {string} tag The tag for this segment.
+     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+     */
     constructor(tag: string = '', options?: X12SerializationOptions) {
         this.tag = tag;
         this.elements = new Array<X12Element>();
@@ -28,6 +33,10 @@ export class X12Segment {
     range: Range;
     options: X12SerializationOptions;
 
+    /**
+     * @description Set the elements of this segment.
+     * @param {string[]} values An array of element values.
+     */
     setElements(values: string[]) {
         this._formatValues(values)
         this.elements = new Array<X12Element>();
@@ -36,6 +45,10 @@ export class X12Segment {
         })
     }
 
+    /**
+     * @description Add an element to this segment.
+     * @param {string} value A string value.
+     */
     addElement(value: string = ''): X12Element {
         const element = new X12Element(value);
 
@@ -44,6 +57,12 @@ export class X12Segment {
         return element;
     }
 
+    /**
+     * @description Replace an element at a position in the segment.
+     * @param {string} value A string value
+     * @param {number} segmentPosition A 1-based number indicating the position in the segment.
+     * @returns {X12Element} The new element if successful, or a null if failed.
+     */
     replaceElement(value: string, segmentPosition: number): X12Element {
         let index = segmentPosition - 1;
 
@@ -56,6 +75,12 @@ export class X12Segment {
         return this.elements[index];
     }
 
+    /**
+     * @description Insert an element at a position in the segment.
+     * @param {string} value A string value
+     * @param {number} segmentPosition A 1-based number indicating the position in the segment.
+     * @returns {X12Element} The new element if successful, or a null if failed.
+     */
     insertElement(value: string = '', segmentPosition: number = 1): boolean {
         let index = segmentPosition - 1;
 
@@ -66,16 +91,27 @@ export class X12Segment {
         return this.elements.splice(index, 0, new X12Element(value)).length === 1;
     }
 
+    /**
+     * @description Remove an element at a position in the segment.
+     * @param {number} segmentPosition A 1-based number indicating the position in the segment.
+     * @returns {boolean} True if successful.
+     */
     removeElement(segmentPosition: number): boolean {
         let index = segmentPosition - 1;
 
         if (this.elements.length <= index) {
-            return null;
+            return false;
         }
         
         return this.elements.splice(index, 1).length === 1;
     }
-    
+
+    /**
+     * @description Get the value of an element in this segment.
+     * @param {number} segmentPosition A 1-based number indicating the position in the segment.
+     * @param {string} [defaultValue] A default value to return if there is no element found.
+     * @returns {string} If no element is at this position, null or the default value will be returned.
+     */
     valueOf(segmentPosition: number, defaultValue?: string): string {
         let index = segmentPosition - 1;
         
@@ -86,6 +122,11 @@ export class X12Segment {
         return this.elements[index].value || defaultValue || null;
     }
 
+    /**
+     * @description Serialize segment to EDI string.
+     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+     * @returns {string}
+     */
     toString(options?: X12SerializationOptions): string {
         options = options
             ? defaultSerializationOptions(options)
@@ -103,10 +144,18 @@ export class X12Segment {
         return edi;
     }
 
-    toJSON() {
-        return new JSEDISegment(this.tag, this.elements.map(x => x.value));
+    /**
+     * @description Serialize transaction set to JSON object.
+     * @returns {object}
+     */
+    toJSON(): object {
+        return new JSEDISegment(this.tag, this.elements.map(x => x.value)) as object;
     }
 
+    /**
+     * @description Check to see if segment is predefined.
+     * @returns {boolean} True if segment is predefined.
+     */
     private _checkSupportedSegment() {
         let supported = false;
 
@@ -125,6 +174,10 @@ export class X12Segment {
         return supported;
     }
 
+    /**
+     * @description Get the definition of this segment.
+     * @returns {object} The definition of this segment.
+     */
     private _getX12Enumerable() {
         let enumerable = X12InterchangeControlHeader;
 
@@ -143,6 +196,10 @@ export class X12Segment {
         return enumerable;
     }
 
+    /**
+     * @description Format and validate the element values according the segment definition.
+     * @param {string[]} values An array of element values.
+     */
     private _formatValues(values: string[]) {
         if (this._checkSupportedSegment()) {
             const enumerable = this._getX12Enumerable();

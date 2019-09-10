@@ -7,6 +7,10 @@ import { X12Transaction } from './X12Transaction';
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions';
 
 export class X12FunctionalGroup {
+    /**
+     * @description Create a functional group.
+     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+     */
     constructor(options?: X12SerializationOptions) {
         this.transactions = new Array<X12Transaction>();
         this.options = defaultSerializationOptions(options);
@@ -19,6 +23,11 @@ export class X12FunctionalGroup {
 
     options: X12SerializationOptions
 
+    /**
+     * @description Set a GS header on this functional group.
+     * @param {string[]} elements An array of elements for a GS header.
+     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+     */
     setHeader(elements: string[], options?: X12SerializationOptions) {
         options = options
             ? defaultSerializationOptions(options)
@@ -31,7 +40,12 @@ export class X12FunctionalGroup {
         this._setTrailer(options);
     }
 
-    addTransaction(options?: X12SerializationOptions) {
+    /**
+     * @description Add a transaction set to this functional group.
+     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+     * @returns {X12Transaction}
+     */
+    addTransaction(options?: X12SerializationOptions): X12Transaction {
         options = options
             ? defaultSerializationOptions(options)
             : this.options;
@@ -45,6 +59,11 @@ export class X12FunctionalGroup {
         return transaction;
     }
     
+    /**
+     * @description Serialize functional group to EDI string.
+     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+     * @returns {string}
+     */
     toString(options?: X12SerializationOptions): string {
         options = options
             ? defaultSerializationOptions(options)
@@ -69,7 +88,11 @@ export class X12FunctionalGroup {
         return  edi;
     }
 
-    toJSON() {
+    /**
+     * @description Serialize functional group to JSON object.
+     * @returns {object}
+     */
+    toJSON(): object {
         const jsen = new JSEDIFunctionalGroup(this.header.elements.map(x => x.value));
 
         this.transactions.forEach((transaction) => {
@@ -80,9 +103,13 @@ export class X12FunctionalGroup {
             });
         });
 
-        return jsen;
+        return jsen as object;
     }
 
+    /**
+     * @description Set a GE trailer on this functional group.
+     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+     */
     private _setTrailer(options?: X12SerializationOptions) {
         options = options
             ? defaultSerializationOptions(options)

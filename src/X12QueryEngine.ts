@@ -9,6 +9,10 @@ import { X12Segment } from './X12Segment';
 import { X12Element } from './X12Element';
 
 export class X12QueryEngine {
+    /**
+     * @description Factory for querying EDI using the node-x12 object model.
+     * @param {X12Parser|boolean} [parser] Pass an external parser or set the strictness of the internal parser.
+     */
     constructor(parser: X12Parser | boolean = true) {
         this._parser = typeof parser === 'boolean'
             ? new X12Parser(parser)
@@ -18,16 +22,30 @@ export class X12QueryEngine {
     private _parser: X12Parser
 
     private _forEachPattern: RegExp = /FOREACH\([A-Z0-9]{2,3}\)=>.+/g;
-    
+    private _concatPattern: RegExp = /CONCAT\(.+,.+\)=>.+/g;
+
+    /**
+     * @description Query all references in an EDI document.
+     * @param {string|X12Interchange} rawEdi An ASCII or UTF8 string of EDI to parse, or an interchange.
+     * @param {string} reference The query string to resolve.
+     * @returns {X12QueryResult[]} An array of results from the EDI document.
+     */
     query(rawEdi: string | X12Interchange, reference: string): X12QueryResult[] {
         let interchange = typeof rawEdi === 'string'
             ? this._parser.parse(rawEdi) as X12Interchange
             : rawEdi;
         
         let forEachMatch = reference.match(this._forEachPattern); // ex. FOREACH(LX)=>MAN02
+        let concathMatch = reference.match(this._concatPattern); // ex. CONCAT(MAN01,-)=>MAN02
+        let concat: any
 
         if(forEachMatch) {
             reference = this._evaluateForEachQueryPart(forEachMatch[0]);
+        }
+
+        if(concathMatch) {
+            concat = this._evaluateConcatQueryPart(interchange, concathMatch[0]);
+            reference = concat.query;
         }
 
         let hlPathMatch = reference.match(/HL\+(\w\+?)+[\+-]/g); // ex. HL+O+P+I
@@ -59,6 +77,10 @@ export class X12QueryEngine {
                 let txnResults = this._evaluateElementReferenceQueryPart(interchange, group, txn, [].concat(segments, [interchange.header, group.header, txn.header, txn.trailer, group.trailer, interchange.trailer]), elmRefMatch[0], qualMatch);
                 
                 txnResults.forEach((res) => {
+                    if (concat) {
+                        res.value = `${concat.value}${concat.separator}${res.value}`;
+                    }
+
                     results.push(res);
                 });
             }
@@ -66,7 +88,13 @@ export class X12QueryEngine {
         
         return results;
     }
-    
+
+    /**
+     * @description Query all references in an EDI document and return the first result.
+     * @param {string|X12Interchange} rawEdi An ASCII or UTF8 string of EDI to parse, or an interchange.
+     * @param {string} reference The query string to resolve.
+     * @returns {X12QueryResult} A result from the EDI document.
+     */
     querySingle(rawEdi: string | X12Interchange, reference: string): X12QueryResult {
         let results = this.query(rawEdi, reference);
 
@@ -82,12 +110,56 @@ export class X12QueryEngine {
         return (results.length == 0) ? null : results[0];
     }
 
+    private _getMacroParts(macroQuery: string): any {
+        const macroPart = macroQuery.substr(0, macroQuery.indexOf('=>'));
+        const queryPart = macroQuery.substr(macroQuery.indexOf('=>') + 2);
+        const parameters = macroPart.substr(macroPart.indexOf('(') + 1, macroPart.length - macroPart.indexOf('(') - 2);
+
+        return {
+            macroPart,
+            queryPart,
+            parameters
+        }
+    }
+
     private _evaluateForEachQueryPart(forEachSegment: string): string {
-        const forEachPart = forEachSegment.substr(0, forEachSegment.indexOf('=>'));
-        const queryPart = forEachSegment.substr(forEachSegment.indexOf('=>') + 2);
-        const selectedPath = forEachPart.substr(forEachPart.indexOf('(') + 1, forEachPart.length - forEachPart.indexOf('(') - 2);
+        const {
+            queryPart,
+            parameters
+        } = this._getMacroParts(forEachSegment);
         
-        return `${selectedPath}-${queryPart}`;
+        return `${parameters}-${queryPart}`;
+    }
+
+    private _evaluateConcatQueryPart(interchange: X12Interchange, concatSegment: string): any {
+        const {
+            queryPart,
+            parameters
+        } = this._getMacroParts(concatSegment);
+
+        let value = ''
+
+        const expandedParams = parameters.split(',');
+
+        if (expandedParams.length === 3) {
+            expandedParams[1] = ',';
+        }
+
+        const result = this.querySingle(interchange, expandedParams[0]);
+
+        if (result) {
+            if (result.value) {
+                value = result.value
+            } else if (Array.isArray(result.values)) {
+                value = result.values.join(expandedParams[1])
+            }
+        }
+
+        return {
+            value,
+            separator: expandedParams[1],
+            query: queryPart
+        };
     }
     
     private _evaluateHLQueryPart(transaction: X12Transaction, hlPath: string): X12Segment[] {
@@ -216,6 +288,18 @@ export class X12QueryEngine {
         return true;
     }
 }
+
+/**
+ * @description A result as resolved by the query engine.
+ * @typedef {object} X12QueryResult
+ * @property {X12Interchange} interchange
+ * @property {X12FunctionalGroup} functionalGroup
+ * @property {X12Transaction} transaction
+ * @property {X12Segment} segment
+ * @property {X12Element} element
+ * @property {string} [value=null]
+ * @property {Array<string | string[]>} [values=[]]
+ */
 
 export class X12QueryResult {
     constructor(interchange?: X12Interchange, functionalGroup?: X12FunctionalGroup, transaction?: X12Transaction, segment?: X12Segment, element?: X12Element) {

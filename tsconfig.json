@@ -1,17 +1,17 @@
 {
-    "compilerOptions": {
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "suppressImplicitAnyIndexErrors": true,
-        "target": "es2017",
-        "experimentalDecorators": true,
-        "outDir": "dist",
-        "types": []
-    },
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es2017",
+    "experimentalDecorators": true,
+    "outDir": "dist",
+    "types": []
+  },
 
-    "exclude": [
-        "node_modules"
-    ]
+  "exclude": [
+    "node_modules"
+  ]
 }

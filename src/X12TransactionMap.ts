@@ -6,6 +6,12 @@ import { X12QueryEngine } from './X12QueryEngine';
 import { X12Transaction } from './X12Transaction';
 
 export class X12TransactionMap {
+    /**
+     * @description Factory for mapping transaction set data to javascript object map.
+     * @param {object} map The javascript object containing keys and querys to resolve.
+     * @param {X12Transaction} [transaction] A transaction set to map.
+     * @param {Function} helper A helper function which will be executed on every resolved query value.
+     */
     constructor(map: object, transaction?: X12Transaction, helper?: Function) {
         this.map = map;
         this.transaction = transaction;
@@ -16,11 +22,21 @@ export class X12TransactionMap {
     transaction: X12Transaction;
     helper: Function;
 
+    /**
+     * @description Set the transaction set to map and optionally a helper function.
+     * @param {X12Transaction} transaction A transaction set to map.
+     * @param {Function} helper A helper function which will be executed on every resolved query value.
+     */
     setTransaction(transaction: X12Transaction, helper?: Function) {
         this.transaction = transaction;
         this.helper = helper || this._helper;
     }
 
+    /**
+     * @description Map data from the transaction set to a javascript object.
+     * @param {object} map The javascript object containing keys and querys to resolve.
+     * @param {callback} [callback] A callback function which will be passed to the helper function.
+     */
     toObject(map?: object, callback?: Function) {
         map = map || this.map;
 
@@ -115,6 +131,14 @@ export class X12TransactionMap {
             : clone;
     }
 
+    /**
+     * @description Default helper function describing the parameters for other helpers.
+     * @param {string} key The current key being set by the mapper.
+     * @param {string} value The current value as resolved by the query engine.
+     * @param {string} [query] The current query as used by the query engine.
+     * @param {callback} [callback] A callback function for signalling back from the helper function.
+     * @returns {string} The value as resolved by the query engine; custom helpers may modify this value further.
+     */
     private _helper(key: string, value: string, query?: string, callback?: Function): any {
         if (callback) {
             callback(key, value, query);

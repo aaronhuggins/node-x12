@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * @description Options for serializing to and from EDI.
+ * @typedef {object} X12SerializationOptions
+ * @property {string} [elementDelimiter]
+ * @property {string} [endOfLine]
+ * @property {boolean} [format]
+ * @property {string} [segmentTerminator]
+ * @property {string} [subElementDelimiter]
+ */
 export interface X12SerializationOptions {
     elementDelimiter?: string;
     endOfLine?: string;
@@ -8,6 +17,11 @@ export interface X12SerializationOptions {
     subElementDelimiter?: string;
 }
 
+/**
+ * @description Set default values for any missing X12SerializationOptions in an options object.
+ * @param {X12SerializationOptions} [options] Options for serializing to and from EDI.
+ * @returns {X12SerializationOptions}
+ */
 export function defaultSerializationOptions(options?: X12SerializationOptions): X12SerializationOptions {
     options = options || {};
     

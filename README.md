@@ -13,16 +13,10 @@ A simple ASC X12 parser, generator, query engine, and mapper for NodeJS. Created
 
 Features marked with an asterisk were initially developed by TrueCommerce and released under an MIT license. Without the good work done by TrueCommerce up until 2016, this library would not exist.
 
-### Query Language
-The query language makes it possible to directly select values from the class object model. This also drives the transaction mapping functionality; in fact, the `FOREACH()` macro was added specifically to support this feature. 
+See the [API](/docs/API.md) for more information.
 
-|Section|Example|Description|
-|:-----:|:-----:|-----------|
-|**Macros**|`FOREACH(LX)=>`|Defines a multi-value operation on a query.|
-|**HL Path**|`HL+O+P+I`|Defines a path through a series of HL segments.|
-|**Parent Segment Path**|`PO1-REF`|Defines a path through a series of adjacent segments.|
-|**Element Reference**|`REF02`|Defines an element by position.|
-|**Value**|`"DP"`|Defines a value to be checked when evaluating qualifiers.<br />Single or double quotes may be used.|
+### Query Language
+The query language makes it possible to directly select values from the class object model. See [Query Language](/docs/QueryLanguage.md) for more information.
 
 **Example 1: Select `REF02` Elements**<br />
 `REF02`
@@ -55,7 +49,7 @@ Implementers of ASC X12 are not guaranteed to conform completely to spec. There 
 Such issues should be resolved between a user of this library and the implementer of ASC X12 documents they are working with.
 
 ## Documentation
-Additional documentation can be found in the wiki. Currently, it is out-of-date. Future documentation is slated to be self-hosted within the repository, and generated from JSDoc. Please keep an eye out for a documentation over-haul in the near future.
+Additional documentation can be found [self-hosted](/docs) within the repository.
 
 ## Usage
 ```js

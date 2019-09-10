@@ -14,7 +14,7 @@ describe('X12Formatting', () => {
         
         let options: X12SerializationOptions = {
             format: true,
-            endOfLine: '\r\n'
+            endOfLine: '\n'
         };
         
         let edi2 = interchange.toString(options);

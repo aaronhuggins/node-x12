@@ -16,7 +16,7 @@ describe('X12Parser', () => {
     it('should produce accurate line numbers for files with line breaks', () => {
         let edi = fs.readFileSync('tests/test-data/850_3.edi', 'utf8');
         let parser = new X12Parser(true);
-        let interchange = parser.parse(edi);
+        let interchange = parser.parse(edi) as X12Interchange;
         
         let segments = [].concat(
             [interchange.header, interchange.functionalGroups[0].header, interchange.functionalGroups[0].transactions[0].header],

@@ -3,6 +3,7 @@
 import { ArgumentNullError, ParserError } from './Errors';
 import { Range, Position } from './Positioning';
 import { X12Diagnostic, X12DiagnosticLevel } from './X12Diagnostic';
+import { X12FatInterchange } from './X12FatInterchange';
 import { X12Interchange } from './X12Interchange';
 import { X12FunctionalGroup } from './X12FunctionalGroup';
 import { X12Transaction } from './X12Transaction';
@@ -22,7 +23,7 @@ export class X12Parser {
     
     diagnostics: X12Diagnostic[];
     
-    parse(edi: string, options?: X12SerializationOptions): X12Interchange {
+    parse(edi: string, options?: X12SerializationOptions): X12Interchange | X12FatInterchange {
         if (!edi) {
             throw new ArgumentNullError('edi');
         }
@@ -46,6 +47,11 @@ export class X12Parser {
             options = defaultSerializationOptions(options);
             segmentTerminator = options.segmentTerminator;
             elementDelimiter = options.elementDelimiter;
+        } else {
+            options = defaultSerializationOptions({
+                segmentTerminator,
+                elementDelimiter
+            })
         }
         
         if (edi.charAt(103) !== elementDelimiter) {
@@ -58,7 +64,8 @@ export class X12Parser {
             this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, new Range(0, 0, 0, 2)));
         }
         
-        let interchange = new X12Interchange(segmentTerminator, elementDelimiter, options);
+        let fatInterchange: X12FatInterchange;
+        let interchange: X12Interchange;
         let group: X12FunctionalGroup;
         let transaction: X12Transaction;
         
@@ -66,11 +73,28 @@ export class X12Parser {
         
         segments.forEach((seg) => {
             if (seg.tag == 'ISA') {
+                if (this._strict && interchange && interchange.header) {
+                    if (!fatInterchange) {
+                        fatInterchange = new X12FatInterchange(options);
+                        fatInterchange.interchanges.push(interchange);
+                    }
+
+                    interchange = new X12Interchange(options)
+                }
+
+                if (!interchange) {
+                    interchange = new X12Interchange(options)
+                }
+
                 this._processISA(interchange, seg);
             }
             
             else if (seg.tag == 'IEA') {
                 this._processIEA(interchange, seg);
+
+                if (fatInterchange) {
+                    fatInterchange.interchanges.push(interchange);
+                }
             }
             
             else if (seg.tag == 'GS') {
@@ -164,7 +188,9 @@ export class X12Parser {
             }
         });
         
-        return interchange;
+        return fatInterchange
+            ? fatInterchange
+            : interchange;
     }
     
     private _parseSegments(edi: string, segmentTerminator: string, elementDelimiter: string): X12Segment[] {

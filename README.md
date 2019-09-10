@@ -8,20 +8,21 @@ A simple ASC X12 parser, generator, query engine, and mapper for NodeJS. Created
 - Generator
 - Query Engine *
 - Transaction set to object mapping
+- Support for fat EDI documents
 - Convenience methods for several generating/mapping scenarios
 
 Features marked with an asterisk were initially developed by TrueCommerce and released under an MIT license. Without the good work done by TrueCommerce up until 2016, this library would not exist.
 
 ### Query Language
-The query language makes it possible to directly select values from the class object model. This also drives the transaction mapping functionality; in fact, the `FOREACH()` macro was added specifically to support this feature.
+The query language makes it possible to directly select values from the class object model. This also drives the transaction mapping functionality; in fact, the `FOREACH()` macro was added specifically to support this feature. 
 
 |Section|Example|Description|
 |:-----:|:-----:|-----------|
-|**Macros**|`FOREACH("LX")=>`|Defines a multi-value operation on a query.|
+|**Macros**|`FOREACH(LX)=>`|Defines a multi-value operation on a query.|
 |**HL Path**|`HL+O+P+I`|Defines a path through a series of HL segments.|
 |**Parent Segment Path**|`PO1-REF`|Defines a path through a series of adjacent segments.|
 |**Element Reference**|`REF02`|Defines an element by position.|
-|**Value**|`"DP"`|Defines a value to be checked when evaluating qualifiers.|
+|**Value**|`"DP"`|Defines a value to be checked when evaluating qualifiers.<br />Single or double quotes may be used.|
 
 **Example 1: Select `REF02` Elements**<br />
 `REF02`
@@ -36,7 +37,14 @@ The query language makes it possible to directly select values from the class ob
 `HL+S+O+P+I-LIN-SN102`
 
 **Example 5: Select values from a loop series**<br />
-`FOREACH("LX")=>MAN02:MAN01["CP"]`
+`FOREACH(LX)=>MAN02:MAN01["CP"]`
+
+### Fat EDI Documents
+Some vendors will concatenate multiple valid EDI documents into a single request or file. This **DOES NOT CONFORM** to the ASC X12 spec, but it does happen. Implementing support for this scenario was trivial. When parsing an EDI document, it will be handled one of two ways:
+1. When strict, the parser will return an `X12FatInterchange` object with property `interchanges`, an array of `X12Interchange` objects
+2. When not strict, the parser will merge valid EDI documents into a single interchange
+
+In the latter of the two scenarios, the parser will set the header and trailer to the last available ISA and IEA segments. The element data of the discarded ISA and IEA segments will be lost if the original fat EDI document is not preserved. If all the header and trailer information is important to your organization, we recommend setting the parser to strict so that you get all the data into an object, or else go back to your implementer and request that they fix their EDI.
 
 ### Gotchas
 Implementers of ASC X12 are not guaranteed to conform completely to spec. There are scenarios that this library WILL NOT be able to handle and WILL NEVER be added. Despite the addition of functionality beyond the base parser from the original libray, the goal of this library is to remain a simple implementation of the spec. Some examples of scenarios this library won't handle:
@@ -45,8 +53,6 @@ Implementers of ASC X12 are not guaranteed to conform completely to spec. There 
 - Missing elements in XYZ tag
 
 Such issues should be resolved between a user of this library and the implementer of ASC X12 documents they are working with.
-
-A scenario we are looking to fix in the immediate future: fat EDI documents. These are documents we define as having multiple, complete, valid documents in a single file. This library will eventually split such a file into an array of X12Interchange objects. Currently, a user of this library will need to handle that logic on their own or work with their implementer.
 
 ## Documentation
 Additional documentation can be found in the wiki. Currently, it is out-of-date. Future documentation is slated to be self-hosted within the repository, and generated from JSDoc. Please keep an eye out for a documentation over-haul in the near future.

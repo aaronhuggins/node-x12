@@ -21,7 +21,7 @@ export class X12QueryEngine {
     
     query(rawEdi: string | X12Interchange, reference: string): X12QueryResult[] {
         let interchange = typeof rawEdi === 'string'
-            ? this._parser.parse(rawEdi)
+            ? this._parser.parse(rawEdi) as X12Interchange
             : rawEdi;
         
         let forEachMatch = reference.match(this._forEachPattern); // ex. FOREACH(LX)=>MAN02

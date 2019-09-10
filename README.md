@@ -1,6 +1,16 @@
 # Node-X12
 A simple ASC X12 parser, generator, query engine, and mapper for NodeJS. Created originally for the [TC Toolbox](https://github.com/TrueCommerce/vscode-tctoolbox) project by TrueCommerce; the public repository for TC Toolbox has been taken offline. The original, parser-only library may be found at [node-x12](https://github.com/TrueCommerce/node-x12), which is still public at this time but no longer maintained.
 
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/standard/eslint-config-standard-with-typescript)
+![GitHub last commit](https://img.shields.io/github/last-commit/ahuggins-nhs/node-x12)
+![GitHub contributors](https://img.shields.io/github/contributors/ahuggins-nhs/node-x12)
+![npm collaborators](https://img.shields.io/npm/collaborators/node-x12)
+![NPM](https://img.shields.io/npm/l/node-x12)<br />
+![GitHub top language](https://img.shields.io/github/languages/top/ahuggins-nhs/node-x12)
+![npm bundle size](https://img.shields.io/bundlephobia/min/node-x12)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ahuggins-nhs/node-x12)
+![npm](https://img.shields.io/npm/dw/node-x12)
+
 ## Features
 - Near-complete class object model of ASC X12 parts *
 - Simplified object notation class for EDI (which allows JSON support)

@@ -11,6 +11,27 @@ A simple ASC X12 parser, generator, query engine, and mapper for NodeJS. Created
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ahuggins-nhs/node-x12)
 ![npm](https://img.shields.io/npm/dw/node-x12)
 
+## Usage
+Install it from the npm repository:
+```console
+npm install --save node-x12
+```
+
+Then require it in your project:
+```js
+const { X12Parser } = require('node-x12)
+```
+
+The TypeScript code is compiled to JavaScript and distributed via NPM. If you wish to use the TypeScript code directly you can download this repository locally, or install the git repository via NPM:
+```console
+npm install --save git+https://git@github.com/ahuggins-nhs/node-x12.git
+```
+
+Then import it in your project:
+```typescript
+import { X12Parser } from './node_modules/node-x12/core.ts'
+```
+
 ## Features
 - Near-complete class object model of ASC X12 parts *
 - Simplified object notation class for EDI (which allows JSON support)
@@ -61,7 +82,7 @@ Such issues should be resolved between a user of this library and the implemente
 ## Documentation
 Additional documentation can be found [self-hosted](/docs) within the repository.
 
-## Usage
+## Examples
 ```js
 const { 
     X12Generator,

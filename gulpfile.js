@@ -1,9 +1,6 @@
 const gulp = require('gulp');
 const shell = require('gulp-shell');
 const mocha = require('gulp-mocha');
-const fs = require('fs');
-const jsdoc2md = require('jsdoc-to-markdown');
-const jsdoc2mdOptions = require('./jsdoc2md.json');
 
 gulp.task('compile', shell.task([
     'tsc'

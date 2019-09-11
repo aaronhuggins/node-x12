@@ -19,7 +19,7 @@ npm install --save node-x12
 
 Then require it in your project:
 ```js
-const { X12Parser } = require('node-x12)
+const { X12Parser } = require('node-x12')
 ```
 
 The TypeScript code is compiled to JavaScript and distributed via NPM. If you wish to use the TypeScript code directly you can download this repository locally, or install the git repository via NPM:

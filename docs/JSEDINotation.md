@@ -1,6 +1,8 @@
 ## JavaScript EDI Notation
 Node-X12 defines a simplified hierarchical object model for EDI objects called **JavaScript EDI Notation**. This object model is used for generating valid EDI in the `X12Generator` class, and for calling `JSON.stringify` on members of the X12 object model. The major difference is that the X12 object model is a **complete** description of an EDI file, while this notation only retains the data necessary to exchange EDI to and from JSON.
 
+A complete interface for this notation can be found at [src/JSEDINotation.ts](/src/JSEDINotation.ts).
+
 ### Format
 Each level in the hierarchy has two properties. A container object will have two array properties. At the bottom level of the hierarchy are the segments of a transaction set; these segments have a tag and a string array.
 

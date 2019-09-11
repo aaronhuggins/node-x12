@@ -2,7 +2,8 @@
   "extends": "@istanbuljs/nyc-config-typescript",
   "all": true,
   "exclude": [
-    "gulpfile.js"
+    "gulpfile.js",
+    "test/**"
   ],
   "check-coverage": true,
   "reporter": "lcov"

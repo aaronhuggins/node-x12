@@ -34,7 +34,7 @@ The following ASC X12 headers are interpreted to and from headers in the hierarc
 - ST: Transaction level
 
 ### Sample JS EDI Notation
-A sample 856 generated from test [document](/tests/test-data/856.edi).
+A sample 856 generated from test [document](/test/test-data/856.edi).
 ```json
 {
     "header": [

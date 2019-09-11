@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const shell = require('gulp-shell');
-const mocha = require('gulp-mocha');
 
 gulp.task('compile', shell.task([
     'tsc'
@@ -14,11 +13,13 @@ gulp.task('clean:dist', shell.task([
     'del-cli ./dist'
 ]));
 
-gulp.task('mocha', async (done) => {
-    await gulp.src('dist/tests/*.js', { read: false }).pipe(mocha());
+gulp.task('test', shell.task([
+    'mocha'
+]));
 
-    return done()
-});
+gulp.task('test:coverage', shell.task([
+    'nyc mocha'
+]));
 
 gulp.task('eslint', shell.task([
     'eslint --ext .ts .'
@@ -27,5 +28,3 @@ gulp.task('eslint', shell.task([
 gulp.task('eslint:fix', shell.task([
     'eslint --ext .ts --fix .'
 ]));
-
-gulp.task('test', gulp.series('compile', 'mocha'));

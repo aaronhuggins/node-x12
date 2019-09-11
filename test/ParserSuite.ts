@@ -7,13 +7,13 @@ import fs = require('fs')
 
 describe('X12Parser', () => {
   it('should parse a valid X12 document without throwing an error', () => {
-    const edi = fs.readFileSync('tests/test-data/850.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)
     parser.parse(edi)
   })
 
   it('should produce accurate line numbers for files with line breaks', () => {
-    const edi = fs.readFileSync('tests/test-data/850_3.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850_3.edi', 'utf8')
     const parser = new X12Parser(true)
     const interchange = parser.parse(edi) as X12Interchange
 

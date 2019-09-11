@@ -7,7 +7,7 @@ import fs = require('fs')
 
 describe('X12QueryEngine', () => {
   it('should handle basic element references', () => {
-    const edi = fs.readFileSync('tests/test-data/850.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
     const results = engine.query(edi, 'REF02')
@@ -18,7 +18,7 @@ describe('X12QueryEngine', () => {
   })
 
   it('should handle qualified element references', () => {
-    const edi = fs.readFileSync('tests/test-data/850.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
     const results = engine.query(edi, 'REF02:REF01["DP"]')
@@ -31,7 +31,7 @@ describe('X12QueryEngine', () => {
   })
 
   it('should handle segment path element references', () => {
-    const edi = fs.readFileSync('tests/test-data/850.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
     const results = engine.query(edi, 'PO1-PID05:PID01["F"]')
@@ -42,7 +42,7 @@ describe('X12QueryEngine', () => {
   })
 
   it('should handle HL path element references', () => {
-    const edi = fs.readFileSync('tests/test-data/856.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/856.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
     const results = engine.query(edi, 'HL+S+O+I-LIN03')
@@ -53,7 +53,7 @@ describe('X12QueryEngine', () => {
   })
 
   it('should return valid range information for segments and elements', () => {
-    const edi = fs.readFileSync('tests/test-data/850.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
     const result = engine.querySingle(edi, 'BEG03')
@@ -92,7 +92,7 @@ describe('X12QueryEngine', () => {
   })
 
   it('should handle envelope queries', () => {
-    const edi = fs.readFileSync('tests/test-data/850.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
     const results = engine.query(edi, 'ISA06')
@@ -107,7 +107,7 @@ describe('X12QueryEngine', () => {
   })
 
   it('should handle queries for files with line feed segment terminators', () => {
-    const edi = fs.readFileSync('tests/test-data/850_2.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850_2.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
     const results = engine.query(edi, 'REF02:REF01["DP"]')
@@ -122,7 +122,7 @@ describe('X12QueryEngine', () => {
   })
 
   it('should handle chained qualifiers', () => {
-    const edi = fs.readFileSync('tests/test-data/850.edi', 'utf8')
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
     const results = engine.query(edi, 'REF02:REF01["DP"]:BEG02["SA"]')

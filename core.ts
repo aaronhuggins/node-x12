@@ -1,5 +1,6 @@
 'use strict'
 
+export * from './src/JSEDINotation'
 export * from './src/X12Element'
 export * from './src/X12FunctionalGroup'
 export * from './src/X12Generator'

@@ -1,0 +1,21 @@
+{
+    "SetID": "ST01",
+    "ControlNumber": "ST02",
+    "OrderNumber": "BEG03",
+    "Date": "BEG04",
+    "ShipTo": {
+        "Name": "N102:N101['ST']",
+        "Destination": "N104:N101['ST']",
+        "Address": "N1-N301:N101['ST']",
+        "City": "N1-N401:N101['ST']",
+        "State": "N1-N402:N101['ST']",
+        "Zip": "N1-N403:N101['ST']"
+    },
+    "OrderLines": {
+        "Quantity": "FOREACH(PO1)=>PO102"
+    },
+    "Trailer": [
+        "SE01",
+        "SE02"
+    ]
+}

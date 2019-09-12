@@ -52,6 +52,28 @@ describe('X12QueryEngine', () => {
     }
   })
 
+  it('should handle FOREACH macro references', () => {
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+    const parser = new X12Parser(true)
+    const engine = new X12QueryEngine(parser)
+    const result = engine.querySingle(edi, 'FOREACH(PO1)=>PID05:PID01["F"]')
+
+    if (result.values.length !== 6) {
+      throw new Error(`Expected six matching elements for FOREACH(PO1)=>PID05:PID01["F"]; received ${result.values.length}.`)
+    }
+  })
+
+  it('should handle CONCAT macro references', () => {
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+    const parser = new X12Parser(true)
+    const engine = new X12QueryEngine(parser)
+    const result = engine.querySingle(edi, 'CONCAT(REF02:REF01["DP"], & )=>REF02:REF01["PS"]')
+
+    if (result.value !== '038 & R') {
+      throw new Error(`Expected '038 & R'; received '${result.value}'.`)
+    }
+  })
+
   it('should return valid range information for segments and elements', () => {
     const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)

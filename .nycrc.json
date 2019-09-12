@@ -1,10 +1,10 @@
 {
   "extends": "@istanbuljs/nyc-config-typescript",
   "all": true,
-  "exclude": [
-    "gulpfile.js",
-    "test/**"
+  "include": [
+    "core.ts",
+    "src/**"
   ],
-  "check-coverage": true,
+  "check-coverage": false,
   "reporter": "lcov"
 }

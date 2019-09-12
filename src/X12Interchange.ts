@@ -113,7 +113,7 @@ export class X12Interchange {
      * @returns {JSEDINotation}
      */
   toJSEDINotation (): JSEDINotation {
-    const jsen = new JSEDINotation(this.header.elements.map(x => x.value), this.options)
+    const jsen = new JSEDINotation(this.header.elements.map(x => x.value.trim()), this.options)
 
     this.functionalGroups.forEach((functionalGroup) => {
       const jsenFunctionalGroup = jsen.addFunctionalGroup(functionalGroup.header.elements.map(x => x.value))

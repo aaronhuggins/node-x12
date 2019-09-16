@@ -55,7 +55,7 @@ export class X12TransactionMap {
 
           (map[key] as string[]).forEach((query) => {
             try {
-              const result = engine.querySingle(interchange, query)
+              const result = engine.querySingle(interchange, query, '')
 
               if (result === null) {
                 newArray.push(null)
@@ -92,7 +92,7 @@ export class X12TransactionMap {
           clone[key] = newArray
         } else if (typeof map[key] === 'string') {
           try {
-            const result = engine.querySingle(interchange, map[key])
+            const result = engine.querySingle(interchange, map[key], '')
 
             if (result === null) {
               clone[key] = null

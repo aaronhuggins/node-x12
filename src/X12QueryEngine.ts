@@ -28,9 +28,10 @@ export class X12QueryEngine {
    * @description Query all references in an EDI document.
    * @param {string|X12Interchange} rawEdi - An ASCII or UTF8 string of EDI to parse, or an interchange.
    * @param {string} reference - The query string to resolve.
+   * @param {string} [defaultValue=null] - A default value to return if result not found.
    * @returns {X12QueryResult[]} An array of results from the EDI document.
    */
-  query (rawEdi: string | X12Interchange, reference: string): X12QueryResult[] {
+  query (rawEdi: string | X12Interchange, reference: string, defaultValue: string = null): X12QueryResult[] {
     const interchange = typeof rawEdi === 'string'
       ? this._parser.parse(rawEdi) as X12Interchange
       : rawEdi
@@ -75,7 +76,7 @@ export class X12QueryEngine {
           throw new QuerySyntaxError('Element reference queries must contain an element reference!')
         }
 
-        const txnResults = this._evaluateElementReferenceQueryPart(interchange, group, txn, [].concat(segments, [interchange.header, group.header, txn.header, txn.trailer, group.trailer, interchange.trailer]), elmRefMatch[0], qualMatch)
+        const txnResults = this._evaluateElementReferenceQueryPart(interchange, group, txn, [].concat(segments, [interchange.header, group.header, txn.header, txn.trailer, group.trailer, interchange.trailer]), elmRefMatch[0], qualMatch, defaultValue)
 
         txnResults.forEach((res) => {
           if (concat !== undefined) {
@@ -94,9 +95,10 @@ export class X12QueryEngine {
    * @description Query all references in an EDI document and return the first result.
    * @param {string|X12Interchange} rawEdi - An ASCII or UTF8 string of EDI to parse, or an interchange.
    * @param {string} reference - The query string to resolve.
+   * @param {string} [defaultValue=null] - A default value to return if result not found.
    * @returns {X12QueryResult} A result from the EDI document.
    */
-  querySingle (rawEdi: string | X12Interchange, reference: string): X12QueryResult {
+  querySingle (rawEdi: string | X12Interchange, reference: string, defaultValue: string = null): X12QueryResult {
     const results = this.query(rawEdi, reference)
 
     if (reference.match(this._forEachPattern) !== null) {
@@ -226,7 +228,7 @@ export class X12QueryEngine {
     return matches
   }
 
-  private _evaluateElementReferenceQueryPart (interchange: X12Interchange, functionalGroup: X12FunctionalGroup, transaction: X12Transaction, segments: X12Segment[], elementReference: string, qualifiers: string[]): X12QueryResult[] {
+  private _evaluateElementReferenceQueryPart (interchange: X12Interchange, functionalGroup: X12FunctionalGroup, transaction: X12Transaction, segments: X12Segment[], elementReference: string, qualifiers: string[], defaultValue: string = null): X12QueryResult[] {
     const reference = elementReference.replace(':', '')
     const tag = reference.substr(0, reference.length - 2)
     const pos = reference.substr(reference.length - 2, 2)
@@ -245,10 +247,10 @@ export class X12QueryEngine {
         continue
       }
 
-      const value = segment.valueOf(posint, null)
+      const value = segment.valueOf(posint, defaultValue)
 
       if (value !== null && this._testQualifiers(transaction, segment, qualifiers)) {
-        results.push(new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1]))
+        results.push(new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1], value))
       }
     }
 
@@ -301,13 +303,13 @@ export class X12QueryEngine {
  */
 
 export class X12QueryResult {
-  constructor (interchange?: X12Interchange, functionalGroup?: X12FunctionalGroup, transaction?: X12Transaction, segment?: X12Segment, element?: X12Element) {
+  constructor (interchange?: X12Interchange, functionalGroup?: X12FunctionalGroup, transaction?: X12Transaction, segment?: X12Segment, element?: X12Element, value?: string) {
     this.interchange = interchange
     this.functionalGroup = functionalGroup
     this.transaction = transaction
     this.segment = segment
     this.element = element
-    this.value = element.value
+    this.value = value === null || value === undefined ? element.value : value
     this.values = new Array<string | string[]>()
   }
 

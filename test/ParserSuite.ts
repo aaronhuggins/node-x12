@@ -37,4 +37,50 @@ describe('X12Parser', () => {
       }
     }
   })
+
+  it('should throw an ArgumentNullError', () => {
+    const parser = new X12Parser()
+    let error
+
+    try {
+      parser.parse(undefined)
+    } catch (err) {
+      error = err
+    }
+
+    if (error.name !== 'ArgumentNullError') {
+      throw new Error('ArgumentNullError expected when first argument to X12Parser.parse() is undefined.')
+    }
+  })
+
+  it('should throw an ParserError', () => {
+    const parser = new X12Parser(true)
+    let error
+
+    try {
+      parser.parse('')
+    } catch (err) {
+      error = err
+    }
+
+    if (error.name !== 'ParserError') {
+      throw new Error('ParserError expected when document length is too short and parser is strict.')
+    }
+  })
+
+  it('should find mismatched elementDelimiter', () => {
+    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+    const parser = new X12Parser(true)
+    let error
+
+    try {
+      parser.parse(edi, { elementDelimiter: '+' })
+    } catch (err) {
+      error = err
+    }
+
+    if (error.name !== 'ParserError') {
+      throw new Error('ParserError expected when elementDelimiter in document does not match and parser is strict.')
+    }
+  })
 })

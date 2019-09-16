@@ -11,8 +11,8 @@ A simple ASC X12 parser, generator, query engine, and mapper for NodeJS. Created
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ahuggins-nhs/node-x12)
 ![npm](https://img.shields.io/npm/dw/node-x12)
 ![NPM](https://img.shields.io/npm/l/node-x12)<br />
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=alert_status)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=security_rating)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=ncloc)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
 

@@ -355,8 +355,8 @@
 
 * [X12QueryEngine](#X12QueryEngine)
     * [new X12QueryEngine([parser])](#new_X12QueryEngine_new)
-    * [.query(rawEdi, reference)](#X12QueryEngine+query) ⇒ [<code>Array.&lt;X12QueryResult&gt;</code>](#X12QueryResult)
-    * [.querySingle(rawEdi, reference)](#X12QueryEngine+querySingle) ⇒ [<code>X12QueryResult</code>](#X12QueryResult)
+    * [.query(rawEdi, reference, [defaultValue])](#X12QueryEngine+query) ⇒ [<code>Array.&lt;X12QueryResult&gt;</code>](#X12QueryResult)
+    * [.querySingle(rawEdi, reference, [defaultValue])](#X12QueryEngine+querySingle) ⇒ [<code>X12QueryResult</code>](#X12QueryResult)
 
 <a name="new_X12QueryEngine_new"></a>
 
@@ -370,29 +370,31 @@
 
 <a name="X12QueryEngine+query"></a>
 
-### x12QueryEngine.query(rawEdi, reference) ⇒ [<code>Array.&lt;X12QueryResult&gt;</code>](#X12QueryResult)
+### x12QueryEngine.query(rawEdi, reference, [defaultValue]) ⇒ [<code>Array.&lt;X12QueryResult&gt;</code>](#X12QueryResult)
 <p>Query all references in an EDI document.</p>
 
 **Kind**: instance method of [<code>X12QueryEngine</code>](#X12QueryEngine)  
 **Returns**: [<code>Array.&lt;X12QueryResult&gt;</code>](#X12QueryResult) - <p>An array of results from the EDI document.</p>  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| rawEdi | <code>string</code> \| [<code>X12Interchange</code>](#X12Interchange) | <p>An ASCII or UTF8 string of EDI to parse, or an interchange.</p> |
-| reference | <code>string</code> | <p>The query string to resolve.</p> |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| rawEdi | <code>string</code> \| [<code>X12Interchange</code>](#X12Interchange) |  | <p>An ASCII or UTF8 string of EDI to parse, or an interchange.</p> |
+| reference | <code>string</code> |  | <p>The query string to resolve.</p> |
+| [defaultValue] | <code>string</code> | <code>null</code> | <p>A default value to return if result not found.</p> |
 
 <a name="X12QueryEngine+querySingle"></a>
 
-### x12QueryEngine.querySingle(rawEdi, reference) ⇒ [<code>X12QueryResult</code>](#X12QueryResult)
+### x12QueryEngine.querySingle(rawEdi, reference, [defaultValue]) ⇒ [<code>X12QueryResult</code>](#X12QueryResult)
 <p>Query all references in an EDI document and return the first result.</p>
 
 **Kind**: instance method of [<code>X12QueryEngine</code>](#X12QueryEngine)  
 **Returns**: [<code>X12QueryResult</code>](#X12QueryResult) - <p>A result from the EDI document.</p>  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| rawEdi | <code>string</code> \| [<code>X12Interchange</code>](#X12Interchange) | <p>An ASCII or UTF8 string of EDI to parse, or an interchange.</p> |
-| reference | <code>string</code> | <p>The query string to resolve.</p> |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| rawEdi | <code>string</code> \| [<code>X12Interchange</code>](#X12Interchange) |  | <p>An ASCII or UTF8 string of EDI to parse, or an interchange.</p> |
+| reference | <code>string</code> |  | <p>The query string to resolve.</p> |
+| [defaultValue] | <code>string</code> | <code>null</code> | <p>A default value to return if result not found.</p> |
 
 <a name="X12Segment"></a>
 

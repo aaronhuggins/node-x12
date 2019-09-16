@@ -59,30 +59,48 @@
 **Kind**: global class  
 
 * [X12FatInterchange](#X12FatInterchange)
-    * [new X12FatInterchange([options])](#new_X12FatInterchange_new)
-    * [.toString([options])](#X12FatInterchange+toString)
+    * [new X12FatInterchange([items], [options])](#new_X12FatInterchange_new)
+    * [.toString([options])](#X12FatInterchange+toString) ⇒ <code>string</code>
+    * [.toJSEDINotation()](#X12FatInterchange+toJSEDINotation) ⇒ <code>Array.&lt;JSEDINotation&gt;</code>
+    * [.toJSON()](#X12FatInterchange+toJSON) ⇒ <code>Array.&lt;object&gt;</code>
 
 <a name="new_X12FatInterchange_new"></a>
 
-### new X12FatInterchange([options])
+### new X12FatInterchange([items], [options])
 <p>Create a fat interchange.</p>
 
 
 | Param | Type | Description |
 | --- | --- | --- |
+| [items] | [<code>Array.&lt;X12Interchange&gt;</code>](#X12Interchange) \| [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>The items for this array or options for this interchange.</p> |
 | [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12FatInterchange+toString"></a>
 
-### x12FatInterchange.toString([options])
+### x12FatInterchange.toString([options]) ⇒ <code>string</code>
 <p>Serialize fat interchange to EDI string.</p>
 
 **Kind**: instance method of [<code>X12FatInterchange</code>](#X12FatInterchange)  
+**Returns**: <code>string</code> - <p>This fat interchange converted to EDI string.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options to override serializing back to EDI.</p> |
 
+<a name="X12FatInterchange+toJSEDINotation"></a>
+
+### x12FatInterchange.toJSEDINotation() ⇒ <code>Array.&lt;JSEDINotation&gt;</code>
+<p>Serialize interchange to JS EDI Notation object.</p>
+
+**Kind**: instance method of [<code>X12FatInterchange</code>](#X12FatInterchange)  
+**Returns**: <code>Array.&lt;JSEDINotation&gt;</code> - <p>This fat interchange converted to an array of JS EDI notation.</p>  
+<a name="X12FatInterchange+toJSON"></a>
+
+### x12FatInterchange.toJSON() ⇒ <code>Array.&lt;object&gt;</code>
+<p>Serialize interchange to JSON object.</p>
+
+**Kind**: instance method of [<code>X12FatInterchange</code>](#X12FatInterchange)  
+**Returns**: <code>Array.&lt;object&gt;</code> - <p>This fat interchange converted to an array of objects.</p>  
 <a name="X12FunctionalGroup"></a>
 
 ## X12FunctionalGroup
@@ -94,7 +112,6 @@
     * [.addTransaction([options])](#X12FunctionalGroup+addTransaction) ⇒ [<code>X12Transaction</code>](#X12Transaction)
     * [.toString([options])](#X12FunctionalGroup+toString) ⇒ <code>string</code>
     * [.toJSON()](#X12FunctionalGroup+toJSON) ⇒ <code>object</code>
-    * [._setTrailer([options])](#X12FunctionalGroup+_setTrailer)
 
 <a name="new_X12FunctionalGroup_new"></a>
 
@@ -124,6 +141,7 @@
 <p>Add a transaction set to this functional group.</p>
 
 **Kind**: instance method of [<code>X12FunctionalGroup</code>](#X12FunctionalGroup)  
+**Returns**: [<code>X12Transaction</code>](#X12Transaction) - <p>The transaction which was added to this functional group.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -135,6 +153,7 @@
 <p>Serialize functional group to EDI string.</p>
 
 **Kind**: instance method of [<code>X12FunctionalGroup</code>](#X12FunctionalGroup)  
+**Returns**: <code>string</code> - <p>This functional group converted to EDI string.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -146,17 +165,7 @@
 <p>Serialize functional group to JSON object.</p>
 
 **Kind**: instance method of [<code>X12FunctionalGroup</code>](#X12FunctionalGroup)  
-<a name="X12FunctionalGroup+_setTrailer"></a>
-
-### x12FunctionalGroup.\_setTrailer([options])
-<p>Set a GE trailer on this functional group.</p>
-
-**Kind**: instance method of [<code>X12FunctionalGroup</code>](#X12FunctionalGroup)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
-
+**Returns**: <code>object</code> - <p>This functional group converted to an object.</p>  
 <a name="X12Generator"></a>
 
 ## X12Generator
@@ -168,9 +177,8 @@
     * [.getJSEDINotation()](#X12Generator+getJSEDINotation) ⇒ <code>JSEDINotation</code>
     * [.setOptions([options])](#X12Generator+setOptions)
     * [.getOptions()](#X12Generator+getOptions) ⇒ [<code>X12SerializationOptions</code>](#X12SerializationOptions)
-    * [.validate()](#X12Generator+validate)
+    * [.validate()](#X12Generator+validate) ⇒ [<code>X12Interchange</code>](#X12Interchange)
     * [.toString()](#X12Generator+toString) ⇒ <code>string</code>
-    * [._generate()](#X12Generator+_generate) ⇒ [<code>X12Interchange</code>](#X12Interchange)
 
 <a name="new_X12Generator_new"></a>
 
@@ -200,6 +208,7 @@
 <p>Get the JS EDI Notation for this instance.</p>
 
 **Kind**: instance method of [<code>X12Generator</code>](#X12Generator)  
+**Returns**: <code>JSEDINotation</code> - <p>The JS EDI Notation for this instance.</p>  
 <a name="X12Generator+setOptions"></a>
 
 ### x12Generator.setOptions([options])
@@ -217,24 +226,21 @@
 <p>Get the serialization options for this instance.</p>
 
 **Kind**: instance method of [<code>X12Generator</code>](#X12Generator)  
+**Returns**: [<code>X12SerializationOptions</code>](#X12SerializationOptions) - <p>The serialization options for this instance.</p>  
 <a name="X12Generator+validate"></a>
 
-### x12Generator.validate()
+### x12Generator.validate() ⇒ [<code>X12Interchange</code>](#X12Interchange)
 <p>Validate the EDI in this instance.</p>
 
 **Kind**: instance method of [<code>X12Generator</code>](#X12Generator)  
+**Returns**: [<code>X12Interchange</code>](#X12Interchange) - <p>This instance converted to an interchange.</p>  
 <a name="X12Generator+toString"></a>
 
 ### x12Generator.toString() ⇒ <code>string</code>
 <p>Serialize the EDI in this instance.</p>
 
 **Kind**: instance method of [<code>X12Generator</code>](#X12Generator)  
-<a name="X12Generator+_generate"></a>
-
-### x12Generator.\_generate() ⇒ [<code>X12Interchange</code>](#X12Interchange)
-<p>Generate an interchange from the JS EDI Notation in this instance.</p>
-
-**Kind**: instance method of [<code>X12Generator</code>](#X12Generator)  
+**Returns**: <code>string</code> - <p>This instance converted to an EDI string.</p>  
 <a name="X12Interchange"></a>
 
 ## X12Interchange
@@ -247,7 +253,6 @@
     * [.toString([options])](#X12Interchange+toString) ⇒ <code>string</code>
     * [.toJSEDINotation()](#X12Interchange+toJSEDINotation) ⇒ <code>JSEDINotation</code>
     * [.toJSON()](#X12Interchange+toJSON) ⇒ <code>object</code>
-    * [._setTrailer([options])](#X12Interchange+_setTrailer)
 
 <a name="new_X12Interchange_new"></a>
 
@@ -279,6 +284,7 @@
 <p>Add a functional group to this interchange.</p>
 
 **Kind**: instance method of [<code>X12Interchange</code>](#X12Interchange)  
+**Returns**: [<code>X12FunctionalGroup</code>](#X12FunctionalGroup) - <p>The functional group added to this interchange.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -290,6 +296,7 @@
 <p>Serialize interchange to EDI string.</p>
 
 **Kind**: instance method of [<code>X12Interchange</code>](#X12Interchange)  
+**Returns**: <code>string</code> - <p>This interchange converted to an EDI string.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -301,23 +308,14 @@
 <p>Serialize interchange to JS EDI Notation object.</p>
 
 **Kind**: instance method of [<code>X12Interchange</code>](#X12Interchange)  
+**Returns**: <code>JSEDINotation</code> - <p>This interchange converted to JS EDI Notation object.</p>  
 <a name="X12Interchange+toJSON"></a>
 
 ### x12Interchange.toJSON() ⇒ <code>object</code>
 <p>Serialize interchange to JSON object.</p>
 
 **Kind**: instance method of [<code>X12Interchange</code>](#X12Interchange)  
-<a name="X12Interchange+_setTrailer"></a>
-
-### x12Interchange.\_setTrailer([options])
-<p>Set an ISA trailer on this interchange.</p>
-
-**Kind**: instance method of [<code>X12Interchange</code>](#X12Interchange)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
-
+**Returns**: <code>object</code> - <p>This interchange converted to an object.</p>  
 <a name="X12Parser"></a>
 
 ## X12Parser
@@ -404,16 +402,13 @@
 * [X12Segment](#X12Segment)
     * [new X12Segment(tag, [options])](#new_X12Segment_new)
     * [.setElements(values)](#X12Segment+setElements)
-    * [.addElement(value)](#X12Segment+addElement)
+    * [.addElement(value)](#X12Segment+addElement) ⇒ [<code>X12Element</code>](#X12Element)
     * [.replaceElement(value, segmentPosition)](#X12Segment+replaceElement) ⇒ [<code>X12Element</code>](#X12Element)
     * [.insertElement(value, segmentPosition)](#X12Segment+insertElement) ⇒ [<code>X12Element</code>](#X12Element)
     * [.removeElement(segmentPosition)](#X12Segment+removeElement) ⇒ <code>boolean</code>
     * [.valueOf(segmentPosition, [defaultValue])](#X12Segment+valueOf) ⇒ <code>string</code>
     * [.toString([options])](#X12Segment+toString) ⇒ <code>string</code>
     * [.toJSON()](#X12Segment+toJSON) ⇒ <code>object</code>
-    * [._checkSupportedSegment()](#X12Segment+_checkSupportedSegment) ⇒ <code>boolean</code>
-    * [._getX12Enumerable()](#X12Segment+_getX12Enumerable) ⇒ <code>object</code>
-    * [._formatValues(values)](#X12Segment+_formatValues)
 
 <a name="new_X12Segment_new"></a>
 
@@ -439,10 +434,11 @@
 
 <a name="X12Segment+addElement"></a>
 
-### x12Segment.addElement(value)
+### x12Segment.addElement(value) ⇒ [<code>X12Element</code>](#X12Element)
 <p>Add an element to this segment.</p>
 
 **Kind**: instance method of [<code>X12Segment</code>](#X12Segment)  
+**Returns**: [<code>X12Element</code>](#X12Element) - <p>The element that was added to this segment.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -458,7 +454,7 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| value | <code>string</code> | <p>A string value</p> |
+| value | <code>string</code> | <p>A string value.</p> |
 | segmentPosition | <code>number</code> | <p>A 1-based number indicating the position in the segment.</p> |
 
 <a name="X12Segment+insertElement"></a>
@@ -471,7 +467,7 @@
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| value | <code>string</code> |  | <p>A string value</p> |
+| value | <code>string</code> |  | <p>A string value.</p> |
 | segmentPosition | <code>number</code> | <code>1</code> | <p>A 1-based number indicating the position in the segment.</p> |
 
 <a name="X12Segment+removeElement"></a>
@@ -505,6 +501,7 @@
 <p>Serialize segment to EDI string.</p>
 
 **Kind**: instance method of [<code>X12Segment</code>](#X12Segment)  
+**Returns**: <code>string</code> - <p>This segment converted to an EDI string.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -516,31 +513,7 @@
 <p>Serialize transaction set to JSON object.</p>
 
 **Kind**: instance method of [<code>X12Segment</code>](#X12Segment)  
-<a name="X12Segment+_checkSupportedSegment"></a>
-
-### x12Segment.\_checkSupportedSegment() ⇒ <code>boolean</code>
-<p>Check to see if segment is predefined.</p>
-
-**Kind**: instance method of [<code>X12Segment</code>](#X12Segment)  
-**Returns**: <code>boolean</code> - <p>True if segment is predefined.</p>  
-<a name="X12Segment+_getX12Enumerable"></a>
-
-### x12Segment.\_getX12Enumerable() ⇒ <code>object</code>
-<p>Get the definition of this segment.</p>
-
-**Kind**: instance method of [<code>X12Segment</code>](#X12Segment)  
-**Returns**: <code>object</code> - <p>The definition of this segment.</p>  
-<a name="X12Segment+_formatValues"></a>
-
-### x12Segment.\_formatValues(values)
-<p>Format and validate the element values according the segment definition.</p>
-
-**Kind**: instance method of [<code>X12Segment</code>](#X12Segment)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| values | <code>Array.&lt;string&gt;</code> | <p>An array of element values.</p> |
-
+**Returns**: <code>object</code> - <p>This segment converted to an object.</p>  
 <a name="X12Transaction"></a>
 
 ## X12Transaction
@@ -549,11 +522,10 @@
 * [X12Transaction](#X12Transaction)
     * [new X12Transaction([options])](#new_X12Transaction_new)
     * [.setHeader(elements, [options])](#X12Transaction+setHeader)
-    * [.addSegment(tag, elements, [options])](#X12Transaction+addSegment)
+    * [.addSegment(tag, elements, [options])](#X12Transaction+addSegment) ⇒ [<code>X12Segment</code>](#X12Segment)
     * [.toObject(map, helper)](#X12Transaction+toObject) ⇒ <code>object</code>
     * [.toString([options])](#X12Transaction+toString) ⇒ <code>string</code>
     * [.toJSON()](#X12Transaction+toJSON) ⇒ <code>object</code>
-    * [._setTrailer([options])](#X12Transaction+_setTrailer)
 
 <a name="new_X12Transaction_new"></a>
 
@@ -574,15 +546,16 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| elements |  | <p>An array of elements for a ST header.</p> |
+| elements | <code>Array.&lt;string&gt;</code> | <p>An array of elements for a ST header.</p> |
 | [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Transaction+addSegment"></a>
 
-### x12Transaction.addSegment(tag, elements, [options])
+### x12Transaction.addSegment(tag, elements, [options]) ⇒ [<code>X12Segment</code>](#X12Segment)
 <p>Add a segment to this transaction set.</p>
 
 **Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
+**Returns**: [<code>X12Segment</code>](#X12Segment) - <p>The segment added to this transaction set.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -609,6 +582,7 @@
 <p>Serialize transaction set to EDI string.</p>
 
 **Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
+**Returns**: <code>string</code> - <p>This transaction set converted to an EDI string.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -620,17 +594,7 @@
 <p>Serialize transaction set to JSON object.</p>
 
 **Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
-<a name="X12Transaction+_setTrailer"></a>
-
-### x12Transaction.\_setTrailer([options])
-<p>Set a SE trailer on this transaction set.</p>
-
-**Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
-
+**Returns**: <code>object</code> - <p>This transaction set converted to an object.</p>  
 <a name="X12TransactionMap"></a>
 
 ## X12TransactionMap
@@ -639,8 +603,7 @@
 * [X12TransactionMap](#X12TransactionMap)
     * [new X12TransactionMap(map, [transaction], helper)](#new_X12TransactionMap_new)
     * [.setTransaction(transaction, helper)](#X12TransactionMap+setTransaction)
-    * [.toObject(map, [callback])](#X12TransactionMap+toObject)
-    * [._helper(key, value, [query], [callback])](#X12TransactionMap+_helper) ⇒ <code>string</code>
+    * [.toObject(map, [callback])](#X12TransactionMap+toObject) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
 
 <a name="new_X12TransactionMap_new"></a>
 
@@ -668,30 +631,16 @@
 
 <a name="X12TransactionMap+toObject"></a>
 
-### x12TransactionMap.toObject(map, [callback])
+### x12TransactionMap.toObject(map, [callback]) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
 <p>Map data from the transaction set to a javascript object.</p>
 
 **Kind**: instance method of [<code>X12TransactionMap</code>](#X12TransactionMap)  
+**Returns**: <code>object</code> \| <code>Array.&lt;object&gt;</code> - <p>The transaction set mapped to an object or an array of objects.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | map | <code>object</code> | <p>The javascript object containing keys and querys to resolve.</p> |
-| [callback] | <code>callback</code> | <p>A callback function which will be passed to the helper function.</p> |
-
-<a name="X12TransactionMap+_helper"></a>
-
-### x12TransactionMap.\_helper(key, value, [query], [callback]) ⇒ <code>string</code>
-<p>Default helper function describing the parameters for other helpers.</p>
-
-**Kind**: instance method of [<code>X12TransactionMap</code>](#X12TransactionMap)  
-**Returns**: <code>string</code> - <p>The value as resolved by the query engine; custom helpers may modify this value further.</p>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| key | <code>string</code> | <p>The current key being set by the mapper.</p> |
-| value | <code>string</code> | <p>The current value as resolved by the query engine.</p> |
-| [query] | <code>string</code> | <p>The current query as used by the query engine.</p> |
-| [callback] | <code>callback</code> | <p>A callback function for signalling back from the helper function.</p> |
+| [callback] | <code>function</code> | <p>A callback function which will be passed to the helper function.</p> |
 
 <a name="defaultSerializationOptions"></a>
 
@@ -699,6 +648,7 @@
 <p>Set default values for any missing X12SerializationOptions in an options object.</p>
 
 **Kind**: global function  
+**Returns**: [<code>X12SerializationOptions</code>](#X12SerializationOptions) - <p>Serialization options with defaults filled in.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |

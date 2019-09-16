@@ -8,11 +8,11 @@ import { defaultSerializationOptions, X12SerializationOptions } from './X12Seria
 
 export class X12Interchange {
   /**
-     * @description Create an interchange.
-     * @param {string|X12SerializationOptions} [segmentTerminator] A character to terminate segments when serializing; or an instance of X12SerializationOptions.
-     * @param {string} [elementDelimiter] A character to separate elements when serializing; only required when segmentTerminator is a character.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     */
+   * @description Create an interchange.
+   * @param {string|X12SerializationOptions} [segmentTerminator] - A character to terminate segments when serializing; or an instance of X12SerializationOptions.
+   * @param {string} [elementDelimiter] - A character to separate elements when serializing; only required when segmentTerminator is a character.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   */
   constructor (segmentTerminator?: string | X12SerializationOptions, elementDelimiter?: string, options?: X12SerializationOptions) {
     this.functionalGroups = new Array<X12FunctionalGroup>()
 
@@ -44,10 +44,10 @@ export class X12Interchange {
   options: X12SerializationOptions;
 
   /**
-     * @description Set an ISA header on this interchange.
-     * @param {string[]} elements An array of elements for an ISA header.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     */
+   * @description Set an ISA header on this interchange.
+   * @param {string[]} elements - An array of elements for an ISA header.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   */
   setHeader (elements: string[], options?: X12SerializationOptions): void {
     options = options !== undefined
       ? defaultSerializationOptions(options)
@@ -61,10 +61,10 @@ export class X12Interchange {
   }
 
   /**
-     * @description Add a functional group to this interchange.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     * @returns {X12FunctionalGroup}
-     */
+   * @description Add a functional group to this interchange.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   * @returns {X12FunctionalGroup} The functional group added to this interchange.
+   */
   addFunctionalGroup (options?: X12SerializationOptions): X12FunctionalGroup {
     options = options !== undefined
       ? defaultSerializationOptions(options)
@@ -80,10 +80,10 @@ export class X12Interchange {
   }
 
   /**
-     * @description Serialize interchange to EDI string.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     * @returns {string}
-     */
+   * @description Serialize interchange to EDI string.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   * @returns {string} This interchange converted to an EDI string.
+   */
   toString (options?: X12SerializationOptions): string {
     options = options !== undefined
       ? defaultSerializationOptions(options)
@@ -109,9 +109,9 @@ export class X12Interchange {
   }
 
   /**
-     * @description Serialize interchange to JS EDI Notation object.
-     * @returns {JSEDINotation}
-     */
+   * @description Serialize interchange to JS EDI Notation object.
+   * @returns {JSEDINotation} This interchange converted to JS EDI Notation object.
+   */
   toJSEDINotation (): JSEDINotation {
     const jsen = new JSEDINotation(this.header.elements.map(x => x.value.trim()), this.options)
 
@@ -131,17 +131,18 @@ export class X12Interchange {
   }
 
   /**
-     * @description Serialize interchange to JSON object.
-     * @returns {object}
-     */
+   * @description Serialize interchange to JSON object.
+   * @returns {object} This interchange converted to an object.
+   */
   toJSON (): object {
     return this.toJSEDINotation() as object
   }
 
   /**
-     * @description Set an ISA trailer on this interchange.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     */
+   * @private
+   * @description Set an ISA trailer on this interchange.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   */
   private _setTrailer (options?: X12SerializationOptions): void {
     options = options !== undefined
       ? defaultSerializationOptions(options)

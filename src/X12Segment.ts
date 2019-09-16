@@ -17,10 +17,10 @@ import { GeneratorError } from './Errors'
 
 export class X12Segment {
   /**
-     * @description Create a segment.
-     * @param {string} tag The tag for this segment.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     */
+   * @description Create a segment.
+   * @param {string} tag - The tag for this segment.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   */
   constructor (tag: string = '', options?: X12SerializationOptions) {
     this.tag = tag
     this.elements = new Array<X12Element>()
@@ -34,9 +34,9 @@ export class X12Segment {
   options: X12SerializationOptions;
 
   /**
-     * @description Set the elements of this segment.
-     * @param {string[]} values An array of element values.
-     */
+   * @description Set the elements of this segment.
+   * @param {string[]} values - An array of element values.
+   */
   setElements (values: string[]): void {
     this._formatValues(values)
     this.elements = new Array<X12Element>()
@@ -46,9 +46,10 @@ export class X12Segment {
   }
 
   /**
-     * @description Add an element to this segment.
-     * @param {string} value A string value.
-     */
+   * @description Add an element to this segment.
+   * @param {string} value - A string value.
+   * @returns {X12Element} The element that was added to this segment.
+   */
   addElement (value: string = ''): X12Element {
     const element = new X12Element(value)
 
@@ -58,11 +59,11 @@ export class X12Segment {
   }
 
   /**
-     * @description Replace an element at a position in the segment.
-     * @param {string} value A string value
-     * @param {number} segmentPosition A 1-based number indicating the position in the segment.
-     * @returns {X12Element} The new element if successful, or a null if failed.
-     */
+   * @description Replace an element at a position in the segment.
+   * @param {string} value - A string value.
+   * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
+   * @returns {X12Element} The new element if successful, or a null if failed.
+   */
   replaceElement (value: string, segmentPosition: number): X12Element {
     const index = segmentPosition - 1
 
@@ -76,11 +77,11 @@ export class X12Segment {
   }
 
   /**
-     * @description Insert an element at a position in the segment.
-     * @param {string} value A string value
-     * @param {number} segmentPosition A 1-based number indicating the position in the segment.
-     * @returns {X12Element} The new element if successful, or a null if failed.
-     */
+   * @description Insert an element at a position in the segment.
+   * @param {string} value - A string value.
+   * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
+   * @returns {X12Element} The new element if successful, or a null if failed.
+   */
   insertElement (value: string = '', segmentPosition: number = 1): boolean {
     const index = segmentPosition - 1
 
@@ -92,10 +93,10 @@ export class X12Segment {
   }
 
   /**
-     * @description Remove an element at a position in the segment.
-     * @param {number} segmentPosition A 1-based number indicating the position in the segment.
-     * @returns {boolean} True if successful.
-     */
+   * @description Remove an element at a position in the segment.
+   * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
+   * @returns {boolean} True if successful.
+   */
   removeElement (segmentPosition: number): boolean {
     const index = segmentPosition - 1
 
@@ -107,11 +108,11 @@ export class X12Segment {
   }
 
   /**
-     * @description Get the value of an element in this segment.
-     * @param {number} segmentPosition A 1-based number indicating the position in the segment.
-     * @param {string} [defaultValue] A default value to return if there is no element found.
-     * @returns {string} If no element is at this position, null or the default value will be returned.
-     */
+   * @description Get the value of an element in this segment.
+   * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
+   * @param {string} [defaultValue] - A default value to return if there is no element found.
+   * @returns {string} If no element is at this position, null or the default value will be returned.
+   */
   valueOf (segmentPosition: number, defaultValue?: string): string {
     const index = segmentPosition - 1
 
@@ -127,10 +128,10 @@ export class X12Segment {
   }
 
   /**
-     * @description Serialize segment to EDI string.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     * @returns {string}
-     */
+   * @description Serialize segment to EDI string.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   * @returns {string} This segment converted to an EDI string.
+   */
   toString (options?: X12SerializationOptions): string {
     options = options !== undefined
       ? defaultSerializationOptions(options)
@@ -149,17 +150,18 @@ export class X12Segment {
   }
 
   /**
-     * @description Serialize transaction set to JSON object.
-     * @returns {object}
-     */
+   * @description Serialize transaction set to JSON object.
+   * @returns {object} This segment converted to an object.
+   */
   toJSON (): object {
     return new JSEDISegment(this.tag, this.elements.map(x => x.value)) as object
   }
 
   /**
-     * @description Check to see if segment is predefined.
-     * @returns {boolean} True if segment is predefined.
-     */
+   * @private
+   * @description Check to see if segment is predefined.
+   * @returns {boolean} True if segment is predefined.
+   */
   private _checkSupportedSegment (): boolean {
     let supported = false
 
@@ -179,9 +181,10 @@ export class X12Segment {
   }
 
   /**
-     * @description Get the definition of this segment.
-     * @returns {object} The definition of this segment.
-     */
+   * @private
+   * @description Get the definition of this segment.
+   * @returns {object} The definition of this segment.
+   */
   private _getX12Enumerable (): any {
     let enumerable = X12InterchangeControlHeader
 
@@ -201,9 +204,10 @@ export class X12Segment {
   }
 
   /**
-     * @description Format and validate the element values according the segment definition.
-     * @param {string[]} values An array of element values.
-     */
+   * @private
+   * @description Format and validate the element values according the segment definition.
+   * @param {string[]} values - An array of element values.
+   */
   private _formatValues (values: string[]): void {
     if (this._checkSupportedSegment()) {
       const enumerable = this._getX12Enumerable()

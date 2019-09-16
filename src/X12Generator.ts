@@ -8,8 +8,8 @@ import { defaultSerializationOptions, X12SerializationOptions } from './X12Seria
 export class X12Generator {
   /**
    * @description Factory for generating EDI from JS EDI Notation.
-   * @param {JSEDINotation} [jsen] Javascript EDI Notation object to serialize.
-   * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+   * @param {JSEDINotation} [jsen] - Javascript EDI Notation object to serialize.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
   constructor (jsen?: JSEDINotation, options?: X12SerializationOptions) {
     this.jsen = jsen === undefined ? new JSEDINotation() : jsen
@@ -31,7 +31,7 @@ export class X12Generator {
 
   /**
    * @description Set the JS EDI Notation for this instance.
-   * @param {JSEDINotation} [jsen] Javascript EDI Notation object to serialize.
+   * @param {JSEDINotation} [jsen] - Javascript EDI Notation object to serialize.
    */
   setJSEDINotation (jsen: JSEDINotation): void {
     this.jsen = jsen
@@ -39,7 +39,7 @@ export class X12Generator {
 
   /**
    * @description Get the JS EDI Notation for this instance.
-   * @returns {JSEDINotation}
+   * @returns {JSEDINotation} The JS EDI Notation for this instance.
    */
   getJSEDINotation (): JSEDINotation {
     return this.jsen
@@ -47,7 +47,7 @@ export class X12Generator {
 
   /**
    * @description Set the serialization options for this instance.
-   * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
   setOptions (options: X12SerializationOptions): void {
     this.options = defaultSerializationOptions(options)
@@ -55,7 +55,7 @@ export class X12Generator {
 
   /**
    * @description Get the serialization options for this instance.
-   * @returns {X12SerializationOptions}
+   * @returns {X12SerializationOptions} The serialization options for this instance.
    */
   getOptions (): X12SerializationOptions {
     return this.options
@@ -63,6 +63,7 @@ export class X12Generator {
 
   /**
    * @description Validate the EDI in this instance.
+   * @returns {X12Interchange} This instance converted to an interchange.
    */
   validate (): X12Interchange {
     this._generate()
@@ -72,15 +73,15 @@ export class X12Generator {
 
   /**
    * @description Serialize the EDI in this instance.
-   * @returns {string}
+   * @returns {string} This instance converted to an EDI string.
    */
   toString (): string {
     return this.validate().toString(this.options)
   }
 
   /**
+   * @private
    * @description Generate an interchange from the JS EDI Notation in this instance.
-   * @returns {X12Interchange}
    */
   private _generate (): void {
     const genInterchange = new X12Interchange(this.options)

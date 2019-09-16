@@ -11,7 +11,6 @@ describe('X12Core', () => {
     }
   })
 
-  
   it('should create ArgumentNullError', () => {
     const error = new ArgumentNullError('test')
 

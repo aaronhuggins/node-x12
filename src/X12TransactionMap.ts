@@ -7,11 +7,11 @@ import { X12Transaction } from './X12Transaction'
 
 export class X12TransactionMap {
   /**
-     * @description Factory for mapping transaction set data to javascript object map.
-     * @param {object} map The javascript object containing keys and querys to resolve.
-     * @param {X12Transaction} [transaction] A transaction set to map.
-     * @param {Function} helper A helper function which will be executed on every resolved query value.
-     */
+   * @description Factory for mapping transaction set data to javascript object map.
+   * @param {object} map - The javascript object containing keys and querys to resolve.
+   * @param {X12Transaction} [transaction] - A transaction set to map.
+   * @param {Function} helper - A helper function which will be executed on every resolved query value.
+   */
   constructor (map: object, transaction?: X12Transaction, helper?: Function) {
     this.map = map
     this.transaction = transaction
@@ -23,21 +23,21 @@ export class X12TransactionMap {
   helper: Function;
 
   /**
-     * @description Set the transaction set to map and optionally a helper function.
-     * @param {X12Transaction} transaction A transaction set to map.
-     * @param {Function} helper A helper function which will be executed on every resolved query value.
-     */
+   * @description Set the transaction set to map and optionally a helper function.
+   * @param {X12Transaction} transaction - A transaction set to map.
+   * @param {Function} helper - A helper function which will be executed on every resolved query value.
+   */
   setTransaction (transaction: X12Transaction, helper?: Function): void {
     this.transaction = transaction
     this.helper = helper === undefined ? this._helper : helper
   }
 
   /**
-     * @description Map data from the transaction set to a javascript object.
-     * @param {object} map The javascript object containing keys and querys to resolve.
-     * @param {callback} [callback] A callback function which will be passed to the helper function.
-     * @returns {object|object[]}
-     */
+   * @description Map data from the transaction set to a javascript object.
+   * @param {object} map - The javascript object containing keys and querys to resolve.
+   * @param {Function} [callback] - A callback function which will be passed to the helper function.
+   * @returns {object|object[]} The transaction set mapped to an object or an array of objects.
+   */
   toObject (map?: object, callback?: Function): any {
     map = map === undefined ? this.map : map
 
@@ -132,13 +132,14 @@ export class X12TransactionMap {
   }
 
   /**
-     * @description Default helper function describing the parameters for other helpers.
-     * @param {string} key The current key being set by the mapper.
-     * @param {string} value The current value as resolved by the query engine.
-     * @param {string} [query] The current query as used by the query engine.
-     * @param {callback} [callback] A callback function for signalling back from the helper function.
-     * @returns {string} The value as resolved by the query engine; custom helpers may modify this value further.
-     */
+   * @private
+   * @description Default helper function describing the parameters for other helpers.
+   * @param {string} key - The current key being set by the mapper.
+   * @param {string} value - The current value as resolved by the query engine.
+   * @param {string} [query] - The current query as used by the query engine.
+   * @param {Function} [callback] - A callback function for signalling back from the helper function.
+   * @returns {string} The value as resolved by the query engine; custom helpers may modify this value further.
+   */
   private _helper (key: string, value: string, query?: string, callback?: Function): string {
     if (callback !== undefined) {
       callback(key, value, query)

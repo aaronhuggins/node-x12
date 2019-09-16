@@ -8,9 +8,9 @@ import { defaultSerializationOptions, X12SerializationOptions } from './X12Seria
 
 export class X12Transaction {
   /**
-     * @description Create a transaction set.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     */
+   * @description Create a transaction set.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   */
   constructor (options?: X12SerializationOptions) {
     this.segments = new Array<X12Segment>()
     this.options = defaultSerializationOptions(options)
@@ -24,10 +24,10 @@ export class X12Transaction {
   options: X12SerializationOptions
 
   /**
-     * @description Set a ST header on this transaction set.
-     * @param elements An array of elements for a ST header.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     */
+   * @description Set a ST header on this transaction set.
+   * @param {string[]} elements - An array of elements for a ST header.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   */
   setHeader (elements: string[], options?: X12SerializationOptions): void {
     options = options !== undefined
       ? defaultSerializationOptions(options)
@@ -41,12 +41,12 @@ export class X12Transaction {
   }
 
   /**
-     * @description Add a segment to this transaction set.
-     * @param {string} tag The tag for this segment.
-     * @param {string[]} elements An array of elements for this segment.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     * @returns {X12Segment}
-     */
+   * @description Add a segment to this transaction set.
+   * @param {string} tag - The tag for this segment.
+   * @param {string[]} elements - An array of elements for this segment.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   * @returns {X12Segment} The segment added to this transaction set.
+   */
   addSegment (tag: string, elements: string[], options?: X12SerializationOptions): X12Segment {
     options = options !== undefined
       ? defaultSerializationOptions(options)
@@ -64,11 +64,11 @@ export class X12Transaction {
   }
 
   /**
-     * @description Map data from a transaction set to a javascript object.
-     * @param {object} map The javascript object containing keys and querys to resolve.
-     * @param {Function} helper A helper function which will be executed on every resolved query value.
-     * @returns {object} An object containing resolved values mapped to object keys.
-     */
+   * @description Map data from a transaction set to a javascript object.
+   * @param {object} map - The javascript object containing keys and querys to resolve.
+   * @param {Function} helper - A helper function which will be executed on every resolved query value.
+   * @returns {object} An object containing resolved values mapped to object keys.
+   */
   toObject (map: object, helper?: Function): object {
     const mapper = new X12TransactionMap(map, this, helper)
 
@@ -76,10 +76,10 @@ export class X12Transaction {
   }
 
   /**
-     * @description Serialize transaction set to EDI string.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     * @returns {string}
-     */
+   * @description Serialize transaction set to EDI string.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   * @returns {string} This transaction set converted to an EDI string.
+   */
   toString (options?: X12SerializationOptions): string {
     options = options !== undefined
       ? defaultSerializationOptions(options)
@@ -105,9 +105,9 @@ export class X12Transaction {
   }
 
   /**
-     * @description Serialize transaction set to JSON object.
-     * @returns {object}
-     */
+   * @description Serialize transaction set to JSON object.
+   * @returns {object} This transaction set converted to an object.
+   */
   toJSON (): object {
     const jsen = new JSEDITransaction(this.header.elements.map(x => x.value))
 
@@ -119,9 +119,10 @@ export class X12Transaction {
   }
 
   /**
-     * @description Set a SE trailer on this transaction set.
-     * @param {X12SerializationOptions} [options] Options for serializing back to EDI.
-     */
+   * @private
+   * @description Set a SE trailer on this transaction set.
+   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
+   */
   private _setTrailer (options?: X12SerializationOptions): void {
     options = options !== undefined
       ? defaultSerializationOptions(options)

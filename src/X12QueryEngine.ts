@@ -10,9 +10,9 @@ import { X12Element } from './X12Element'
 
 export class X12QueryEngine {
   /**
-     * @description Factory for querying EDI using the node-x12 object model.
-     * @param {X12Parser|boolean} [parser] Pass an external parser or set the strictness of the internal parser.
-     */
+   * @description Factory for querying EDI using the node-x12 object model.
+   * @param {X12Parser|boolean} [parser] - Pass an external parser or set the strictness of the internal parser.
+   */
   constructor (parser: X12Parser | boolean = true) {
     this._parser = typeof parser === 'boolean'
       ? new X12Parser(parser)
@@ -25,11 +25,11 @@ export class X12QueryEngine {
   private readonly _concatPattern: RegExp = /CONCAT\(.+,.+\)=>.+/g;
 
   /**
-     * @description Query all references in an EDI document.
-     * @param {string|X12Interchange} rawEdi An ASCII or UTF8 string of EDI to parse, or an interchange.
-     * @param {string} reference The query string to resolve.
-     * @returns {X12QueryResult[]} An array of results from the EDI document.
-     */
+   * @description Query all references in an EDI document.
+   * @param {string|X12Interchange} rawEdi - An ASCII or UTF8 string of EDI to parse, or an interchange.
+   * @param {string} reference - The query string to resolve.
+   * @returns {X12QueryResult[]} An array of results from the EDI document.
+   */
   query (rawEdi: string | X12Interchange, reference: string): X12QueryResult[] {
     const interchange = typeof rawEdi === 'string'
       ? this._parser.parse(rawEdi) as X12Interchange
@@ -91,11 +91,11 @@ export class X12QueryEngine {
   }
 
   /**
-     * @description Query all references in an EDI document and return the first result.
-     * @param {string|X12Interchange} rawEdi An ASCII or UTF8 string of EDI to parse, or an interchange.
-     * @param {string} reference The query string to resolve.
-     * @returns {X12QueryResult} A result from the EDI document.
-     */
+   * @description Query all references in an EDI document and return the first result.
+   * @param {string|X12Interchange} rawEdi - An ASCII or UTF8 string of EDI to parse, or an interchange.
+   * @param {string} reference - The query string to resolve.
+   * @returns {X12QueryResult} A result from the EDI document.
+   */
   querySingle (rawEdi: string | X12Interchange, reference: string): X12QueryResult {
     const results = this.query(rawEdi, reference)
 

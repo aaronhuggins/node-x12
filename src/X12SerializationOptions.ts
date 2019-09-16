@@ -19,8 +19,8 @@ export interface X12SerializationOptions {
 
 /**
  * @description Set default values for any missing X12SerializationOptions in an options object.
- * @param {X12SerializationOptions} [options] Options for serializing to and from EDI.
- * @returns {X12SerializationOptions}
+ * @param {X12SerializationOptions} [options] - Options for serializing to and from EDI.
+ * @returns {X12SerializationOptions} Serialization options with defaults filled in.
  */
 export function defaultSerializationOptions (options?: X12SerializationOptions): X12SerializationOptions {
   options = options === undefined ? {} : options

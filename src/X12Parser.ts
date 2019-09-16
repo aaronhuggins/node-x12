@@ -18,9 +18,9 @@ const ELEMENT_DELIMITER_POS: number = 3
 
 export class X12Parser {
   /**
-     * @description Factory for parsing EDI into interchange object.
-     * @param {boolean} [strict] Set true to strictly follow the EDI spec.
-     */
+   * @description Factory for parsing EDI into interchange object.
+   * @param {boolean} [strict] - Set true to strictly follow the EDI spec.
+   */
   constructor (strict?: boolean) {
     this.diagnostics = new Array<X12Diagnostic>()
     this._strict = strict
@@ -30,11 +30,11 @@ export class X12Parser {
   diagnostics: X12Diagnostic[];
 
   /**
-     * @description Parse an EDI document.
-     * @param {string} edi An ASCII or UTF8 string of EDI to parse.
-     * @param {X12SerializationOptions} [options] Options for serializing from EDI.
-     * @returns {X12Interchange|X12FatInterchange} An interchange or a fat interchange.
-     */
+   * @description Parse an EDI document.
+   * @param {string} edi - An ASCII or UTF8 string of EDI to parse.
+   * @param {X12SerializationOptions} [options] - Options for serializing from EDI.
+   * @returns {X12Interchange|X12FatInterchange} An interchange or a fat interchange.
+   */
   parse (edi: string, options?: X12SerializationOptions): X12Interchange | X12FatInterchange {
     if (edi === undefined) {
       throw new ArgumentNullError('edi')

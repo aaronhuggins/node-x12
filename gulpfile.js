@@ -15,7 +15,8 @@ gulp.task('compile', shell.task([
 ]))
 
 gulp.task('compile:docs', shell.task([
-  'jsdoc2md --no-cache --files ./src/*.ts --configure ./jsdoc2md.json > ./docs/API.md'
+  'jsdoc2md --no-cache --files ./src/*.ts --configure ./jsdoc2md.json > ./docs/API.md',
+  'mocha --reporter=markdown > ./docs/Tests.md'
 ]))
 
 gulp.task('clean:dist', shell.task([

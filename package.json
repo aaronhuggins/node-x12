@@ -34,10 +34,7 @@
         "prepack": "tsc",
         "postpack": "del-cli ./dist"
     },
-    "dependencies": {
-        "eslint-config-standard-jsdoc": "^9.2.0",
-        "eslint-plugin-jsdoc": "^15.9.2"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@babel/cli": "^7.6.0",
         "@babel/core": "^7.6.0",
@@ -51,8 +48,10 @@
         "codecov": "^3.5.0",
         "del-cli": "^3.0.0",
         "eslint": "^6.3.0",
+        "eslint-config-standard-jsdoc": "^9.2.0",
         "eslint-config-standard-with-typescript": "^9.0.0",
         "eslint-plugin-import": "^2.18.2",
+        "eslint-plugin-jsdoc": "^15.9.2",
         "eslint-plugin-node": "^9.2.0",
         "eslint-plugin-promise": "^4.2.1",
         "eslint-plugin-standard": "^4.0.1",

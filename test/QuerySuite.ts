@@ -47,7 +47,7 @@ describe('X12QueryEngine', () => {
     const engine = new X12QueryEngine(parser)
     const results = engine.query(edi, 'HL+S+O+I-LIN03')
 
-    if (results.length !== 2) {
+    if (results[0].value !== '87787D' || results[1].value !== '99887D') {
       throw new Error('Expected two matching elements for HL+S+O+I-LIN03.')
     }
   })

@@ -7,7 +7,8 @@
         "x12",
         "edi",
         "ansi",
-        "asc"
+        "asc",
+        "ecommerce"
     ],
     "files": [
         "/dist"

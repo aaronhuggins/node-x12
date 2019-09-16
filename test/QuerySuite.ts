@@ -25,7 +25,7 @@ describe('X12QueryEngine', () => {
 
     if (results.length !== 1) {
       throw new Error('Expected one matching element for REF02:REF01["DP"].')
-    } else if (results[0].element.value !== '038') {
+    } else if (results[0].value !== '038') {
       throw new Error('Expected REF02 to be "038".')
     }
   })
@@ -120,8 +120,8 @@ describe('X12QueryEngine', () => {
     const results = engine.query(edi, 'ISA06')
 
     if (results.length === 1) {
-      if (results[0].element.value.trim() !== '4405197800') {
-        throw new Error(`Expected 4405197800, found ${results[0].element.value}.`)
+      if (results[0].value.trim() !== '4405197800') {
+        throw new Error(`Expected 4405197800, found ${results[0].value}.`)
       }
     } else {
       throw new Error(`Expected exactly one result. Found ${results.length}.`)
@@ -132,14 +132,10 @@ describe('X12QueryEngine', () => {
     const edi = fs.readFileSync('test/test-data/850_2.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)
-    const results = engine.query(edi, 'REF02:REF01["DP"]')
+    const result = engine.querySingle(edi, 'REF02:REF01["DP"]')
 
-    if (results.length === 1) {
-      if (results[0].element.value.trim() !== '038') {
-        throw new Error(`Expected 038, found ${results[0].element.value}.`)
-      }
-    } else {
-      throw new Error(`Expected exactly one result. Found ${results.length}.`)
+    if (result.value.trim() !== '038') {
+      throw new Error(`Expected 038, found ${result.value}.`)
     }
   })
 
@@ -150,8 +146,8 @@ describe('X12QueryEngine', () => {
     const results = engine.query(edi, 'REF02:REF01["DP"]:BEG02["SA"]')
 
     if (results.length === 1) {
-      if (results[0].element.value.trim() !== '038') {
-        throw new Error(`Expected 038, found ${results[0].element.value}.`)
+      if (results[0].value.trim() !== '038') {
+        throw new Error(`Expected 038, found ${results[0].value}.`)
       }
     } else {
       throw new Error(`Expected exactly one result. Found ${results.length}.`)

@@ -16,7 +16,7 @@ describe('X12Mapping', () => {
     const transaction = interchange.functionalGroups[0].transactions[0]
     const mapper = new X12TransactionMap(JSON.parse(mapJson), transaction)
     const result = JSON.stringify(mapper.toObject())
-    console.log(result)
+
     if (result !== resultJson) {
       throw new Error(`Formatted JSON does not match source. Found ${result}, expected ${resultJson}.`)
     }

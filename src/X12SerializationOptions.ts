@@ -3,11 +3,11 @@
 /**
  * @description Options for serializing to and from EDI.
  * @typedef {object} X12SerializationOptions
- * @property {string} [elementDelimiter]
- * @property {string} [endOfLine]
- * @property {boolean} [format]
- * @property {string} [segmentTerminator]
- * @property {string} [subElementDelimiter]
+ * @property {string} [elementDelimiter=*] The separator for elements within an EDI segment.
+ * @property {string} [endOfLine=\n] The end of line charactor for formatting.
+ * @property {boolean} [format=false] A flag to set formatting when serializing back to EDI.
+ * @property {string} [segmentTerminator=~] The terminator for each EDI segment.
+ * @property {string} [subElementDelimiter=>] A sub-element separator; typically found at element 16 of the ISA header segment.
  */
 export interface X12SerializationOptions {
   elementDelimiter?: string

@@ -682,11 +682,11 @@
 **Kind**: global typedef  
 **Properties**
 
-| Name | Type |
-| --- | --- |
-| [elementDelimiter] | <code>string</code> | 
-| [endOfLine] | <code>string</code> | 
-| [format] | <code>boolean</code> | 
-| [segmentTerminator] | <code>string</code> | 
-| [subElementDelimiter] | <code>string</code> | 
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| [elementDelimiter] | <code>string</code> | <code>&quot;*&quot;</code> | <p>The separator for elements within an EDI segment.</p> |
+| [endOfLine] | <code>string</code> | <code>&quot;\\n&quot;</code> | <p>The end of line charactor for formatting.</p> |
+| [format] | <code>boolean</code> | <code>false</code> | <p>A flag to set formatting when serializing back to EDI.</p> |
+| [segmentTerminator] | <code>string</code> | <code>&quot;~&quot;</code> | <p>The terminator for each EDI segment.</p> |
+| [subElementDelimiter] | <code>string</code> | <code>&quot;&gt;&quot;</code> | <p>A sub-element separator; typically found at element 16 of the ISA header segment.</p> |
 

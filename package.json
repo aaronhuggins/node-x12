@@ -1,8 +1,8 @@
 {
     "name": "node-x12",
-    "version": "1.1.9",
+    "version": "1.1.10",
     "description": "A simple ASC X12 parser, generator, query engine, and mapper for NodeJS.",
-    "main": "dist/core.js",
+    "main": "index.js",
     "keywords": [
         "x12",
         "edi",
@@ -11,7 +11,7 @@
         "ecommerce"
     ],
     "files": [
-        "/dist"
+        "index.js"
     ],
     "homepage": "https://github.com/ahuggins-nhs/node-x12",
     "bugs": {
@@ -31,8 +31,8 @@
     ],
     "scripts": {
         "tsc": "tsc",
-        "prepack": "tsc",
-        "postpack": "del-cli ./dist"
+        "prepack": "gulp compile",
+        "postpack": "gulp clean:index"
     },
     "dependencies": {},
     "devDependencies": {
@@ -64,7 +64,10 @@
         "mocha-lcov-reporter": "^1.3.0",
         "nyc": "^14.1.1",
         "source-map-support": "^0.5.13",
+        "ts-loader": "^6.1.0",
         "ts-node": "^8.3.0",
-        "typescript": "^3.6.2"
+        "typescript": "^3.6.2",
+        "webpack": "^4.40.2",
+        "webpack-cli": "^3.3.9"
     }
 }

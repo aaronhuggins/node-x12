@@ -27,14 +27,11 @@ Then require it in your project:
 const { X12Parser } = require('node-x12')
 ```
 
-The TypeScript code is compiled to JavaScript and distributed via NPM. If you wish to use the TypeScript code directly you can download this repository locally, or install the git repository via NPM:
-```console
-npm install --save git+https://git@github.com/ahuggins-nhs/node-x12.git
-```
+The TypeScript code is compiled to JavaScript and distributed via NPM. If you wish to use the TypeScript code directly you can download this repository locally.
 
 Then import it in your project:
 ```typescript
-import { X12Parser } from './node_modules/node-x12/core.ts'
+import { X12Parser } from './node-x12/core.ts'
 ```
 
 ## Features

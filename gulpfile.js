@@ -10,17 +10,21 @@ gulp.task('mkdir', async (done) => {
   return done()
 })
 
+gulp.task('clean:dist', shell.task([
+  'del-cli ./dist'
+]))
+
+gulp.task('clean:index', shell.task([
+  'del-cli ./index.js'
+]))
+
 gulp.task('compile', shell.task([
-  'tsc'
+  'webpack'
 ]))
 
 gulp.task('compile:docs', shell.task([
   'jsdoc2md --no-cache --files ./src/*.ts --configure ./jsdoc2md.json > ./docs/API.md',
   'mocha --reporter=markdown > ./docs/Tests.md'
-]))
-
-gulp.task('clean:dist', shell.task([
-  'del-cli ./dist'
 ]))
 
 gulp.task('mocha', shell.task([

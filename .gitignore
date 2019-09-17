@@ -25,6 +25,7 @@ coverage
 
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
+*.tgz
 
 # Dependency directory
 node_modules
@@ -37,3 +38,4 @@ node_modules
 
 # compiled typescript
 dist/**
+index.js

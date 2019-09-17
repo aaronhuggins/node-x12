@@ -82,7 +82,7 @@ Implementers of ASC X12 are not guaranteed to conform completely to spec. There 
 Such issues should be resolved between a user of this library and the implementer of ASC X12 documents they are working with.
 
 ## Documentation
-Additional documentation can be found [self-hosted](/docs) within the repository.
+Additional documentation can be found [self-hosted](/docs/TOC.md) within the repository.
 
 ## Examples
 ```js

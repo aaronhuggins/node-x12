@@ -17,7 +17,7 @@ A simple ASC X12 parser, generator, query engine, and mapper for NodeJS. Created
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=ncloc)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
 
 ## Usage
-Install it from the npm repository:
+Install it from the [npm repository](https://www.npmjs.com/package/node-x12):
 ```console
 npm install --save node-x12
 ```

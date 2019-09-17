@@ -8,6 +8,7 @@
     "target": "es2017",
     "experimentalDecorators": true,
     "outDir": "dist",
+    "declaration": true,
     "types": [
       "mocha",
       "node"
@@ -15,6 +16,7 @@
   },
 
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist"
   ]
 }

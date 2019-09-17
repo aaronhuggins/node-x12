@@ -1,3 +1,5 @@
+const DtsBundleWebpack = require('dts-bundle-webpack')
+
 module.exports = {
   mode: 'production',
   entry: './core.ts',
@@ -17,5 +19,13 @@ module.exports = {
   target: 'node',
   optimization: {
     minimize: false
-  }
+  },
+  plugins: [
+    new DtsBundleWebpack({
+      name: 'node-x12',
+      baseDir: './',
+      main: 'dist/core.d.ts',
+      out: 'index.d.ts'
+    })
+  ]
 }

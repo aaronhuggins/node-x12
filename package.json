@@ -1,6 +1,6 @@
 {
     "name": "node-x12",
-    "version": "1.1.10",
+    "version": "1.1.11",
     "description": "A simple ASC X12 parser, generator, query engine, and mapper for NodeJS.",
     "main": "index.js",
     "keywords": [
@@ -11,7 +11,8 @@
         "ecommerce"
     ],
     "files": [
-        "index.js"
+        "index.js",
+        "index.d.ts"
     ],
     "homepage": "https://github.com/ahuggins-nhs/node-x12",
     "bugs": {
@@ -32,7 +33,7 @@
     "scripts": {
         "tsc": "tsc",
         "prepack": "gulp compile",
-        "postpack": "gulp clean:index"
+        "postpack": "gulp clean"
     },
     "dependencies": {},
     "devDependencies": {
@@ -47,6 +48,7 @@
         "@typescript-eslint/eslint-plugin": "^2.2.0",
         "codecov": "^3.5.0",
         "del-cli": "^3.0.0",
+        "dts-bundle-webpack": "^1.0.2",
         "eslint": "^6.3.0",
         "eslint-config-standard-jsdoc": "^9.2.0",
         "eslint-config-standard-with-typescript": "^9.0.0",

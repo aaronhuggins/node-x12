@@ -39,3 +39,4 @@ node_modules
 # compiled typescript
 dist/**
 index.js
+index.d.ts

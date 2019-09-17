@@ -1,6 +1,6 @@
 {
     "name": "node-x12",
-    "version": "1.1.11",
+    "version": "1.1.12",
     "description": "A simple ASC X12 parser, generator, query engine, and mapper for NodeJS.",
     "main": "index.js",
     "keywords": [
@@ -14,7 +14,7 @@
         "index.js",
         "index.d.ts"
     ],
-    "homepage": "https://github.com/ahuggins-nhs/node-x12",
+    "homepage": "https://ahuggins-nhs.github.io/node-x12/",
     "bugs": {
         "url": "https://github.com/ahuggins-nhs/node-x12/issues"
     },
@@ -31,6 +31,8 @@
         "typings/*"
     ],
     "scripts": {
+        "test": "gulp test",
+        "test:local": "gulp test:local",
         "tsc": "tsc",
         "prepack": "gulp compile",
         "postpack": "gulp clean"

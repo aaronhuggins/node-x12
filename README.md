@@ -43,6 +43,7 @@ import { X12Parser } from './node-x12/core.ts'
 - Transaction set to object mapping
 - Support for fat EDI documents
 - Convenience methods for several generating/mapping scenarios
+- Intellisense support in VSCode with packaged type declarations
 
 Features marked with an asterisk were initially developed by TrueCommerce and released under an MIT license. Without the good work done by TrueCommerce up until 2016, this library would not exist.
 

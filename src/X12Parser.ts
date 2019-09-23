@@ -14,6 +14,7 @@ import { defaultSerializationOptions, X12SerializationOptions } from './X12Seria
 const DOCUMENT_MIN_LENGTH: number = 113 // ISA = 106, IEA > 7
 const SEGMENT_TERMINATOR_POS: number = 105
 const ELEMENT_DELIMITER_POS: number = 3
+const SUBELEMENT_DELIMITER_POS: number = 104
 // Legacy note: const INTERCHANGE_CACHE_SIZE: number = 10
 
 export class X12Parser {
@@ -54,16 +55,19 @@ export class X12Parser {
 
     let segmentTerminator = edi.charAt(SEGMENT_TERMINATOR_POS)
     let elementDelimiter = edi.charAt(ELEMENT_DELIMITER_POS)
+    let subElementDelimiter = edi.charAt(SUBELEMENT_DELIMITER_POS)
 
     if (options === undefined) {
       options = defaultSerializationOptions({
         segmentTerminator,
-        elementDelimiter
+        elementDelimiter,
+        subElementDelimiter
       })
     } else {
       options = defaultSerializationOptions(options)
       segmentTerminator = options.segmentTerminator
       elementDelimiter = options.elementDelimiter
+      subElementDelimiter = options.subElementDelimiter
     }
 
     if (edi.charAt(103) !== elementDelimiter) {

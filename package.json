@@ -1,6 +1,6 @@
 {
     "name": "node-x12",
-    "version": "1.1.12",
+    "version": "1.1.13",
     "description": "A simple ASC X12 parser, generator, query engine, and mapper for NodeJS.",
     "main": "index.js",
     "keywords": [

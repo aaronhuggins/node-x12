@@ -231,7 +231,11 @@ export class X12Segment {
           }
 
           if (enumerable.PADDING as boolean && ((values[i].length < max && values[i].length > min) || values[i].length === 0)) {
-            values[i] = String.prototype.padEnd.call(values[i], max, ' ')
+            if (name === 'ISA13') {
+              values[i] = String.prototype.padStart.call(values[i], max, '0')
+            } else {
+              values[i] = String.prototype.padEnd.call(values[i], max, ' ')
+            }
           }
         }
       } else {

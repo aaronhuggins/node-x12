@@ -41,6 +41,7 @@ import { X12Parser } from './node-x12/core.ts'
 - Generator
 - Query Engine *
 - Transaction set to object mapping
+- Object to transaction set mapping
 - Support for fat EDI documents
 - Convenience methods for several generating/mapping scenarios
 - Intellisense support in VSCode with packaged type declarations

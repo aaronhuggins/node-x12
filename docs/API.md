@@ -525,6 +525,7 @@
     * [new X12Transaction([options])](#new_X12Transaction_new)
     * [.setHeader(elements, [options])](#X12Transaction+setHeader)
     * [.addSegment(tag, elements, [options])](#X12Transaction+addSegment) ⇒ [<code>X12Segment</code>](#X12Segment)
+    * [.fromObject(input, map, [macroObj])](#X12Transaction+fromObject) ⇒ <code>object</code>
     * [.toObject(map, helper)](#X12Transaction+toObject) ⇒ <code>object</code>
     * [.toString([options])](#X12Transaction+toString) ⇒ <code>string</code>
     * [.toJSON()](#X12Transaction+toJSON) ⇒ <code>object</code>
@@ -564,6 +565,20 @@
 | tag | <code>string</code> | <p>The tag for this segment.</p> |
 | elements | <code>Array.&lt;string&gt;</code> | <p>An array of elements for this segment.</p> |
 | [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+
+<a name="X12Transaction+fromObject"></a>
+
+### x12Transaction.fromObject(input, map, [macroObj]) ⇒ <code>object</code>
+<p>Map data from a javascript object to this transaction set.</p>
+
+**Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
+**Returns**: <code>object</code> - <p>An object containing resolved values mapped to object keys.</p>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| input | <code>object</code> | <p>The input object to create the transaction from.</p> |
+| map | <code>object</code> | <p>The javascript object containing keys and querys to resolve.</p> |
+| [macroObj] | <code>object</code> | <p>A macro object to add or override methods for the macro directive; properties 'header' and 'segments' are reserved words.</p> |
 
 <a name="X12Transaction+toObject"></a>
 
@@ -605,7 +620,9 @@
 * [X12TransactionMap](#X12TransactionMap)
     * [new X12TransactionMap(map, [transaction], helper)](#new_X12TransactionMap_new)
     * [.setTransaction(transaction, helper)](#X12TransactionMap+setTransaction)
+    * [.getTransaction()](#X12TransactionMap+getTransaction) ⇒ [<code>X12Transaction</code>](#X12Transaction)
     * [.toObject(map, [callback])](#X12TransactionMap+toObject) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
+    * [.fromObject(input, [map], [macroObj])](#X12TransactionMap+fromObject) ⇒ [<code>X12Transaction</code>](#X12Transaction)
 
 <a name="new_X12TransactionMap_new"></a>
 
@@ -631,6 +648,13 @@
 | transaction | [<code>X12Transaction</code>](#X12Transaction) | <p>A transaction set to map.</p> |
 | helper | <code>function</code> | <p>A helper function which will be executed on every resolved query value.</p> |
 
+<a name="X12TransactionMap+getTransaction"></a>
+
+### x12TransactionMap.getTransaction() ⇒ [<code>X12Transaction</code>](#X12Transaction)
+<p>Set the transaction set to map and optionally a helper function.</p>
+
+**Kind**: instance method of [<code>X12TransactionMap</code>](#X12TransactionMap)  
+**Returns**: [<code>X12Transaction</code>](#X12Transaction) - <p>The transaction from this instance.</p>  
 <a name="X12TransactionMap+toObject"></a>
 
 ### x12TransactionMap.toObject(map, [callback]) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
@@ -643,6 +667,20 @@
 | --- | --- | --- |
 | map | <code>object</code> | <p>The javascript object containing keys and querys to resolve.</p> |
 | [callback] | <code>function</code> | <p>A callback function which will be passed to the helper function.</p> |
+
+<a name="X12TransactionMap+fromObject"></a>
+
+### x12TransactionMap.fromObject(input, [map], [macroObj]) ⇒ [<code>X12Transaction</code>](#X12Transaction)
+<p>Map data from a javascript object to the transaction set.</p>
+
+**Kind**: instance method of [<code>X12TransactionMap</code>](#X12TransactionMap)  
+**Returns**: [<code>X12Transaction</code>](#X12Transaction) - <p>The transaction created from the object values.</p>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| input | <code>object</code> |  | <p>The input object to create the transaction from.</p> |
+| [map] | <code>object</code> |  | <p>The map to associate values from the input to the transaction, or a macro object.</p> |
+| [macroObj] | <code>object</code> | <code>{}</code> | <p>A macro object to add or override methods for the macro directive; properties 'header' and 'segments' are reserved words.</p> |
 
 <a name="defaultSerializationOptions"></a>
 

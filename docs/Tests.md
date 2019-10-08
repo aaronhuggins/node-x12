@@ -205,6 +205,37 @@ const parser = new core_1.X12Parser(true);
 parser.parse(edi);
 ```
 
+should parse and reconstruct a valid X12 stream without throwing an error.
+
+```js
+async () => {
+        return new Promise((resolve, reject) => {
+            const ediStream = fs.createReadStream('test/test-data/850.edi', 'utf8');
+            const parser = new core_1.X12Parser();
+            const segments = [];
+            ediStream.on('error', (error) => {
+                reject(error);
+            });
+            parser.on('error', (error) => {
+                reject(error);
+            });
+            ediStream.pipe(parser).on('data', (data) => {
+                segments.push(data);
+            })
+                .on('end', () => {
+                const edi = fs.readFileSync('test/test-data/850.edi', 'utf8');
+                const interchange = parser.getInterchangeFromSegments(segments);
+                interchange.options.format = true;
+                interchange.options.endOfLine = '\n';
+                if (interchange.toString() !== edi) {
+                    reject(new Error('Expected parsed EDI stream to match raw EDI document.'));
+                }
+                resolve();
+            });
+        });
+    }
+```
+
 should produce accurate line numbers for files with line breaks.
 
 ```js

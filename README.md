@@ -38,6 +38,7 @@ import { X12Parser } from './node-x12/core.ts'
 - Near-complete class object model of ASC X12 parts *
 - Simplified object notation class for EDI (which allows JSON support)
 - Parser *
+- Streaming Parser (allows for parsing of large EDI files with reduced memory overhead)
 - Generator
 - Query Engine *
 - Transaction set to object mapping
@@ -95,8 +96,20 @@ const {
 } = require('node-x12')
 
 // Parse valid ASC X12 EDI into an object.
-const parser = new X12Parser(true);
-const interchange = parser.parse('...raw X12 data...');
+const parser = new X12Parser(true)
+let interchange = parser.parse('...raw X12 data...')
+
+// Parse a stream of valid ASC X12 EDI
+const ediStream = fs.createReadStream('someFile.edi')
+const segments = []
+
+ediStream.pipe(parser)
+    .on('data', (data) => {
+        segments.push(data)
+    })
+    .on('end', () => {
+        interchange = parser.getInterchangeFromSegments(segments)
+    })
 
 // Generate valid ASC X12 EDI from an object.
 const jsen = {
@@ -110,8 +123,8 @@ const jsen = {
 const generator = new X12Generator(jsen)
 
 // Query X12 like an object model
-const engine = new X12QueryEngine();
-const results = engine.query(interchange, 'REF02:REF01["IA"]');
+const engine = new X12QueryEngine()
+const results = engine.query(interchange, 'REF02:REF01["IA"]')
 
 results.forEach((result) => {
     // Do something with each result.
@@ -129,11 +142,11 @@ const map = {
     status: 'W0601',
     poNumber: 'W0602',
     poDate: 'W0603',
-    shipto_name: 'N102:N101[\"ST\"]',
-    shipto_address: 'N1-N301:N101[\"ST\"]',
-    shipto_city: 'N1-N401:N101[\"ST\"]',
-    shipto_state: 'N1-N402:N101[\"ST\"]',
-    shipto_zip: 'N1-N403:N101[\"ST\"]'
+    shipto_name: 'N102:N101["ST"]',
+    shipto_address: 'N1-N301:N101["ST"]',
+    shipto_city: 'N1-N401:N101["ST"]',
+    shipto_state: 'N1-N402:N101["ST"]',
+    shipto_zip: 'N1-N403:N101["ST"]'
 }
 
 interchange.functionalGroups.forEach((group) => {

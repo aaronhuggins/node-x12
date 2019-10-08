@@ -322,18 +322,23 @@
 **Kind**: global class  
 
 * [X12Parser](#X12Parser)
-    * [new X12Parser([strict])](#new_X12Parser_new)
+    * [new X12Parser([strict], [encoding], [options])](#new_X12Parser_new)
     * [.parse(edi, [options])](#X12Parser+parse) ⇒ [<code>X12Interchange</code>](#X12Interchange) \| [<code>X12FatInterchange</code>](#X12FatInterchange)
+    * [.getInterchangeFromSegments(segments, [options])](#X12Parser+getInterchangeFromSegments) ⇒ [<code>X12Interchange</code>](#X12Interchange) \| [<code>X12FatInterchange</code>](#X12FatInterchange)
+    * [._flush(callback)](#X12Parser+_flush)
+    * [._transform(chunk, encoding, callback)](#X12Parser+_transform)
 
 <a name="new_X12Parser_new"></a>
 
-### new X12Parser([strict])
+### new X12Parser([strict], [encoding], [options])
 <p>Factory for parsing EDI into interchange object.</p>
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [strict] | <code>boolean</code> | <p>Set true to strictly follow the EDI spec.</p> |
+| [strict] | <code>boolean</code> \| [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Set true to strictly follow the EDI spec; defaults to false.</p> |
+| [encoding] | <code>string</code> \| [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>The encoding to use for this instance when parsing a stream; defaults to UTF-8.</p> |
+| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>The options to use when parsing a stream.</p> |
 
 <a name="X12Parser+parse"></a>
 
@@ -341,12 +346,49 @@
 <p>Parse an EDI document.</p>
 
 **Kind**: instance method of [<code>X12Parser</code>](#X12Parser)  
-**Returns**: [<code>X12Interchange</code>](#X12Interchange) \| [<code>X12FatInterchange</code>](#X12FatInterchange) - <p>An interchange or a fat interchange.</p>  
+**Returns**: [<code>X12Interchange</code>](#X12Interchange) \| [<code>X12FatInterchange</code>](#X12FatInterchange) - <p>An interchange or fat interchange.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | edi | <code>string</code> | <p>An ASCII or UTF8 string of EDI to parse.</p> |
 | [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing from EDI.</p> |
+
+<a name="X12Parser+getInterchangeFromSegments"></a>
+
+### x12Parser.getInterchangeFromSegments(segments, [options]) ⇒ [<code>X12Interchange</code>](#X12Interchange) \| [<code>X12FatInterchange</code>](#X12FatInterchange)
+<p>Method for processing an array of segments into the node-x12 object model; typically used with the finished output of a stream.</p>
+
+**Kind**: instance method of [<code>X12Parser</code>](#X12Parser)  
+**Returns**: [<code>X12Interchange</code>](#X12Interchange) \| [<code>X12FatInterchange</code>](#X12FatInterchange) - <p>An interchange or fat interchange.</p>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| segments | [<code>Array.&lt;X12Segment&gt;</code>](#X12Segment) | <p>An array of X12Segment objects.</p> |
+| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing from EDI.</p> |
+
+<a name="X12Parser+_flush"></a>
+
+### x12Parser.\_flush(callback)
+<p>Flush method for Node API Transform stream.</p>
+
+**Kind**: instance method of [<code>X12Parser</code>](#X12Parser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| callback | <code>function</code> | <p>Callback to execute when finished.</p> |
+
+<a name="X12Parser+_transform"></a>
+
+### x12Parser.\_transform(chunk, encoding, callback)
+<p>Transform method for Node API Transform stream.</p>
+
+**Kind**: instance method of [<code>X12Parser</code>](#X12Parser)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| chunk | <code>object</code> | <p>A chunk of data from the read stream.</p> |
+| encoding | <code>string</code> | <p>Chunk enoding.</p> |
+| callback | <code>function</code> | <p>Callback signalling chunk is processed and instance is ready for next chunk.</p> |
 
 <a name="X12QueryEngine"></a>
 
@@ -525,7 +567,7 @@
     * [new X12Transaction([options])](#new_X12Transaction_new)
     * [.setHeader(elements, [options])](#X12Transaction+setHeader)
     * [.addSegment(tag, elements, [options])](#X12Transaction+addSegment) ⇒ [<code>X12Segment</code>](#X12Segment)
-    * [.fromObject(input, map, [macroObj])](#X12Transaction+fromObject) ⇒ <code>object</code>
+    * [.fromObject(input, map, [macro])](#X12Transaction+fromObject)
     * [.toObject(map, helper)](#X12Transaction+toObject) ⇒ <code>object</code>
     * [.toString([options])](#X12Transaction+toString) ⇒ <code>string</code>
     * [.toJSON()](#X12Transaction+toJSON) ⇒ <code>object</code>
@@ -568,17 +610,16 @@
 
 <a name="X12Transaction+fromObject"></a>
 
-### x12Transaction.fromObject(input, map, [macroObj]) ⇒ <code>object</code>
+### x12Transaction.fromObject(input, map, [macro])
 <p>Map data from a javascript object to this transaction set.</p>
 
 **Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
-**Returns**: <code>object</code> - <p>An object containing resolved values mapped to object keys.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | input | <code>object</code> | <p>The input object to create the transaction from.</p> |
 | map | <code>object</code> | <p>The javascript object containing keys and querys to resolve.</p> |
-| [macroObj] | <code>object</code> | <p>A macro object to add or override methods for the macro directive; properties 'header' and 'segments' are reserved words.</p> |
+| [macro] | <code>object</code> | <p>A macro object to add or override methods for the macro directive; properties 'header' and 'segments' are reserved words.</p> |
 
 <a name="X12Transaction+toObject"></a>
 

@@ -40,7 +40,12 @@ export class X12Parser extends Transform {
       options = encoding
       encoding = 'utf8'
     }
-    super({ objectMode: true, encoding })
+    super({
+      readableObjectMode: true,
+      writableObjectMode: true,
+      objectMode: true,
+      defaultEncoding: encoding
+    })
     this.diagnostics = new Array<X12Diagnostic>()
     this._strict = strict
     this._options = options
@@ -437,11 +442,13 @@ export class X12Parser extends Transform {
 
     if (Array.isArray(rawSegments)) {
       for (let i = 0; i < rawSegments.length; i += 1) {
-        const segments = this._parseSegments(rawSegments[i] + this._options.segmentTerminator, this._options.segmentTerminator, this._options.elementDelimiter)
+        if (rawSegments[i].length > 0) {
+          const segments = this._parseSegments(rawSegments[i] + this._options.segmentTerminator, this._options.segmentTerminator, this._options.elementDelimiter)
 
-        segments.forEach((segment) => {
-          this.push(segment)
-        })
+          segments.forEach((segment) => {
+            this.push(segment)
+          })
+        }
       }
     }
   }
@@ -455,7 +462,7 @@ export class X12Parser extends Transform {
     this._consumeChunk(this._dataCache)
     this._flushing = false
 
-    callback.call(this)
+    callback()
   }
 
   /**
@@ -467,6 +474,6 @@ export class X12Parser extends Transform {
   public _transform (chunk: any, encoding: string, callback: Function): void {
     this._consumeChunk(this._decoder.write(chunk))
 
-    callback.call(this)
+    callback()
   }
 }

@@ -183,7 +183,7 @@ export class X12TransactionMap {
         value.forEach((item) => { sum += item[property] })
 
         return {
-          val: sum.toFixed(dec === undefined ? 0 : 0)
+          val: sum.toFixed(dec === undefined ? 0 : dec)
         }
       },
       random: function random () {

@@ -15,6 +15,7 @@ export interface X12SerializationOptions {
   format?: boolean
   segmentTerminator?: string
   subElementDelimiter?: string
+  repetitionDelimiter?: string
 }
 
 /**
@@ -30,6 +31,7 @@ export function defaultSerializationOptions (options?: X12SerializationOptions):
   options.format = options.format === undefined ? false : options.format
   options.segmentTerminator = options.segmentTerminator === undefined ? '~' : options.segmentTerminator
   options.subElementDelimiter = options.subElementDelimiter === undefined ? '>' : options.subElementDelimiter
+  options.repetitionDelimiter = options.repetitionDelimiter === undefined ? '^' : options.repetitionDelimiter
 
   if (options.segmentTerminator === '\n') {
     options.endOfLine = ''

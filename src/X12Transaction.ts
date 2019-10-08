@@ -67,8 +67,7 @@ export class X12Transaction {
    * @description Map data from a javascript object to this transaction set.
    * @param {object} input - The input object to create the transaction from.
    * @param {object} map - The javascript object containing keys and querys to resolve.
-   * @param {object} [macroObj] - A macro object to add or override methods for the macro directive; properties 'header' and 'segments' are reserved words.
-   * @returns {object} An object containing resolved values mapped to object keys.
+   * @param {object} [macro] - A macro object to add or override methods for the macro directive; properties 'header' and 'segments' are reserved words.
    */
   fromObject (input: any, map: any, macro?: any): void {
     const mapper = new X12TransactionMap(map, this)

@@ -1,5 +1,5 @@
 # Node-X12
-A simple ASC X12 parser, generator, query engine, and mapper for NodeJS. Created originally for the [TC Toolbox](https://github.com/TrueCommerce/vscode-tctoolbox) project by TrueCommerce; the public repository for TC Toolbox has been taken offline. The original, parser-only library may be found at [TrueCommerce/node-x12](https://github.com/TrueCommerce/node-x12), which is still public at this time but no longer maintained.
+An ASC X12 parser, generator, query engine, and mapper written for NodeJS. Parsing supports reading from streams to conserve resources in memory-intensive operations.
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/standard/eslint-config-standard-with-typescript)
 [![codecov](https://codecov.io/gh/ahuggins-nhs/node-x12/branch/master/graph/badge.svg)](https://codecov.io/gh/ahuggins-nhs/node-x12)
@@ -35,19 +35,20 @@ import { X12Parser } from './node-x12/core.ts'
 ```
 
 ## Features
-- Near-complete class object model of ASC X12 parts *
-- Simplified object notation class for EDI (which allows JSON support)
-- Parser *
+Contributions by TrueCommerce up to April 2016:
+- Near-complete class object model of ASC X12 parts
+- Parser
+- Query Engine
+
+Enhancements original to this fork:
+- Simplified object notation class for EDI (allows for easy JSON support)
 - Streaming Parser (allows for parsing of large EDI files with reduced memory overhead)
 - Generator
-- Query Engine *
 - Transaction set to object mapping
 - Object to transaction set mapping
 - Support for fat EDI documents
 - Convenience methods for several generating/mapping scenarios
 - Intellisense support in VSCode with packaged type declarations
-
-Features marked with an asterisk were initially developed by TrueCommerce and released under an MIT license. Without the good work done by TrueCommerce up until 2016, this library would not exist.
 
 See the [API](/docs/API.md) for more information.
 
@@ -156,3 +157,8 @@ interchange.functionalGroups.forEach((group) => {
 })
 
 ```
+
+### Credit
+Created originally for the [TC Toolbox](https://github.com/TrueCommerce/vscode-tctoolbox) project by TrueCommerce; the public repository for TC Toolbox has been taken offline. The original, parser-only library may be found at [TrueCommerce/node-x12](https://github.com/TrueCommerce/node-x12), which is still public at this time but no longer maintained. Without the good work done by TrueCommerce up until 2016, this library would not exist.
+
+Thanks to [@DotJoshJohnson](https://github.com/DotJoshJohnson).

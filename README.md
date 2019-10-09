@@ -27,7 +27,7 @@ Then require it in your project:
 const { X12Parser } = require('node-x12')
 ```
 
-The TypeScript code is compiled to JavaScript and distributed via NPM. If you wish to use the TypeScript code directly you can download this repository locally.
+The TypeScript code is compiled to JavaScript and distributed via NPM. If you wish to use the TypeScript code directly you can [download the zip](https://github.com/ahuggins-nhs/node-x12/releases/latest) and unpack it locally.
 
 Then import it in your project:
 ```typescript

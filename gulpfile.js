@@ -1,6 +1,8 @@
 const fs = require('fs')
 const gulp = require('gulp')
 const shell = require('gulp-shell')
+const zip = require('gulp-zip')
+const pkg = require('./package.json')
 
 gulp.task('mkdir', async (done) => {
   if (!fs.existsSync('coverage')) {
@@ -31,6 +33,29 @@ gulp.task('compile:docs', shell.task([
   'jsdoc2md --no-cache --files ./src/*.ts --configure ./jsdoc2md.json > ./docs/API.md',
   'mocha --reporter=markdown > ./docs/Tests.md'
 ]))
+
+gulp.task('release:js', shell.task([
+  'npm pack'
+]))
+
+gulp.task('release:ts', async (done) => {
+  gulp.src([
+    'src/**',
+    'core.ts',
+    'LICENSE',
+    'README.md',
+    'package.json'
+  ], { base : '.' })
+    .pipe(zip(`${pkg.name}-${pkg.version}-ts.zip`))
+    .pipe(gulp.dest('./'))
+
+  done()
+})
+
+gulp.task('release', gulp.parallel(
+  'release:js',
+  'release:ts'
+))
 
 gulp.task('mocha', shell.task([
   'mocha'

@@ -158,7 +158,7 @@ interchange.functionalGroups.forEach((group) => {
 
 ```
 
-### Credit
+## Credit
 Created originally for the [TC Toolbox](https://github.com/TrueCommerce/vscode-tctoolbox) project by TrueCommerce; the public repository for TC Toolbox has been taken offline. The original, parser-only library may be found at [TrueCommerce/node-x12](https://github.com/TrueCommerce/node-x12), which is still public at this time but no longer maintained. Without the good work done by TrueCommerce up until 2016, this library would not exist.
 
 Thanks to [@DotJoshJohnson](https://github.com/DotJoshJohnson).

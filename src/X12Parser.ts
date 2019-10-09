@@ -15,6 +15,7 @@ import { defaultSerializationOptions, X12SerializationOptions } from './X12Seria
 
 const DOCUMENT_MIN_LENGTH: number = 113 // ISA = 106, IEA > 7
 const SEGMENT_TERMINATOR_POS: number = 105
+const END_OF_LINE_POS: number = 106
 const ELEMENT_DELIMITER_POS: number = 3
 const SUBELEMENT_DELIMITER_POS: number = 104
 const REPETITION_DELIMITER_POS: number = 82
@@ -144,13 +145,27 @@ export class X12Parser extends Transform {
     const elementDelimiter = edi.charAt(ELEMENT_DELIMITER_POS)
     const subElementDelimiter = edi.charAt(SUBELEMENT_DELIMITER_POS)
     const repetitionDelimiter = edi.charAt(REPETITION_DELIMITER_POS)
+    let endOfLine = edi.charAt(END_OF_LINE_POS)
+    let format = false
 
     if (options === undefined) {
+      if (endOfLine !== '\r' && endOfLine !== '\n') {
+        endOfLine = undefined
+      } else {
+        format = true
+      }
+
+      if (endOfLine === '\r' && edi.charAt(END_OF_LINE_POS + 1) === '\n') {
+        endOfLine = '\r\n'
+      }
+
       this._options = defaultSerializationOptions({
         segmentTerminator,
         elementDelimiter,
         subElementDelimiter,
-        repetitionDelimiter
+        repetitionDelimiter,
+        endOfLine,
+        format
       })
     } else {
       this._options = defaultSerializationOptions(options)

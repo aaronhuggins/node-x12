@@ -12,12 +12,7 @@ describe('X12Formatting', () => {
     const parser = new X12Parser(true)
     const interchange = parser.parse(edi)
 
-    const options: X12SerializationOptions = {
-      format: true,
-      endOfLine: '\n'
-    }
-
-    const edi2 = interchange.toString(options)
+    const edi2 = interchange.toString()
 
     if (edi !== edi2) {
       throw new Error(`Formatted EDI does not match source. Found ${edi2}, expected ${edi}.`)

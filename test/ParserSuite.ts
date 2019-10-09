@@ -39,9 +39,6 @@ describe('X12Parser', () => {
           const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
           const interchange = parser.getInterchangeFromSegments(segments)
 
-          interchange.options.format = true
-          interchange.options.endOfLine = '\n'
-
           if (interchange.toString() !== edi) {
             reject(new Error('Expected parsed EDI stream to match raw EDI document.'))
           }

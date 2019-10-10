@@ -54,6 +54,7 @@ export class X12Parser extends Transform {
     this._parsedISA = false
     this._flushing = false
     this._dataCache = ''
+    this._segmentCounter = 0
   }
 
   private readonly _strict: boolean
@@ -66,6 +67,7 @@ export class X12Parser extends Transform {
   private _interchange: X12Interchange
   private _group: X12FunctionalGroup
   private _transaction: X12Transaction
+  private _segmentCounter: number
   diagnostics: X12Diagnostic[]
 
   /**
@@ -89,9 +91,13 @@ export class X12Parser extends Transform {
 
     const segments = this._parseSegments(edi, this._options.segmentTerminator, this._options.elementDelimiter)
 
-    segments.forEach((segment) => {
-      this._processSegment(segment)
-    })
+    if (segments.length > 2) {
+      segments.forEach((segment) => {
+        this._processSegment(segment)
+      })
+    } else {
+      this._validateEdiSegmentCount()
+    }
 
     return this._fatInterchange === undefined
       ? this._interchange
@@ -114,6 +120,16 @@ export class X12Parser extends Transform {
     return this._fatInterchange === undefined
       ? this._interchange
       : this._fatInterchange
+  }
+
+  private _validateEdiSegmentCount (): void {
+    const errorMessage = 'X12 Standard: An EDI document must contain at least one functional group; verify the document contains valid control characters.'
+
+    if (this._strict) {
+      throw new ParserError(errorMessage)
+    }
+
+    this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, new Range(0, 0, 0, 1)))
   }
 
   private _validateEdiLength (edi: string): void {
@@ -462,6 +478,7 @@ export class X12Parser extends Transform {
 
           segments.forEach((segment) => {
             this.push(segment)
+            this._segmentCounter += 1
           })
         }
       }
@@ -478,6 +495,8 @@ export class X12Parser extends Transform {
     this._flushing = false
 
     callback()
+
+    this._validateEdiSegmentCount()
   }
 
   /**

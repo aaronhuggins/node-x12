@@ -224,6 +224,11 @@ export class X12Parser extends Transform {
       } else if (edi[i] === segmentTerminator) {
         currentElement.range.end = new Position(l, (c - 1))
         currentSegment.elements.push(currentElement)
+
+        if (currentSegment.tag === 'IEA' && currentSegment.elements.length === 2) {
+          currentSegment.elements[1].value = `${parseInt(currentSegment.elements[1].value, 10)}`
+        }
+
         currentSegment.range.end = new Position(l, c)
 
         segments.push(currentSegment)
@@ -240,6 +245,10 @@ export class X12Parser extends Transform {
       } else if (tagged && (edi[i] === elementDelimiter)) {
         currentElement.range.end = new Position(l, (c - 1))
         currentSegment.elements.push(currentElement)
+
+        if (currentSegment.tag === 'ISA' && currentSegment.elements.length === 13) {
+          currentSegment.elements[12].value = `${parseInt(currentSegment.elements[12].value, 10)}`
+        }
 
         currentElement = new X12Element()
         currentElement.range.start = new Position(l, c + 1)

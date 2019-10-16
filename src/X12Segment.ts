@@ -141,7 +141,11 @@ export class X12Segment {
 
     for (let i = 0; i < this.elements.length; i++) {
       edi += options.elementDelimiter
-      edi += this.elements[i].value
+      if ((this.tag === 'ISA' && i === 12) || (this.tag === 'IEA' && i === 1)) {
+        edi += String.prototype.padStart.call(this.elements[i].value, 9, '0')
+      } else {
+        edi += this.elements[i].value
+      }
     }
 
     edi += options.segmentTerminator

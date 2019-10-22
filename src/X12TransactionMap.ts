@@ -191,9 +191,15 @@ export class X12TransactionMap {
           val: Math.floor(Math.random() * 10000)
         }
       },
-      truncate: function truncate (value: string, maxChars: number) {
+      truncate: function truncate (value: string|string[], maxChars: number) {
+        if (Array.isArray(value)) {
+          value = value.map((str) => str.substring(0, maxChars))
+        } else {
+          value = `${value}`.substring(0, maxChars)
+        }
+
         return {
-          val: `${value}`.substring(0, maxChars)
+          val: value
         }
       }
     }

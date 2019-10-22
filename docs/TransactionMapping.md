@@ -81,4 +81,4 @@ The syntax for mapping is based on object properties. The object to map from is 
 |**map**|any[], string|`macro['map'](input['someArrayOfObjects'], 'someProperty')['val']`|Method for returning an array of a specific property in array of objects.|
 |**sum**|any[], string, [number=0]|`macro['sum'](input['someArrayOfObjects'], 'someProperty')['val']`|Method for returning the sum of an array of numbers, with an optional decimal places parameter.|
 |**random**|N/A|`macro['random']()['val']`|Method for returning a random 4 digit number.|
-|**truncate**|N/A|`macro['truncate']("testing", 4)['val']`|Method for truncating a string to the desired length.|
+|**truncate**|string \| string[], number|`macro['truncate']("testing", 4)['val']`|Method for truncating a string or array of strings to the desired character length.|

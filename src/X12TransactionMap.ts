@@ -190,6 +190,11 @@ export class X12TransactionMap {
         return {
           val: Math.floor(Math.random() * 10000)
         }
+      },
+      truncate: function truncate (value: string, maxChars: number) {
+        return {
+          val: `${value}`.substring(0, maxChars)
+        }
       }
     }
 

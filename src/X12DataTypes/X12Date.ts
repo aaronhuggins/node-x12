@@ -119,7 +119,7 @@ export class X12Date extends Date {
   /**
    * @description Convenience method for getting the date as a string.
    * @param {number} [length] - An optional override for the date length; accepts length 6 or 8.
-   * @returns {string} The date asa valid X12 date string.
+   * @returns {string} The date as a valid X12 date string.
    */
   toString (length?: number): string {
     let year = this.getFullYear()

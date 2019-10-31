@@ -6,5 +6,6 @@
         "**/*.js": {
             "when": "$(basename).ts"
         }
-    }
+    },
+    "editor.tabSize": 2
 }

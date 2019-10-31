@@ -55,7 +55,7 @@ See the [API](/docs/API.md) for more information.
 #### Future
 Version 2.x series is being actively developed. Minor versions *should not* cause breaking changes, but major releases *will break*.
 
-The next major version has lots of things planned in order to more completely describe ASC X12 and perform more of the heavy lifting in terms of parsing and handling X12 EDI documents. To view and track all issues in the 2.x series milestone, go to [milestone 'Version 2.0.0'](/milestone/1)
+The next major version has lots of things planned in order to more completely describe ASC X12 and perform more of the heavy lifting in terms of parsing and handling X12 EDI documents. To view and track all issues in the 2.x series: [milestone 'Version 2.0.0'](https://github.com/ahuggins-nhs/node-x12/milestone/1)
 
 ### Query Language
 The query language makes it possible to directly select values from the class object model. See [Query Language](/docs/QueryLanguage.md) for more information.

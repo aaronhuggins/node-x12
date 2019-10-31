@@ -226,7 +226,7 @@ export class X12Parser extends Transform {
         currentSegment.elements.push(currentElement)
 
         if (currentSegment.tag === 'IEA' && currentSegment.elements.length === 2) {
-          currentSegment.elements[1].value = `${parseInt(currentSegment.elements[1].value, 10)}`
+          currentSegment.elements[1].value = `${parseInt(currentSegment.elements[1].value as string, 10)}`
         }
 
         currentSegment.range.end = new Position(l, c)
@@ -247,7 +247,7 @@ export class X12Parser extends Transform {
         currentSegment.elements.push(currentElement)
 
         if (currentSegment.tag === 'ISA' && currentSegment.elements.length === 13) {
-          currentSegment.elements[12].value = `${parseInt(currentSegment.elements[12].value, 10)}`
+          currentSegment.elements[12].value = `${parseInt(currentSegment.elements[12].value as string, 10)}`
         }
 
         currentElement = new X12Element()
@@ -375,7 +375,7 @@ export class X12Parser extends Transform {
   private _processIEA (interchange: X12Interchange, segment: X12Segment): void {
     interchange.trailer = segment
 
-    if (parseInt(segment.valueOf(1)) !== interchange.functionalGroups.length) {
+    if (parseInt(segment.valueOf(1) as string) !== interchange.functionalGroups.length) {
       const errorMessage = `X12 Standard: The value in IEA01 (${segment.valueOf(1)}) does not match the number of GS segments in the interchange (${interchange.functionalGroups.length}).`
 
       if (this._strict) {
@@ -403,7 +403,7 @@ export class X12Parser extends Transform {
   private _processGE (group: X12FunctionalGroup, segment: X12Segment): void {
     group.trailer = segment
 
-    if (parseInt(segment.valueOf(1)) !== group.transactions.length) {
+    if (parseInt(segment.valueOf(1) as string) !== group.transactions.length) {
       const errorMessage = `X12 Standard: The value in GE01 (${segment.valueOf(1)}) does not match the number of ST segments in the functional group (${group.transactions.length}).`
 
       if (this._strict) {
@@ -433,7 +433,7 @@ export class X12Parser extends Transform {
 
     const expectedNumberOfSegments = (transaction.segments.length + 2)
 
-    if (parseInt(segment.valueOf(1)) !== expectedNumberOfSegments) {
+    if (parseInt(segment.valueOf(1) as string) !== expectedNumberOfSegments) {
       const errorMessage = `X12 Standard: The value in SE01 (${segment.valueOf(1)}) does not match the number of segments in the transaction (${expectedNumberOfSegments}).`
 
       if (this._strict) {

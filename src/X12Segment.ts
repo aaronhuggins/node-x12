@@ -11,9 +11,11 @@ import {
 } from './X12Enumerables'
 import {
   defaultSerializationOptions,
+  discoverValueType,
   X12SerializationOptions
 } from './X12SerializationOptions'
 import { GeneratorError } from './Errors'
+import { X12Date } from './X12DataTypes/X12Date'
 
 export class X12Segment {
   /**
@@ -36,12 +38,21 @@ export class X12Segment {
   /**
    * @description Set the elements of this segment.
    * @param {string[]} values - An array of element values.
+   * @param {boolean} [discoverTypes=false] - Optional flag to discover the value types.
    */
-  setElements (values: string[]): void {
+  setElements (values: string[], discoverTypes: boolean = false): void {
     this._formatValues(values)
     this.elements = new Array<X12Element>()
     values.forEach((value) => {
-      this.elements.push(new X12Element(value))
+      let result: string | number | X12Date
+
+      if (discoverTypes || this.options.discoverTypes) {
+        result = discoverValueType(value)
+      } else {
+        result = value
+      }
+
+      this.elements.push(new X12Element(result))
     })
   }
 
@@ -113,7 +124,7 @@ export class X12Segment {
    * @param {string} [defaultValue] - A default value to return if there is no element found.
    * @returns {string} If no element is at this position, null or the default value will be returned.
    */
-  valueOf (segmentPosition: number, defaultValue?: string): string {
+  valueOf (segmentPosition: number, defaultValue?: string): string | number | X12Date {
     const index = segmentPosition - 1
 
     if (this.elements.length <= index) {
@@ -158,7 +169,7 @@ export class X12Segment {
    * @returns {object} This segment converted to an object.
    */
   toJSON (): object {
-    return new JSEDISegment(this.tag, this.elements.map(x => x.value)) as object
+    return new JSEDISegment(this.tag, this.elements.map(x => `${x.value}`)) as object
   }
 
   /**

@@ -1,6 +1,7 @@
 'use strict'
 
 import { X12Date } from './X12DataTypes/X12Date'
+import { X12Time } from './X12DataTypes/X12Time'
 
 /**
  * @description Options for serializing to and from EDI.
@@ -50,7 +51,7 @@ export function defaultSerializationOptions (options?: X12SerializationOptions):
  * @returns {string|number|X12Date} - The coerced value.
  * @todo Implement in version 2.x.
  */
-export function discoverValueType (value: string): string | number | X12Date {
+export function discoverValueType (value: string): string | number | X12Date | X12Time {
   let result
 
   try {
@@ -64,6 +65,12 @@ export function discoverValueType (value: string): string | number | X12Date {
 
       if (date.valid) {
         result = date
+      } else {
+        const time = new X12Time(value)
+
+        if (time.valid) {
+          result = time
+        }
       }
     }
   } catch (err) {}
@@ -79,10 +86,10 @@ export function discoverValueType (value: string): string | number | X12Date {
  * @returns {string} - The coerced value.
  * @todo Implement in version 2.x.
  */
-export function renderValueToString (value: string | number | X12Date): string {
+export function renderValueToString (value: string | number | X12Date | X12Time): string {
   let result
 
-  if (value instanceof X12Date) {
+  if (value instanceof X12Date || value instanceof X12Time) {
     result = value.toString()
   } else if (typeof value === 'number') {
     result = `${value}`

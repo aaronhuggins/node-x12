@@ -188,7 +188,7 @@ export class X12TransactionMap {
       },
       random: function random () {
         return {
-          val: Math.floor(Math.random() * 10000)
+          val: Math.floor(1000 + Math.random() * 10000)
         }
       },
       truncate: function truncate (value: string|string[], maxChars: number) {

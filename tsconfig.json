@@ -14,7 +14,11 @@
       "node"
     ]
   },
-
+  "include": [
+    "core.ts",
+    "src",
+    "test"
+  ],
   "exclude": [
     "node_modules",
     "dist"

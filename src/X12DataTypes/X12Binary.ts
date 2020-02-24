@@ -1,5 +1,5 @@
 export class X12Binary {
-  constructor(data: any, length?: number) {
+  constructor (data: any, length?: number) {
     this.data = data
     this.length = length
   }

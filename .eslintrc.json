@@ -4,9 +4,9 @@
     "standard-jsdoc"
   ],
   "parserOptions": {
-      "project": "./tsconfig.json"
+    "project": "./tsconfig.json"
   },
   "globals": {
-      "mocha": "readonly"
+    "mocha": "readonly"
   }
 }

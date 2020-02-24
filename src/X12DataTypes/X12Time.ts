@@ -1,5 +1,5 @@
 export class X12Time extends Date {
-  constructor(hour?: string | number, minute?: string | number, second?: string | number, millisecond?: string | number) {
+  constructor (hour?: string | number, minute?: string | number, second?: string | number, millisecond?: string | number) {
     super(0)
     const originalInput = {
       hour,
@@ -28,7 +28,7 @@ export class X12Time extends Date {
         hour = parseFloat(hour.substring(0, 2))
         second = 0
         millisecond = 0
-      }else if (hour.length === 6) {
+      } else if (hour.length === 6) {
         second = parseFloat(hour.substring(4, 6))
         minute = parseFloat(hour.substring(2, 4))
         hour = parseFloat(hour.substring(0, 2))
@@ -152,11 +152,11 @@ export class X12Time extends Date {
     if (length === 4) {
       time = `${this._pad(this.getUTCHours())}${this._pad(this.getUTCMinutes())}`
     }
-    
+
     if (length === 6) {
       time = `${this._pad(this.getUTCHours())}${this._pad(this.getUTCMinutes())}${this._pad(this.getUTCSeconds())}`
     }
-    
+
     if (length > 6) {
       time = `${this._pad(this.getUTCHours())}${this._pad(this.getUTCMinutes())}${this._pad(this.getUTCSeconds())}${this.getUTCMilliseconds()}`
     }

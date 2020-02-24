@@ -7,6 +7,8 @@ import { X12FunctionalGroup } from './X12FunctionalGroup'
 import { X12Transaction } from './X12Transaction'
 import { X12Segment } from './X12Segment'
 import { X12Element } from './X12Element'
+import { X12Date } from './X12DataTypes/X12Date'
+import { X12Time } from './X12DataTypes/X12Time'
 
 export class X12QueryEngine {
   /**
@@ -140,7 +142,7 @@ export class X12QueryEngine {
       parameters
     } = this._getMacroParts(concatSegment)
 
-    let value = ''
+    let value: string | number | X12Date | X12Time = ''
 
     const expandedParams = parameters.split(',')
 
@@ -176,7 +178,7 @@ export class X12QueryEngine {
       const segment = transaction.segments[i]
 
       if (qualified && segment.tag === 'HL') {
-        const parentIndex = parseInt(segment.valueOf(2, '-1'))
+        const parentIndex = parseInt(segment.valueOf(2, '-1') as string)
 
         if (parentIndex !== lastParentIndex) {
           j = 0
@@ -185,7 +187,7 @@ export class X12QueryEngine {
       }
 
       if (!qualified && transaction.segments[i].tag === 'HL' && transaction.segments[i].valueOf(3) === pathParts[j]) {
-        lastParentIndex = parseInt(segment.valueOf(2, '-1'))
+        lastParentIndex = parseInt(segment.valueOf(2, '-1') as string)
         j++
 
         if (j === pathParts.length) {
@@ -250,7 +252,7 @@ export class X12QueryEngine {
       const value = segment.valueOf(posint, defaultValue)
 
       if (value !== null && this._testQualifiers(transaction, segment, qualifiers)) {
-        results.push(new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1], value))
+        results.push(new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1], value as string))
       }
     }
 
@@ -318,6 +320,6 @@ export class X12QueryResult {
   transaction: X12Transaction;
   segment: X12Segment;
   element: X12Element;
-  value: string;
-  values: Array<string | string[]>;
+  value: string | number | X12Date | X12Time;
+  values: Array<string | number | X12Date | X12Time | Array<string | number | X12Date | X12Time>>;
 }

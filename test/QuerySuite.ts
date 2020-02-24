@@ -120,7 +120,7 @@ describe('X12QueryEngine', () => {
     const results = engine.query(edi, 'ISA06')
 
     if (results.length === 1) {
-      if (results[0].value.trim() !== '4405197800') {
+      if ((results[0].value as string).trim() !== '4405197800') {
         throw new Error(`Expected 4405197800, found ${results[0].value}.`)
       }
     } else {
@@ -134,7 +134,7 @@ describe('X12QueryEngine', () => {
     const engine = new X12QueryEngine(parser)
     const result = engine.querySingle(edi, 'REF02:REF01["DP"]')
 
-    if (result.value.trim() !== '038') {
+    if ((result.value as string).trim() !== '038') {
       throw new Error(`Expected 038, found ${result.value}.`)
     }
   })
@@ -146,7 +146,7 @@ describe('X12QueryEngine', () => {
     const results = engine.query(edi, 'REF02:REF01["DP"]:BEG02["SA"]')
 
     if (results.length === 1) {
-      if (results[0].value.trim() !== '038') {
+      if ((results[0].value as string).trim() !== '038') {
         throw new Error(`Expected 038, found ${results[0].value}.`)
       }
     } else {

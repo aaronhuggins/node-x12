@@ -5,6 +5,8 @@ import { X12Segment } from './X12Segment'
 import { X12SupportedSegments } from './X12Enumerables'
 import { X12Transaction } from './X12Transaction'
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { X12Date } from './X12DataTypes/X12Date'
+import { X12Time } from './X12DataTypes/X12Time'
 
 export class X12FunctionalGroup {
   /**
@@ -28,7 +30,7 @@ export class X12FunctionalGroup {
    * @param {string[]} elements - An array of elements for a GS header.
    * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  setHeader (elements: string[], options?: X12SerializationOptions): void {
+  setHeader (elements: Array<string | number | X12Date | X12Time>, options?: X12SerializationOptions): void {
     options = options !== undefined
       ? defaultSerializationOptions(options)
       : this.options

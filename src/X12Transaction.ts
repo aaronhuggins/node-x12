@@ -5,6 +5,8 @@ import { X12Segment } from './X12Segment'
 import { X12SupportedSegments } from './X12Enumerables'
 import { X12TransactionMap } from './X12TransactionMap'
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { X12Date } from './X12DataTypes/X12Date'
+import { X12Time } from './X12DataTypes/X12Time'
 
 export class X12Transaction {
   /**
@@ -28,7 +30,7 @@ export class X12Transaction {
    * @param {string[]} elements - An array of elements for a ST header.
    * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  setHeader (elements: string[], options?: X12SerializationOptions): void {
+  setHeader (elements: Array<string | number | X12Date | X12Time>, options?: X12SerializationOptions): void {
     options = options !== undefined
       ? defaultSerializationOptions(options)
       : this.options
@@ -47,7 +49,7 @@ export class X12Transaction {
    * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    * @returns {X12Segment} The segment added to this transaction set.
    */
-  addSegment (tag: string, elements: string[], options?: X12SerializationOptions): X12Segment {
+  addSegment (tag: string, elements: Array<string | number | X12Date | X12Time>, options?: X12SerializationOptions): X12Segment {
     options = options !== undefined
       ? defaultSerializationOptions(options)
       : this.options

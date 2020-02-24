@@ -16,6 +16,7 @@ import {
 } from './X12SerializationOptions'
 import { GeneratorError } from './Errors'
 import { X12Date } from './X12DataTypes/X12Date'
+import { X12Time } from './X12DataTypes/X12Time'
 
 export class X12Segment {
   /**
@@ -37,17 +38,17 @@ export class X12Segment {
 
   /**
    * @description Set the elements of this segment.
-   * @param {string[]} values - An array of element values.
+   * @param {Array<string | number | X12Date | X12Time>} values - An array of element values.
    * @param {boolean} [discoverTypes=false] - Optional flag to discover the value types.
    */
-  setElements (values: string[], discoverTypes: boolean = false): void {
+  setElements (values: Array<string | number | X12Date | X12Time>, discoverTypes: boolean = false): void {
     this._formatValues(values)
     this.elements = new Array<X12Element>()
     values.forEach((value) => {
-      let result: string | number | X12Date
+      let result: string | number | X12Date | X12Time
 
       if (discoverTypes || this.options.discoverTypes) {
-        result = discoverValueType(value)
+        result = discoverValueType(value as string)
       } else {
         result = value
       }
@@ -124,7 +125,7 @@ export class X12Segment {
    * @param {string} [defaultValue] - A default value to return if there is no element found.
    * @returns {string} If no element is at this position, null or the default value will be returned.
    */
-  valueOf (segmentPosition: number, defaultValue?: string): string | number | X12Date {
+  valueOf (segmentPosition: number, defaultValue?: string): string | number | X12Date | X12Time {
     const index = segmentPosition - 1
 
     if (this.elements.length <= index) {
@@ -223,7 +224,7 @@ export class X12Segment {
    * @description Format and validate the element values according the segment definition.
    * @param {string[]} values - An array of element values.
    */
-  private _formatValues (values: string[]): void {
+  private _formatValues (values: Array<string | number | X12Date | X12Time>): void {
     if (this._checkSupportedSegment()) {
       const enumerable = this._getX12Enumerable()
 
@@ -239,15 +240,15 @@ export class X12Segment {
 
           values[i] = `${values[i]}`
 
-          if (values[i].length > max && values[i].length !== 0) {
+          if ((values[i] as string).length > max && (values[i] as string).length !== 0) {
             throw new GeneratorError(`Segment element "${name}" with value of "${values[i]}" exceeds maximum of ${max} characters.`)
           }
 
-          if (values[i].length < min && values[i].length !== 0) {
+          if ((values[i] as string).length < min && (values[i] as string).length !== 0) {
             throw new GeneratorError(`Segment element "${name}" with value of "${values[i]}" does not meet minimum of ${min} characters.`)
           }
 
-          if (enumerable.PADDING as boolean && ((values[i].length < max && values[i].length > min) || values[i].length === 0)) {
+          if (enumerable.PADDING as boolean && (((values[i] as string).length < max && (values[i] as string).length > min) || (values[i] as string).length === 0)) {
             if (name === 'ISA13') {
               values[i] = String.prototype.padStart.call(values[i], max, '0')
             } else {

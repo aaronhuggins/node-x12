@@ -5,6 +5,8 @@ import { X12FunctionalGroup } from './X12FunctionalGroup'
 import { X12Segment } from './X12Segment'
 import { X12SupportedSegments } from './X12Enumerables'
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { X12Date } from './X12DataTypes/X12Date'
+import { X12Time } from './X12DataTypes/X12Time'
 
 export class X12Interchange {
   /**
@@ -48,7 +50,7 @@ export class X12Interchange {
    * @param {string[]} elements - An array of elements for an ISA header.
    * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  setHeader (elements: string[], options?: X12SerializationOptions): void {
+  setHeader (elements: Array<string | number | X12Date | X12Time>, options?: X12SerializationOptions): void {
     options = options !== undefined
       ? defaultSerializationOptions(options)
       : this.options
@@ -113,7 +115,7 @@ export class X12Interchange {
    * @returns {JSEDINotation} This interchange converted to JS EDI Notation object.
    */
   toJSEDINotation (): JSEDINotation {
-    const jsen = new JSEDINotation(this.header.elements.map(x => x.value.trim()), this.options)
+    const jsen = new JSEDINotation(this.header.elements.map(x => (x.value as string).trim()), this.options)
 
     this.functionalGroups.forEach((functionalGroup) => {
       const jsenFunctionalGroup = jsen.addFunctionalGroup(functionalGroup.header.elements.map(x => x.value))

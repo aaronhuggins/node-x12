@@ -3,6 +3,7 @@
     "version": "2.0.0-alpha",
     "description": "ASC X12 parser, generator, query engine, and mapper; now with support for streams.",
     "main": "index.js",
+    "types": "index.d.ts",
     "keywords": [
         "x12",
         "edi",

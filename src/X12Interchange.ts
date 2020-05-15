@@ -3,7 +3,7 @@
 import { JSEDINotation } from './JSEDINotation'
 import { X12FunctionalGroup } from './X12FunctionalGroup'
 import { X12Segment } from './X12Segment'
-import { X12SupportedSegments } from './X12Enumerables'
+import { ISASegmentHeader } from './X12SegmentHeader'
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
 
 export class X12Interchange {
@@ -53,7 +53,7 @@ export class X12Interchange {
       ? defaultSerializationOptions(options)
       : this.options
 
-    this.header = new X12Segment(X12SupportedSegments.ISA, options)
+    this.header = new X12Segment(ISASegmentHeader.tag, options)
 
     this.header.setElements(elements)
 
@@ -148,7 +148,7 @@ export class X12Interchange {
       ? defaultSerializationOptions(options)
       : this.options
 
-    this.trailer = new X12Segment(X12SupportedSegments.IEA, options)
+    this.trailer = new X12Segment(ISASegmentHeader.trailer, options)
 
     this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)])
   }

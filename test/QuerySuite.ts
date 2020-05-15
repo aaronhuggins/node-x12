@@ -52,7 +52,7 @@ describe('X12QueryEngine', () => {
     }
   })
 
-  it.only('should handle HL paths where HL03 is a number', () => {
+  it('should handle HL paths where HL03 is a number', () => {
     const edi = fs.readFileSync('test/test-data/271.edi', 'utf8')
     const parser = new X12Parser(true)
     const engine = new X12QueryEngine(parser)

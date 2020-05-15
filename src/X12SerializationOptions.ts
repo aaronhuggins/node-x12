@@ -1,4 +1,5 @@
 'use strict'
+import { X12SegmentHeader, GSSegmentHeader, ISASegmentHeader, STSegmentHeader } from './X12SegmentHeader'
 
 /**
  * @description Options for serializing to and from EDI.
@@ -16,6 +17,7 @@ export interface X12SerializationOptions {
   segmentTerminator?: string
   subElementDelimiter?: string
   repetitionDelimiter?: string
+  segmentHeaders?: X12SegmentHeader[]
 }
 
 /**
@@ -32,6 +34,7 @@ export function defaultSerializationOptions (options?: X12SerializationOptions):
   options.segmentTerminator = options.segmentTerminator === undefined ? '~' : options.segmentTerminator
   options.subElementDelimiter = options.subElementDelimiter === undefined ? '>' : options.subElementDelimiter
   options.repetitionDelimiter = options.repetitionDelimiter === undefined ? '^' : options.repetitionDelimiter
+  options.segmentHeaders = options.segmentHeaders === undefined ? [GSSegmentHeader, ISASegmentHeader, STSegmentHeader] : options.segmentHeaders
 
   if (options.segmentTerminator === '\n') {
     options.endOfLine = ''

@@ -176,7 +176,7 @@ export class X12Segment {
     if (match !== undefined) {
       return match.layout
     } else {
-      throw Error(`Unable to find segment header for tag '${this.tag}' even though it should be support`)
+      throw Error(`Unable to find segment header for tag '${this.tag}' even though it should be supported.`)
     }
   }
 

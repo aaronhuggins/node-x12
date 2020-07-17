@@ -4,24 +4,32 @@ import { QuerySyntaxError } from './Errors'
 import { X12Interchange } from './X12Interchange'
 import { X12QueryEngine } from './X12QueryEngine'
 import { X12Transaction } from './X12Transaction'
+import { TxEngine } from './X12SerializationOptions'
+import * as crypto from 'crypto'
 
 export class X12TransactionMap {
   /**
    * @description Factory for mapping transaction set data to javascript object map.
    * @param {object} map - The javascript object containing keys and querys to resolve.
    * @param {X12Transaction} [transaction] - A transaction set to map.
-   * @param {Function} helper - A helper function which will be executed on every resolved query value.
+   * @param {Function|'liquidjs'|'internal'} [helper] - A helper function which will be executed on every resolved query value, or a macro engine.
+   * @param {'liquidjs'|'internal'} [txEngine] - A macro engine to use; either 'internal' or 'liquidjs'; defaults to internal for backwords compatibility.
    */
-  constructor (map: any, transaction?: X12Transaction, helper?: Function) {
+  constructor (map: any, transaction?: X12Transaction, helper?: Function | TxEngine, txEngine?: TxEngine) {
     this._map = map
     this._transaction = transaction
-    this.helper = helper === undefined ? this._helper : helper
+    this.helper = typeof helper === 'function' ? helper : this._helper
+    if (typeof helper === 'string' && typeof txEngine === 'undefined') {
+      txEngine = helper
+    }
+    this.txEngine = txEngine === undefined ? 'internal' : txEngine
   }
 
   protected _map: any;
   protected _transaction: X12Transaction;
   protected _object: any
   helper: Function;
+  txEngine: TxEngine
 
   /**
    * @description Set the transaction set to map and optionally a helper function.
@@ -148,6 +156,9 @@ export class X12TransactionMap {
    * @returns {X12Transaction} The transaction created from the object values.
    */
   fromObject (input: any, map?: any, macroObj: any = {}): X12Transaction {
+    const counter = {}
+    let inLoop = false
+    let liquidjs: any
     const macro: any = {
       counter: {},
       currentDate: `${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${new Date().getDate().toString().padStart(2, '0')}`,
@@ -204,22 +215,87 @@ export class X12TransactionMap {
       }
     }
 
+    const LIQUID_FILTERS: {
+      [name: string]: (...args: any[]) => any
+    } = {
+      sequence: (value: string) => {
+        if (counter[value] === undefined) {
+          counter[value] = 1
+        } else {
+          counter[value] += 1
+        }
+
+        return counter[value]
+      },
+      sum_array: (value: any[]) => {
+        let sum = 0
+
+        value.forEach((item) => { sum += item })
+
+        return sum
+      },
+      in_loop: (value: any) => {
+        return LIQUID_FILTERS.json_stringify(value)
+      },
+      json_stringify: (value: any) => {
+        return JSON.stringify(value)
+      },
+      json_parse: (value: string) => {
+        return JSON.parse(value)
+      },
+      truncate: (value: string|string[], maxChars: number) => {
+        if (Array.isArray(value)) {
+          return value.map((str) => str.substring(0, maxChars))
+        }
+
+        return `${value}`.substring(0, maxChars)
+      },
+      random: (val: string, maxLength: number = 4) => {
+        const bytes = Math.ceil(maxLength / 2)
+        const buffer = crypto.randomBytes(bytes)
+        const hex = buffer.toString('hex')
+
+        return parseInt(hex, 16).toString().substring(0, maxLength)
+      },
+      edi_date: (val: string, length: string = 'long') => {
+        const date = new Date()
+        const ediDate = `${date.getUTCFullYear()}${(date.getUTCMonth() + 1).toString().padStart(2, '0')}${date.getUTCDate().toString().padStart(2, '0')}`
+
+        if (length !== 'long') {
+          return ediDate.substring(2, ediDate.length)
+        }
+    
+        return ediDate
+      },
+      edi_time: () => {
+        const date = new Date()
+
+        return `${date.getUTCHours().toString().padStart(2, '0')}${date.getUTCMinutes().toString().padStart(2, '0')}`
+      }
+    }
+
     const resolveKey = function resolveKey (key: string): any {
-      const clean = /(^(`\${)*(input|macro)\[.*(}`)*$)/g
+      if (typeof liquidjs !== 'undefined') {
+        const result: any = liquidjs.parseAndRenderSync(key, { input })
 
-      if (clean.test(key)) {
-        // eslint-disable-next-line no-eval
-        const result: any = eval(key)
-
-        return result === undefined ? '' : result
+        return key.indexOf('in_loop }}') > 0 ? JSON.parse(result) : result
       } else {
-        return key
+        const clean = /(^(`\${)*(input|macro)\[.*(}`)*$)/g
+
+        if (clean.test(key)) {
+          // eslint-disable-next-line no-eval
+          const result: any = eval(key)
+  
+          return result === undefined ? '' : result
+        } else {
+          return key
+        }
       }
     }
 
     const resolveLoop = function resolveLoop (loop: any[], transaction: X12Transaction): void {
       const start = loop[0]
-      const length = resolveKey(start.loopLength)
+      const length = parseFloat(resolveKey(start.loopLength))
 
       for (let i = 0; i < length; i += 1) {
         loop.forEach((segment) => {
@@ -242,14 +318,37 @@ export class X12TransactionMap {
 
     if (map !== undefined) {
       if (map.header === undefined || map.segments === undefined) {
-        Object.assign(macro, map)
+        macroObj = map
         map = undefined
       }
     }
 
     map = map === undefined ? this._map : map
 
-    Object.assign(macro, macroObj)
+    if (this.txEngine === 'liquidjs') {
+      try {
+        const { Liquid } = require('liquidjs')
+        const engine = new Liquid({ strictFilters: true })
+
+        for (const [name, func] of Object.entries(LIQUID_FILTERS)) {
+          engine.registerFilter(name, func)
+        }
+
+        if (typeof macroObj === 'object') {
+          for (const [name, func] of Object.entries(macroObj)) {
+            if (typeof name === 'string' && typeof func === 'function') {
+              engine.registerFilter(name, func)
+            }
+          }
+        }
+
+        liquidjs = engine
+      } catch (error) {
+        throw error
+      }
+    } else {
+      Object.assign(macro, macroObj)
+    }
 
     const transaction = this._transaction === undefined ? new X12Transaction() : this._transaction
     const header = []

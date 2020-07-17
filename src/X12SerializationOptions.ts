@@ -1,6 +1,8 @@
 'use strict'
 import { X12SegmentHeader, GSSegmentHeader, ISASegmentHeader, STSegmentHeader } from './X12SegmentHeader'
 
+export type TxEngine = 'liquidjs'|'internal'
+
 /**
  * @description Options for serializing to and from EDI.
  * @typedef {object} X12SerializationOptions
@@ -9,6 +11,8 @@ import { X12SegmentHeader, GSSegmentHeader, ISASegmentHeader, STSegmentHeader } 
  * @property {boolean} [format=false] A flag to set formatting when serializing back to EDI.
  * @property {string} [segmentTerminator=~] The terminator for each EDI segment.
  * @property {string} [subElementDelimiter=>] A sub-element separator; typically found at element 16 of the ISA header segment.
+ * @property {X12SegmentHeader[]} [segmentHeaders] Default array of known, pre-defined segment headers.
+ * @property {'liquidjs'|'internal'} [txEngine='internal'] The engine to use for macros when mapping transaction sets from objects.
  */
 export interface X12SerializationOptions {
   elementDelimiter?: string
@@ -18,6 +22,7 @@ export interface X12SerializationOptions {
   subElementDelimiter?: string
   repetitionDelimiter?: string
   segmentHeaders?: X12SegmentHeader[]
+  txEngine?: TxEngine
 }
 
 /**
@@ -35,6 +40,7 @@ export function defaultSerializationOptions (options?: X12SerializationOptions):
   options.subElementDelimiter = options.subElementDelimiter === undefined ? '>' : options.subElementDelimiter
   options.repetitionDelimiter = options.repetitionDelimiter === undefined ? '^' : options.repetitionDelimiter
   options.segmentHeaders = options.segmentHeaders === undefined ? [GSSegmentHeader, ISASegmentHeader, STSegmentHeader] : options.segmentHeaders
+  options.txEngine = options.txEngine === undefined ? 'internal' : options.txEngine
 
   if (options.segmentTerminator === '\n') {
     options.endOfLine = ''

@@ -45,7 +45,7 @@ Enhancements original to this fork:
 - Streaming Parser (allows for parsing of large EDI files with reduced memory overhead)
 - Generator
 - Transaction set to object mapping
-- Object to transaction set mapping
+- Object to transaction set mapping, now with support for Liquid syntax
 - Support for fat EDI documents
 - Convenience methods for several generating/mapping scenarios
 - Intellisense support in VSCode with packaged type declarations

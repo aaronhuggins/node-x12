@@ -54,13 +54,13 @@ export class X12Transaction {
   }
 
   /**
-   * @description Map data from a javascript object to this transaction set.
+   * @description Map data from a javascript object to this transaction set. Will use the txEngine property for Liquid support from `this.options` if available.
    * @param {object} input - The input object to create the transaction from.
    * @param {object} map - The javascript object containing keys and querys to resolve.
    * @param {object} [macro] - A macro object to add or override methods for the macro directive; properties 'header' and 'segments' are reserved words.
    */
   fromObject (input: any, map: any, macro?: any): void {
-    const mapper = new X12TransactionMap(map, this)
+    const mapper = new X12TransactionMap(map, this, this.options.txEngine)
 
     mapper.fromObject(input, macro)
   }

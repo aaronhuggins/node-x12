@@ -278,7 +278,7 @@ export class X12TransactionMap {
       if (typeof liquidjs !== 'undefined') {
         const result: any = liquidjs.parseAndRenderSync(key, { input })
 
-        return key.indexOf('in_loop }}') > 0 ? JSON.parse(result) : result
+        return key.indexOf('in_loop }}') > -1 ? JSON.parse(result) : result
       } else {
         const clean = /(^(`\${)*(input|macro)\[.*(}`)*$)/g
 
@@ -326,26 +326,22 @@ export class X12TransactionMap {
     map = map === undefined ? this._map : map
 
     if (this.txEngine === 'liquidjs') {
-      try {
-        const { Liquid } = require('liquidjs')
-        const engine = new Liquid({ strictFilters: true })
+      const { Liquid } = require('liquidjs')
+      const engine = new Liquid({ strictFilters: true })
 
-        for (const [name, func] of Object.entries(LIQUID_FILTERS)) {
-          engine.registerFilter(name, func)
-        }
+      for (const [name, func] of Object.entries(LIQUID_FILTERS)) {
+        engine.registerFilter(name, func)
+      }
 
-        if (typeof macroObj === 'object') {
-          for (const [name, func] of Object.entries(macroObj)) {
-            if (typeof name === 'string' && typeof func === 'function') {
-              engine.registerFilter(name, func)
-            }
+      if (typeof macroObj === 'object') {
+        for (const [name, func] of Object.entries(macroObj)) {
+          if (typeof name === 'string' && typeof func === 'function') {
+            engine.registerFilter(name, func)
           }
         }
-
-        liquidjs = engine
-      } catch (error) {
-        throw error
       }
+
+      liquidjs = engine
     } else {
       Object.assign(macro, macroObj)
     }

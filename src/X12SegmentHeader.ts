@@ -33,6 +33,7 @@ export const ISASegmentHeader: X12SegmentHeader = {
 
 export const GSSegmentHeader: X12SegmentHeader = {
   tag: 'GS',
+  trailer: 'GE',
   layout: {
     GS01: 2,
     GS02: 15,
@@ -55,6 +56,7 @@ export const GSSegmentHeader: X12SegmentHeader = {
 
 export const STSegmentHeader: X12SegmentHeader = {
   tag: 'ST',
+  trailer: 'SE',
   layout: {
     ST01: 3,
     ST02: 9,

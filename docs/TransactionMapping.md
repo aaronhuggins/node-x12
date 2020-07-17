@@ -92,7 +92,7 @@ The table of filters should not be considered exhaustive; see [Liquid's official
 |**truncate**|string \| string[], number|`{{ input.someArray \| truncate: 45 }}`|Method for truncating a string or array of strings to the desired character length. Overrides default Liquid implementation.|
 |**random**|N/A|`{{ macro \| random }}`|Method for returning a random 4 digit number.|
 |**edi_date**|N/A,string|`{{ macro \| edi_date: 'long' }}`|The current date; takes argument of `'long'` for YYYYmmdd or `'short'` for YYmmdd.|
-|**edi_time**|N/A,string|`{{ macro \| edi_time }}`|The current time in HHMM format.|
+|**edi_time**|N/A|`{{ macro \| edi_time }}`|The current time in HHMM format.|
 
 #### Legacy Macro Language
 

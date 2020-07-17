@@ -52,6 +52,17 @@ describe('X12QueryEngine', () => {
     }
   })
 
+  it('should handle HL paths where HL03 is a number', () => {
+    const edi = fs.readFileSync('test/test-data/271.edi', 'utf8')
+    const parser = new X12Parser(true)
+    const engine = new X12QueryEngine(parser)
+    const results = engine.query(edi, 'HL+20+21+22-NM101')
+
+    if (results.length !== 2) {
+      throw new Error('Expected two matching elements for HL+20+21+22-NM101.')
+    }
+  })
+
   it('should handle FOREACH macro references', () => {
     const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
     const parser = new X12Parser(true)

@@ -4,15 +4,10 @@ import { JSEDISegment } from './JSEDINotation'
 import { Range } from './Positioning'
 import { X12Element } from './X12Element'
 import {
-  X12SupportedSegments,
-  X12InterchangeControlHeader,
-  X12FunctionalGroupHeader,
-  X12TransactionSetHeader
-} from './X12Enumerables'
-import {
   defaultSerializationOptions,
   X12SerializationOptions
 } from './X12SerializationOptions'
+import { ISASegmentHeader } from './X12SegmentHeader'
 import { GeneratorError } from './Errors'
 
 export class X12Segment {
@@ -167,21 +162,7 @@ export class X12Segment {
    * @returns {boolean} True if segment is predefined.
    */
   private _checkSupportedSegment (): boolean {
-    let supported = false
-
-    switch (this.tag) {
-      case X12SupportedSegments.ISA:
-        supported = true
-        break
-      case X12SupportedSegments.GS:
-        supported = true
-        break
-      case X12SupportedSegments.ST:
-        supported = true
-        break
-    }
-
-    return supported
+    return this.options.segmentHeaders.findIndex((sh) => { return sh.tag === this.tag }) > -1
   }
 
   /**
@@ -190,21 +171,13 @@ export class X12Segment {
    * @returns {object} The definition of this segment.
    */
   private _getX12Enumerable (): any {
-    let enumerable = X12InterchangeControlHeader
+    const match = this.options.segmentHeaders.find((sh) => { return sh.tag === this.tag })
 
-    switch (this.tag) {
-      case X12SupportedSegments.ISA:
-        enumerable = X12InterchangeControlHeader
-        break
-      case X12SupportedSegments.GS:
-        enumerable = X12FunctionalGroupHeader
-        break
-      case X12SupportedSegments.ST:
-        enumerable = X12TransactionSetHeader
-        break
+    if (match !== undefined) {
+      return match.layout
+    } else {
+      throw Error(`Unable to find segment header for tag '${this.tag}' even though it should be support`)
     }
-
-    return enumerable
   }
 
   /**
@@ -216,7 +189,7 @@ export class X12Segment {
     if (this._checkSupportedSegment()) {
       const enumerable = this._getX12Enumerable()
 
-      if (this.tag === X12SupportedSegments.ISA && this.options.subElementDelimiter.length === 1) {
+      if (this.tag === ISASegmentHeader.tag && this.options.subElementDelimiter.length === 1) {
         values[15] = this.options.subElementDelimiter
       }
 

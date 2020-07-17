@@ -2,7 +2,7 @@
 
 import { JSEDIFunctionalGroup } from './JSEDINotation'
 import { X12Segment } from './X12Segment'
-import { X12SupportedSegments } from './X12Enumerables'
+import { GSSegmentHeader } from './X12SegmentHeader'
 import { X12Transaction } from './X12Transaction'
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
 
@@ -33,7 +33,7 @@ export class X12FunctionalGroup {
       ? defaultSerializationOptions(options)
       : this.options
 
-    this.header = new X12Segment(X12SupportedSegments.GS, options)
+    this.header = new X12Segment(GSSegmentHeader.tag, options)
 
     this.header.setElements(elements)
 
@@ -116,7 +116,7 @@ export class X12FunctionalGroup {
       ? defaultSerializationOptions(options)
       : this.options
 
-    this.trailer = new X12Segment(X12SupportedSegments.GE, options)
+    this.trailer = new X12Segment(GSSegmentHeader.trailer, options)
 
     this.trailer.setElements([`${this.transactions.length}`, this.header.valueOf(6)])
   }

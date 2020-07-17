@@ -2,7 +2,7 @@
 
 import { JSEDITransaction } from './JSEDINotation'
 import { X12Segment } from './X12Segment'
-import { X12SupportedSegments } from './X12Enumerables'
+import { STSegmentHeader } from './X12SegmentHeader'
 import { X12TransactionMap } from './X12TransactionMap'
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
 
@@ -33,7 +33,7 @@ export class X12Transaction {
       ? defaultSerializationOptions(options)
       : this.options
 
-    this.header = new X12Segment(X12SupportedSegments.ST, options)
+    this.header = new X12Segment(STSegmentHeader.tag, options)
 
     this.header.setElements(elements)
 
@@ -140,7 +140,7 @@ export class X12Transaction {
       ? defaultSerializationOptions(options)
       : this.options
 
-    this.trailer = new X12Segment(X12SupportedSegments.SE, options)
+    this.trailer = new X12Segment(STSegmentHeader.trailer, options)
 
     this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(2)])
   }

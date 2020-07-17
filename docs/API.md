@@ -26,7 +26,7 @@
 ## Functions
 
 <dl>
-<dt><a href="#defaultSerializationOptions">defaultSerializationOptions([options])</a> ⇒ <code><a href="#X12SerializationOptions">X12SerializationOptions</a></code></dt>
+<dt><a href="#defaultSerializationOptions">defaultSerializationOptions([options])</a> ⇒ <code>X12SerializationOptions</code></dt>
 <dd><p>Set default values for any missing X12SerializationOptions in an options object.</p></dd>
 </dl>
 
@@ -35,8 +35,6 @@
 <dl>
 <dt><a href="#X12QueryResult">X12QueryResult</a> : <code>object</code></dt>
 <dd><p>A result as resolved by the query engine.</p></dd>
-<dt><a href="#X12SerializationOptions">X12SerializationOptions</a> : <code>object</code></dt>
-<dd><p>Options for serializing to and from EDI.</p></dd>
 </dl>
 
 <a name="X12Element"></a>
@@ -72,8 +70,8 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [items] | [<code>Array.&lt;X12Interchange&gt;</code>](#X12Interchange) \| [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>The items for this array or options for this interchange.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [items] | [<code>Array.&lt;X12Interchange&gt;</code>](#X12Interchange) \| <code>X12SerializationOptions</code> | <p>The items for this array or options for this interchange.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12FatInterchange+toString"></a>
 
@@ -85,7 +83,7 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options to override serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options to override serializing back to EDI.</p> |
 
 <a name="X12FatInterchange+toJSEDINotation"></a>
 
@@ -108,8 +106,8 @@
 
 * [X12FunctionalGroup](#X12FunctionalGroup)
     * [new X12FunctionalGroup([options])](#new_X12FunctionalGroup_new)
-    * [.setHeader(elements, [options])](#X12FunctionalGroup+setHeader)
-    * [.addTransaction([options])](#X12FunctionalGroup+addTransaction) ⇒ [<code>X12Transaction</code>](#X12Transaction)
+    * [.setHeader(elements)](#X12FunctionalGroup+setHeader)
+    * [.addTransaction()](#X12FunctionalGroup+addTransaction) ⇒ [<code>X12Transaction</code>](#X12Transaction)
     * [.toString([options])](#X12FunctionalGroup+toString) ⇒ <code>string</code>
     * [.toJSON()](#X12FunctionalGroup+toJSON) ⇒ <code>object</code>
 
@@ -121,11 +119,11 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12FunctionalGroup+setHeader"></a>
 
-### x12FunctionalGroup.setHeader(elements, [options])
+### x12FunctionalGroup.setHeader(elements)
 <p>Set a GS header on this functional group.</p>
 
 **Kind**: instance method of [<code>X12FunctionalGroup</code>](#X12FunctionalGroup)  
@@ -133,20 +131,14 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | elements | <code>Array.&lt;string&gt;</code> | <p>An array of elements for a GS header.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12FunctionalGroup+addTransaction"></a>
 
-### x12FunctionalGroup.addTransaction([options]) ⇒ [<code>X12Transaction</code>](#X12Transaction)
+### x12FunctionalGroup.addTransaction() ⇒ [<code>X12Transaction</code>](#X12Transaction)
 <p>Add a transaction set to this functional group.</p>
 
 **Kind**: instance method of [<code>X12FunctionalGroup</code>](#X12FunctionalGroup)  
 **Returns**: [<code>X12Transaction</code>](#X12Transaction) - <p>The transaction which was added to this functional group.</p>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
-
 <a name="X12FunctionalGroup+toString"></a>
 
 ### x12FunctionalGroup.toString([options]) ⇒ <code>string</code>
@@ -157,7 +149,7 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12FunctionalGroup+toJSON"></a>
 
@@ -176,7 +168,7 @@
     * [.setJSEDINotation([jsen])](#X12Generator+setJSEDINotation)
     * [.getJSEDINotation()](#X12Generator+getJSEDINotation) ⇒ <code>JSEDINotation</code>
     * [.setOptions([options])](#X12Generator+setOptions)
-    * [.getOptions()](#X12Generator+getOptions) ⇒ [<code>X12SerializationOptions</code>](#X12SerializationOptions)
+    * [.getOptions()](#X12Generator+getOptions) ⇒ <code>X12SerializationOptions</code>
     * [.validate()](#X12Generator+validate) ⇒ [<code>X12Interchange</code>](#X12Interchange)
     * [.toString()](#X12Generator+toString) ⇒ <code>string</code>
 
@@ -189,7 +181,7 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | [jsen] | <code>JSEDINotation</code> | <p>Javascript EDI Notation object to serialize.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Generator+setJSEDINotation"></a>
 
@@ -218,15 +210,15 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Generator+getOptions"></a>
 
-### x12Generator.getOptions() ⇒ [<code>X12SerializationOptions</code>](#X12SerializationOptions)
+### x12Generator.getOptions() ⇒ <code>X12SerializationOptions</code>
 <p>Get the serialization options for this instance.</p>
 
 **Kind**: instance method of [<code>X12Generator</code>](#X12Generator)  
-**Returns**: [<code>X12SerializationOptions</code>](#X12SerializationOptions) - <p>The serialization options for this instance.</p>  
+**Returns**: <code>X12SerializationOptions</code> - <p>The serialization options for this instance.</p>  
 <a name="X12Generator+validate"></a>
 
 ### x12Generator.validate() ⇒ [<code>X12Interchange</code>](#X12Interchange)
@@ -248,7 +240,7 @@
 
 * [X12Interchange](#X12Interchange)
     * [new X12Interchange([segmentTerminator], [elementDelimiter], [options])](#new_X12Interchange_new)
-    * [.setHeader(elements, [options])](#X12Interchange+setHeader)
+    * [.setHeader(elements)](#X12Interchange+setHeader)
     * [.addFunctionalGroup([options])](#X12Interchange+addFunctionalGroup) ⇒ [<code>X12FunctionalGroup</code>](#X12FunctionalGroup)
     * [.toString([options])](#X12Interchange+toString) ⇒ <code>string</code>
     * [.toJSEDINotation()](#X12Interchange+toJSEDINotation) ⇒ <code>JSEDINotation</code>
@@ -262,13 +254,13 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [segmentTerminator] | <code>string</code> \| [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>A character to terminate segments when serializing; or an instance of X12SerializationOptions.</p> |
+| [segmentTerminator] | <code>string</code> \| <code>X12SerializationOptions</code> | <p>A character to terminate segments when serializing; or an instance of X12SerializationOptions.</p> |
 | [elementDelimiter] | <code>string</code> | <p>A character to separate elements when serializing; only required when segmentTerminator is a character.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Interchange+setHeader"></a>
 
-### x12Interchange.setHeader(elements, [options])
+### x12Interchange.setHeader(elements)
 <p>Set an ISA header on this interchange.</p>
 
 **Kind**: instance method of [<code>X12Interchange</code>](#X12Interchange)  
@@ -276,7 +268,6 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | elements | <code>Array.&lt;string&gt;</code> | <p>An array of elements for an ISA header.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Interchange+addFunctionalGroup"></a>
 
@@ -288,7 +279,7 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Interchange+toString"></a>
 
@@ -300,7 +291,7 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Interchange+toJSEDINotation"></a>
 
@@ -336,9 +327,9 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [strict] | <code>boolean</code> \| [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Set true to strictly follow the EDI spec; defaults to false.</p> |
-| [encoding] | <code>string</code> \| [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>The encoding to use for this instance when parsing a stream; defaults to UTF-8.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>The options to use when parsing a stream.</p> |
+| [strict] | <code>boolean</code> \| <code>X12SerializationOptions</code> | <p>Set true to strictly follow the EDI spec; defaults to false.</p> |
+| [encoding] | <code>string</code> \| <code>X12SerializationOptions</code> | <p>The encoding to use for this instance when parsing a stream; defaults to UTF-8.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>The options to use when parsing a stream.</p> |
 
 <a name="X12Parser+parse"></a>
 
@@ -351,7 +342,7 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | edi | <code>string</code> | <p>An ASCII or UTF8 string of EDI to parse.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing from EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing from EDI.</p> |
 
 <a name="X12Parser+getInterchangeFromSegments"></a>
 
@@ -364,7 +355,7 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | segments | [<code>Array.&lt;X12Segment&gt;</code>](#X12Segment) | <p>An array of X12Segment objects.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing from EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing from EDI.</p> |
 
 <a name="X12Parser+_flush"></a>
 
@@ -445,6 +436,7 @@
 
 * [X12Segment](#X12Segment)
     * [new X12Segment(tag, [options])](#new_X12Segment_new)
+    * [.setTag(tag)](#X12Segment+setTag)
     * [.setElements(values)](#X12Segment+setElements)
     * [.addElement(value)](#X12Segment+addElement) ⇒ [<code>X12Element</code>](#X12Element)
     * [.replaceElement(value, segmentPosition)](#X12Segment+replaceElement) ⇒ [<code>X12Element</code>](#X12Element)
@@ -463,7 +455,18 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | tag | <code>string</code> | <p>The tag for this segment.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
+
+<a name="X12Segment+setTag"></a>
+
+### x12Segment.setTag(tag)
+<p>Set the tag name for the segment if not provided when constructed.</p>
+
+**Kind**: instance method of [<code>X12Segment</code>](#X12Segment)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| tag | <code>string</code> | <p>The tag for this segment.</p> |
 
 <a name="X12Segment+setElements"></a>
 
@@ -549,7 +552,7 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Segment+toJSON"></a>
 
@@ -565,8 +568,8 @@
 
 * [X12Transaction](#X12Transaction)
     * [new X12Transaction([options])](#new_X12Transaction_new)
-    * [.setHeader(elements, [options])](#X12Transaction+setHeader)
-    * [.addSegment(tag, elements, [options])](#X12Transaction+addSegment) ⇒ [<code>X12Segment</code>](#X12Segment)
+    * [.setHeader(elements)](#X12Transaction+setHeader)
+    * [.addSegment(tag, elements)](#X12Transaction+addSegment) ⇒ [<code>X12Segment</code>](#X12Segment)
     * [.fromObject(input, map, [macro])](#X12Transaction+fromObject)
     * [.toObject(map, helper)](#X12Transaction+toObject) ⇒ <code>object</code>
     * [.toString([options])](#X12Transaction+toString) ⇒ <code>string</code>
@@ -580,11 +583,11 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Transaction+setHeader"></a>
 
-### x12Transaction.setHeader(elements, [options])
+### x12Transaction.setHeader(elements)
 <p>Set a ST header on this transaction set.</p>
 
 **Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
@@ -592,11 +595,10 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | elements | <code>Array.&lt;string&gt;</code> | <p>An array of elements for a ST header.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Transaction+addSegment"></a>
 
-### x12Transaction.addSegment(tag, elements, [options]) ⇒ [<code>X12Segment</code>](#X12Segment)
+### x12Transaction.addSegment(tag, elements) ⇒ [<code>X12Segment</code>](#X12Segment)
 <p>Add a segment to this transaction set.</p>
 
 **Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
@@ -606,12 +608,11 @@
 | --- | --- | --- |
 | tag | <code>string</code> | <p>The tag for this segment.</p> |
 | elements | <code>Array.&lt;string&gt;</code> | <p>An array of elements for this segment.</p> |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Transaction+fromObject"></a>
 
 ### x12Transaction.fromObject(input, map, [macro])
-<p>Map data from a javascript object to this transaction set.</p>
+<p>Map data from a javascript object to this transaction set. Will use the txEngine property for Liquid support from <code>this.options</code> if available.</p>
 
 **Kind**: instance method of [<code>X12Transaction</code>](#X12Transaction)  
 
@@ -644,7 +645,7 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing back to EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing back to EDI.</p> |
 
 <a name="X12Transaction+toJSON"></a>
 
@@ -659,15 +660,15 @@
 **Kind**: global class  
 
 * [X12TransactionMap](#X12TransactionMap)
-    * [new X12TransactionMap(map, [transaction], helper)](#new_X12TransactionMap_new)
+    * [new X12TransactionMap(map, [transaction], [helper], [txEngine])](#new_X12TransactionMap_new)
     * [.setTransaction(transaction, helper)](#X12TransactionMap+setTransaction)
     * [.getTransaction()](#X12TransactionMap+getTransaction) ⇒ [<code>X12Transaction</code>](#X12Transaction)
-    * [.toObject(map, [callback])](#X12TransactionMap+toObject) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
+    * [.toObject([map], [callback])](#X12TransactionMap+toObject) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
     * [.fromObject(input, [map], [macroObj])](#X12TransactionMap+fromObject) ⇒ [<code>X12Transaction</code>](#X12Transaction)
 
 <a name="new_X12TransactionMap_new"></a>
 
-### new X12TransactionMap(map, [transaction], helper)
+### new X12TransactionMap(map, [transaction], [helper], [txEngine])
 <p>Factory for mapping transaction set data to javascript object map.</p>
 
 
@@ -675,7 +676,8 @@
 | --- | --- | --- |
 | map | <code>object</code> | <p>The javascript object containing keys and querys to resolve.</p> |
 | [transaction] | [<code>X12Transaction</code>](#X12Transaction) | <p>A transaction set to map.</p> |
-| helper | <code>function</code> | <p>A helper function which will be executed on every resolved query value.</p> |
+| [helper] | <code>function</code> \| <code>&#x27;liquidjs&#x27;</code> \| <code>&#x27;internal&#x27;</code> | <p>A helper function which will be executed on every resolved query value, or a macro engine.</p> |
+| [txEngine] | <code>&#x27;liquidjs&#x27;</code> \| <code>&#x27;internal&#x27;</code> | <p>A macro engine to use; either 'internal' or 'liquidjs'; defaults to internal for backwords compatibility.</p> |
 
 <a name="X12TransactionMap+setTransaction"></a>
 
@@ -698,7 +700,7 @@
 **Returns**: [<code>X12Transaction</code>](#X12Transaction) - <p>The transaction from this instance.</p>  
 <a name="X12TransactionMap+toObject"></a>
 
-### x12TransactionMap.toObject(map, [callback]) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
+### x12TransactionMap.toObject([map], [callback]) ⇒ <code>object</code> \| <code>Array.&lt;object&gt;</code>
 <p>Map data from the transaction set to a javascript object.</p>
 
 **Kind**: instance method of [<code>X12TransactionMap</code>](#X12TransactionMap)  
@@ -706,7 +708,7 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| map | <code>object</code> | <p>The javascript object containing keys and querys to resolve.</p> |
+| [map] | <code>object</code> | <p>The javascript object containing keys and querys to resolve.</p> |
 | [callback] | <code>function</code> | <p>A callback function which will be passed to the helper function.</p> |
 
 <a name="X12TransactionMap+fromObject"></a>
@@ -725,15 +727,15 @@
 
 <a name="defaultSerializationOptions"></a>
 
-## defaultSerializationOptions([options]) ⇒ [<code>X12SerializationOptions</code>](#X12SerializationOptions)
+## defaultSerializationOptions([options]) ⇒ <code>X12SerializationOptions</code>
 <p>Set default values for any missing X12SerializationOptions in an options object.</p>
 
 **Kind**: global function  
-**Returns**: [<code>X12SerializationOptions</code>](#X12SerializationOptions) - <p>Serialization options with defaults filled in.</p>  
+**Returns**: <code>X12SerializationOptions</code> - <p>Serialization options with defaults filled in.</p>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | [<code>X12SerializationOptions</code>](#X12SerializationOptions) | <p>Options for serializing to and from EDI.</p> |
+| [options] | <code>X12SerializationOptions</code> | <p>Options for serializing to and from EDI.</p> |
 
 <a name="X12QueryResult"></a>
 
@@ -752,20 +754,4 @@
 | element | [<code>X12Element</code>](#X12Element) |  | 
 | [value] | <code>string</code> | <code>null</code> | 
 | [values] | <code>Array.&lt;(string\|Array.&lt;string&gt;)&gt;</code> | <code>[]</code> | 
-
-<a name="X12SerializationOptions"></a>
-
-## X12SerializationOptions : <code>object</code>
-<p>Options for serializing to and from EDI.</p>
-
-**Kind**: global typedef  
-**Properties**
-
-| Name | Type | Default | Description |
-| --- | --- | --- | --- |
-| [elementDelimiter] | <code>string</code> | <code>&quot;*&quot;</code> | <p>The separator for elements within an EDI segment.</p> |
-| [endOfLine] | <code>string</code> | <code>&quot;\\n&quot;</code> | <p>The end of line charactor for formatting.</p> |
-| [format] | <code>boolean</code> | <code>false</code> | <p>A flag to set formatting when serializing back to EDI.</p> |
-| [segmentTerminator] | <code>string</code> | <code>&quot;~&quot;</code> | <p>The terminator for each EDI segment.</p> |
-| [subElementDelimiter] | <code>string</code> | <code>&quot;&gt;&quot;</code> | <p>A sub-element separator; typically found at element 16 of the ISA header segment.</p> |
 

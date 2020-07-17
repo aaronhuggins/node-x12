@@ -9,5 +9,5 @@
   "shippingStateCode": "IA",
   "shippingPostalCode": "87654",
   "shippingCountryCode": "US",
-  "orderItems": "[{\"quantity\":3,\"sku\":\"SKU-123\",\"title\":\"Some Title\",\"weight\":12.134,\"volume\":2.8}]"
+  "orderItems": "[{\"quantity\":3,\"sku\":\"SKU-123\",\"title\":\"Some Title\",\"weight\":12.134,\"volume\":2.8},{\"quantity\":1,\"sku\":\"SKU-456\",\"title\":\"Some Title 2\",\"weight\":10.2,\"volume\":4.18}]"
 }

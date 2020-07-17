@@ -54,6 +54,15 @@ if (error.message !== 'test') {
 }
 ```
 
+should create X12Diagnostic.
+
+```js
+const diag = new X12Diagnostic_1.X12Diagnostic();
+if (!(diag instanceof X12Diagnostic_1.X12Diagnostic)) {
+    throw new Error('Could not create X12Diagnostic.');
+}
+```
+
 <a name="x12formatting"></a>
 # X12Formatting
 should replicate the source data unless changes are made.
@@ -62,11 +71,7 @@ should replicate the source data unless changes are made.
 const edi = fs.readFileSync('test/test-data/850.edi', 'utf8');
 const parser = new core_1.X12Parser(true);
 const interchange = parser.parse(edi);
-const options = {
-    format: true,
-    endOfLine: '\n'
-};
-const edi2 = interchange.toString(options);
+const edi2 = interchange.toString();
 if (edi !== edi2) {
     throw new Error(`Formatted EDI does not match source. Found ${edi2}, expected ${edi}.`);
 }
@@ -90,17 +95,26 @@ if (edi !== edi2) {
 
 <a name="x12generator"></a>
 # X12Generator
+should create X12Generator.
+
+```js
+const generator = new core_1.X12Generator();
+const notation = generator.getJSEDINotation();
+const options = generator.getOptions();
+generator.setJSEDINotation(new core_1.JSEDINotation());
+generator.setOptions({});
+if (!(notation instanceof core_1.JSEDINotation) || typeof options !== 'object') {
+    throw new Error('Could not correctly create instance of X12Generator.');
+}
+```
+
 should replicate the source data unless changes are made.
 
 ```js
 const edi = fs.readFileSync('test/test-data/850.edi', 'utf8');
 const parser = new core_1.X12Parser(true);
 const notation = parser.parse(edi).toJSEDINotation();
-const options = {
-    format: true,
-    endOfLine: '\n'
-};
-const generator = new core_1.X12Generator(notation, options);
+const generator = new core_1.X12Generator(notation);
 const edi2 = generator.toString();
 if (edi !== edi2) {
     throw new Error(`Formatted EDI does not match source. Found ${edi2}, expected ${edi}.`);
@@ -113,21 +127,117 @@ should replicate the source data to and from JSON unless changes are made.
 const edi = fs.readFileSync('test/test-data/850.edi', 'utf8');
 const parser = new core_1.X12Parser(true);
 const interchange = parser.parse(edi);
-const options = {
-    format: true,
-    endOfLine: '\n'
-};
 const json = JSON.stringify(interchange);
-const generator = new core_1.X12Generator(JSON.parse(json), options);
+const generator = new core_1.X12Generator(JSON.parse(json));
 const edi2 = generator.toString();
 if (edi !== edi2) {
     throw new Error(`Formatted EDI does not match source. Found ${edi2}, expected ${edi}.`);
 }
 ```
 
+should not generate 271 with 3 ST elements using default segment headers.
+
+```js
+const fileEdi = fs.readFileSync('test/test-data/271.edi', 'utf8').split('~');
+const i = new core_1.X12Interchange();
+i.setHeader(fileEdi[0].split('*').slice(1));
+const fg = i.addFunctionalGroup();
+fg.setHeader(fileEdi[1].split('*').slice(1));
+const t = fg.addTransaction();
+let error;
+try {
+    t.setHeader(fileEdi[2].split('*').slice(1));
+}
+catch (err) {
+    error = err.message;
+}
+if (error !== 'Segment "ST" with 3 elements does meet the required count of 2.') {
+    throw new Error('271 with 3 ST elements parsing succeed which should not happen');
+}
+```
+
+should generate 271 with 3 ST elements using custom segment headers.
+
+```js
+const fileEdi = fs.readFileSync('test/test-data/271.edi', 'utf8').split('~');
+const i = new core_1.X12Interchange({
+    segmentHeaders: [
+        core_1.ISASegmentHeader,
+        core_1.GSSegmentHeader,
+        {
+            tag: 'ST',
+            layout: {
+                ST01: 3,
+                ST02: 9,
+                ST02_MIN: 4,
+                ST03: 35,
+                ST03_MIN: 1,
+                COUNT: 3,
+                PADDING: false
+            }
+        }
+    ]
+});
+i.setHeader(fileEdi[0].split('*').slice(1));
+const fg = i.addFunctionalGroup();
+fg.setHeader(fileEdi[1].split('*').slice(1));
+const t = fg.addTransaction();
+t.setHeader(fileEdi[2].split('*').slice(1));
+```
+
+should validate custom segment headers.
+
+```js
+const edi = fs.readFileSync('test/test-data/271.edi', 'utf8');
+const options = {
+    segmentHeaders: [
+        core_1.ISASegmentHeader,
+        core_1.GSSegmentHeader,
+        {
+            tag: 'ST',
+            layout: {
+                ST01: 3,
+                ST02: 9,
+                ST02_MIN: 4,
+                ST03: 35,
+                ST03_MIN: 1,
+                COUNT: 3,
+                PADDING: false
+            }
+        },
+        {
+            tag: 'HL',
+            layout: {
+                HL01: 3,
+                HL02: 9,
+                HL02_MIN: 4,
+                HL03: 35,
+                HL03_MIN: 1,
+                COUNT: 3,
+                PADDING: false
+            }
+        }
+    ]
+};
+const parser = new core_1.X12Parser(true);
+const interchange = parser.parse(edi);
+const json = JSON.stringify(interchange);
+let error;
+try {
+    const generator = new core_1.X12Generator(JSON.parse(json), options);
+    generator.toString();
+}
+catch (err) {
+    error = err.message;
+}
+if (error !== 'Segment "HL" with 4 elements does meet the required count of 3.') {
+    throw new Error('271 with custom segment headers parsing succeed which should not happen');
+}
+```
+
 <a name="x12mapping"></a>
 # X12Mapping
-should map transaction.
+should map transaction to data.
 
 ```js
 const parser = new core_1.X12Parser();
@@ -140,6 +250,38 @@ if (result !== resultJson) {
 }
 ```
 
+should map data to transaction with custom macro.
+
+```js
+const transaction = new core_1.X12Transaction();
+const mapper = new core_1.X12TransactionMap(JSON.parse(transactionJson), transaction);
+const data = JSON.parse(transactionData);
+const result = mapper.fromObject(data, {
+    toFixed: function toFixed(key, places) {
+        return {
+            val: parseFloat(key).toFixed(places)
+        };
+    }
+});
+if (!(result instanceof core_1.X12Transaction)) {
+    throw new Error(`An error occured when mapping an object to a transaction.`);
+}
+```
+
+should map data to transaction with LiquidJS.
+
+```js
+const transaction = new core_1.X12Transaction();
+const mapper = new core_1.X12TransactionMap(JSON.parse(transactionJsonLiquid), transaction, 'liquidjs');
+const data = JSON.parse(transactionData);
+const result = mapper.fromObject(data, {
+    to_fixed: (value, places) => parseFloat(value).toFixed(places)
+});
+if (!(result instanceof core_1.X12Transaction)) {
+    throw new Error(`An error occured when mapping an object to a transaction.`);
+}
+```
+
 <a name="x12objectmodel"></a>
 # X12ObjectModel
 should create X12Interchange with string delimiters.
@@ -148,6 +290,37 @@ should create X12Interchange with string delimiters.
 const interchange = new core_1.X12Interchange('~', '*');
 if (interchange.elementDelimiter !== '*') {
     throw new Error('Instance of X12Interchange not successfully created.');
+}
+```
+
+should create X12FatInterchange.
+
+```js
+const parser = new core_1.X12Parser();
+const interchange = parser.parse(edi);
+const fatInterchange = new core_1.X12FatInterchange([interchange]);
+const str = fatInterchange.toString();
+const json = fatInterchange.toJSON();
+if (!Array.isArray(json) || typeof str !== 'string') {
+    throw new Error('Instance of X12FatInterchange not successfully created.');
+}
+```
+
+should create X12Segment.
+
+```js
+const segment = new core_1.X12Segment();
+const noElement = segment.replaceElement('1', 1);
+const noInsert = segment.insertElement('1', 1);
+const noneToRemove = segment.removeElement(1);
+const defaultVal = segment.valueOf(1, '2');
+segment.setTag('WX');
+segment.addElement('1');
+segment.insertElement('2', 1);
+segment.removeElement(2);
+if (noElement !== null || noInsert !== null || noneToRemove !== false ||
+    defaultVal !== '2' || segment.elements.length !== 1 || segment.elements[0].value !== '2') {
+    throw new Error('Instance of segment or methods did not execute as expected.');
 }
 ```
 
@@ -184,6 +357,17 @@ const transaction = functionalGroup.transactions[0];
 const segment = transaction.segments[0];
 if (typeof segment.toJSON() !== 'object') {
     throw new Error('Instance of X12FunctionalGroup not cast to JSON.');
+}
+```
+
+should construct JSEDINotation objects.
+
+```js
+const notation = new core_1.JSEDINotation();
+const group = new JSEDINotation_1.JSEDIFunctionalGroup();
+const transaction = new JSEDINotation_1.JSEDITransaction();
+if (!(notation instanceof core_1.JSEDINotation) || !(group instanceof JSEDINotation_1.JSEDIFunctionalGroup) || !(transaction instanceof JSEDINotation_1.JSEDITransaction)) {
+    throw new Error('One or more JS EDI Notation objects could not be constructed.');
 }
 ```
 
@@ -225,8 +409,6 @@ async () => {
                 .on('end', () => {
                 const edi = fs.readFileSync('test/test-data/850.edi', 'utf8');
                 const interchange = parser.getInterchangeFromSegments(segments);
-                interchange.options.format = true;
-                interchange.options.endOfLine = '\n';
                 if (interchange.toString() !== edi) {
                     reject(new Error('Expected parsed EDI stream to match raw EDI document.'));
                 }
@@ -350,6 +532,18 @@ const engine = new core_1.X12QueryEngine(parser);
 const results = engine.query(edi, 'HL+S+O+I-LIN03');
 if (results[0].value !== '87787D' || results[1].value !== '99887D') {
     throw new Error('Expected two matching elements for HL+S+O+I-LIN03.');
+}
+```
+
+should handle HL paths where HL03 is a number.
+
+```js
+const edi = fs.readFileSync('test/test-data/271.edi', 'utf8');
+const parser = new core_1.X12Parser(true);
+const engine = new core_1.X12QueryEngine(parser);
+const results = engine.query(edi, 'HL+20+21+22-NM101');
+if (results.length !== 2) {
+    throw new Error('Expected two matching elements for HL+20+21+22-NM101.');
 }
 ```
 

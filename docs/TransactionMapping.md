@@ -82,11 +82,11 @@ The table of filters should not be considered exhaustive; see [Liquid's official
 
 |Property|Parameters|Example|Description|
 |--------|----------|-------|-----------|
-|**sequence**|string|`{{ 'LX' | sequence }}`|Method for assigning sequence values in a loop.|
-|**in_loop**|string|`{{ input.someValue | in_loop }}`|Method for serializing values within a loop to preserve them for use by the loop; only use this as the last filter, see example for defining loops.|
-|**json_parse**|string|`{{ '{\"example\": \"content\"}' | json_parse }}`|Method for returning an object from valid JSON.|
-|**json_stringify**|string|`{{ inport.someObject | json_stringify }}`|Method for converting a value to valid JSON.|
-|**size**|any[] |`{{ input.someArray | size }}`|Method for returning the length of an array or string. Default Liquid filter.|
+|**sequence**|string|`{{ 'LX' \| sequence }}`|Method for assigning sequence values in a loop.|
+|**in_loop**|string|`{{ input.someValue \| in_loop }}`|Method for serializing values within a loop to preserve them for use by the loop; only use this as the last filter, see example for defining loops.|
+|**json_parse**|string|`{{ '{\"example\": \"content\"}' \| json_parse }}`|Method for returning an object from valid JSON.|
+|**json_stringify**|string|`{{ inport.someObject \| json_stringify }}`|Method for converting a value to valid JSON.|
+|**size**|any[] |`{{ input.someArray \| size }}`|Method for returning the length of an array or string. Default Liquid filter.|
 |**map**|any[], string|`{{ input.someArray | map: 'someProperty' }}`|Method for returning an array of a specific property in array of objects.|
 |**sum_array**|any[] |`{{ input.someArray | sum_array }}`|Method for returning the sum of an array of numbers.|
 |**truncate**|string \| string[], number|`{{ input.someArray | truncate: 45 }}`|Method for truncating a string or array of strings to the desired character length. Overrides default Liquid implementation.|

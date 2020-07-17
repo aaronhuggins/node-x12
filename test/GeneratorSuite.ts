@@ -55,8 +55,6 @@ describe('X12Generator', () => {
       error = err.message
     }
 
-    console.log(error)
-
     if (error !== 'Segment "ST" with 3 elements does meet the required count of 2.') {
       throw new Error('271 with 3 ST elements parsing succeed which should not happen')
     }

@@ -15,11 +15,11 @@ export class X12FatInterchange extends Array<X12Interchange> {
       super(...items)
     } else {
       super()
-      this.options = defaultSerializationOptions(items)
+      options = items
     }
-    if (options !== undefined) {
-      this.options = defaultSerializationOptions(options)
-    }
+
+    this.options = defaultSerializationOptions(options)
+
     this.interchanges = this
   }
 

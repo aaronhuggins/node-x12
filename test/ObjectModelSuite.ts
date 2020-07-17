@@ -1,7 +1,7 @@
 'use strict'
 
 import 'mocha'
-import { X12Parser, X12Interchange } from '../core'
+import { X12Parser, X12Interchange, X12FatInterchange, X12Segment } from '../core'
 
 import fs = require('fs')
 
@@ -13,6 +13,36 @@ describe('X12ObjectModel', () => {
 
     if (interchange.elementDelimiter !== '*') {
       throw new Error('Instance of X12Interchange not successfully created.')
+    }
+  })
+
+  it('should create X12FatInterchange', () => {
+    const parser = new X12Parser()
+    const interchange = parser.parse(edi) as X12Interchange
+    const fatInterchange = new X12FatInterchange([interchange])
+    const json = fatInterchange.toJSON()
+
+    if (!Array.isArray(json)) {
+      throw new Error('Instance of X12FatInterchange not successfully created.')
+    }
+  })
+
+  it('should create X12Segment', () => {
+    const segment = new X12Segment()
+    const noElement = segment.replaceElement('1', 1)
+    const noInsert = segment.insertElement('1', 1)
+    const noneToRemove = segment.removeElement(1)
+    const defaultVal = segment.valueOf(1, '2')
+
+    segment.setTag('WX')
+    segment.addElement('1')
+    segment.insertElement('2', 1)
+    segment.removeElement(2)
+
+    if (noElement !== null || noInsert !== null || noneToRemove !== false ||
+      defaultVal !== '2' || segment.elements.length !== 1 || segment.elements[0].value !== '2'
+    ) {
+      throw new Error('Instance of segment or methods did not execute as expected.')
     }
   })
 

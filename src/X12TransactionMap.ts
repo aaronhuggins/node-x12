@@ -43,7 +43,7 @@ export class X12TransactionMap {
 
   /**
    * @description Map data from the transaction set to a javascript object.
-   * @param {object} map - The javascript object containing keys and querys to resolve.
+   * @param {object} [map] - The javascript object containing keys and querys to resolve.
    * @param {Function} [callback] - A callback function which will be passed to the helper function.
    * @returns {object|object[]} The transaction set mapped to an object or an array of objects.
    */

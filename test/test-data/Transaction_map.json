@@ -1,0 +1,46 @@
+{
+  "header": ["940", "macro['random']()['val']"],
+  "segments": [
+    { "tag": "W05", "elements": ["N", "input['internalOrderId']", "input['orderId']"] },
+    { "tag": "N1", "elements": ["ST", "`${input['shippingFirstName']} ${input['shippingLastName']}`"] },
+    { "tag": "N3", "elements": ["input['shippingStreet1']", "input['shippingStreet2']"] },
+    { "tag": "N4", "elements":
+      [
+        "input['shippingCity']",
+        "input['shippingStateCode']",
+        "input['shippingPostalCode']",
+        "input['shippingCountryCode']"
+      ]
+    },
+    { "tag": "N1", "elements": ["BT", "My Company LLC"] },
+    { "tag": "N3", "elements": ["1234 Company Dr"] },
+    { "tag": "N4", "elements": ["Madison", "WI", "12345", "US"] },
+    { "tag": "N9", "elements": ["VR", "54321"] },
+    { "tag": "N9", "elements": ["14", "567"] },
+    { "tag": "N9", "elements": ["11", "8765"] },
+    { "tag": "N9", "elements": ["12", "987654321"] },
+    { "tag": "N9", "elements": ["23", "12345"] },
+    { "tag": "G62", "elements": ["37", "macro['currentDate']"] },
+    { "tag": "W66", "elements": ["PP", "M", "", "", "GR", "", "", "", "", "UPSN"] },
+    { "tag": "LX", "elements": ["macro['sequence']('LX')['val']"], "loopStart": true, "loopLength": "macro['length'](macro['json'](input['orderItems'])['val'])['val']" },
+    { "tag": "W01", "elements":
+      [
+        "macro['map'](macro['json'](input['orderItems'])['val'], 'quantity')['val']",
+        "EA",
+        "",
+        "VN",
+        "macro['map'](macro['json'](input['orderItems'])['val'], 'sku')['val']"
+      ]
+    },
+    { "tag": "G69", "elements": ["macro['truncate'](macro['map'](macro['json'](input['orderItems'])['val'], 'title')['val'], 45)['val']"], "loopEnd": true },
+    { "tag": "W76", "elements":
+      [
+        "macro['sum'](macro['json'](input['orderItems'])['val'], 'quantity')['val']",
+        "macro['toFixed'](macro['sum'](macro['json'](input['orderItems'])['val'], 'weight', 2)['val'], 2)['val']",
+        "LB",
+        "macro['toFixed'](macro['sum'](macro['json'](input['orderItems'])['val'], 'volume', 2)['val'], 2)['val']",
+        "CF"
+      ]
+    }
+  ]
+}

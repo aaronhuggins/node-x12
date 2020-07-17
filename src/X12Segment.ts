@@ -29,6 +29,14 @@ export class X12Segment {
   options: X12SerializationOptions;
 
   /**
+   * @description Set the tag name for the segment if not provided when constructed.
+   * @param {string} tag - The tag for this segment.
+   */
+  setTag (tag: string) {
+    this.tag = tag
+  }
+
+  /**
    * @description Set the elements of this segment.
    * @param {string[]} values - An array of element values.
    */

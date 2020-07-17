@@ -1,0 +1,13 @@
+{
+  "internalOrderId": "ORDER-1234",
+  "orderId": "OD-879",
+  "shippingFirstName": "Somebody",
+  "shippingLastName": "Once",
+  "shippingStreet1": "456 Told Me Ave.",
+  "shippingStreet2": "",
+  "shippingCity": "Dubuque",
+  "shippingStateCode": "IA",
+  "shippingPostalCode": "87654",
+  "shippingCountryCode": "US",
+  "orderItems": "[{\"quantity\":3,\"sku\":\"SKU-123\",\"title\":\"Some Title\",\"weight\":12.134,\"volume\":2.8}]"
+}

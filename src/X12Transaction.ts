@@ -26,33 +26,23 @@ export class X12Transaction {
   /**
    * @description Set a ST header on this transaction set.
    * @param {string[]} elements - An array of elements for a ST header.
-   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  setHeader (elements: string[], options?: X12SerializationOptions): void {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
-
-    this.header = new X12Segment(STSegmentHeader.tag, options)
+  setHeader (elements: string[]): void {
+    this.header = new X12Segment(STSegmentHeader.tag, this.options)
 
     this.header.setElements(elements)
 
-    this._setTrailer(options)
+    this._setTrailer()
   }
 
   /**
    * @description Add a segment to this transaction set.
    * @param {string} tag - The tag for this segment.
    * @param {string[]} elements - An array of elements for this segment.
-   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    * @returns {X12Segment} The segment added to this transaction set.
    */
-  addSegment (tag: string, elements: string[], options?: X12SerializationOptions): X12Segment {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
-
-    const segment = new X12Segment(tag, options)
+  addSegment (tag: string, elements: string[]): X12Segment {
+    const segment = new X12Segment(tag, this.options)
 
     segment.setElements(elements)
 
@@ -133,14 +123,9 @@ export class X12Transaction {
   /**
    * @private
    * @description Set a SE trailer on this transaction set.
-   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  private _setTrailer (options?: X12SerializationOptions): void {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
-
-    this.trailer = new X12Segment(STSegmentHeader.trailer, options)
+  private _setTrailer (): void {
+    this.trailer = new X12Segment(STSegmentHeader.trailer, this.options)
 
     this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(2)])
   }

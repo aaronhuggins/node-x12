@@ -1,9 +1,10 @@
 'use strict'
 
 import 'mocha'
-import { X12Parser, X12Interchange, X12FatInterchange, X12Segment } from '../core'
+import { JSEDINotation, X12Parser, X12Interchange, X12FatInterchange, X12Segment } from '../core'
 
 import fs = require('fs')
+import { JSEDIFunctionalGroup, JSEDITransaction } from '../src/JSEDINotation'
 
 const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
 
@@ -20,9 +21,10 @@ describe('X12ObjectModel', () => {
     const parser = new X12Parser()
     const interchange = parser.parse(edi) as X12Interchange
     const fatInterchange = new X12FatInterchange([interchange])
+    const str = fatInterchange.toString()
     const json = fatInterchange.toJSON()
 
-    if (!Array.isArray(json)) {
+    if (!Array.isArray(json) || typeof str !== 'string') {
       throw new Error('Instance of X12FatInterchange not successfully created.')
     }
   })
@@ -76,6 +78,16 @@ describe('X12ObjectModel', () => {
 
     if (typeof segment.toJSON() !== 'object') {
       throw new Error('Instance of X12FunctionalGroup not cast to JSON.')
+    }
+  })
+
+  it('should construct JSEDINotation objects', () => {
+    const notation = new JSEDINotation()
+    const group = new JSEDIFunctionalGroup()
+    const transaction = new JSEDITransaction()
+
+    if (!(notation instanceof JSEDINotation) || !(group instanceof JSEDIFunctionalGroup) || !(transaction instanceof JSEDITransaction)) {
+      throw new Error('One or more JS EDI Notation objects could not be constructed.')
     }
   })
 })

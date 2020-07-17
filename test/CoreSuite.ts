@@ -2,6 +2,7 @@
 
 import 'mocha'
 import { ArgumentNullError, GeneratorError, ParserError, QuerySyntaxError } from '../src/Errors'
+import { X12Diagnostic } from '../src/X12Diagnostic'
 import * as core from '../core'
 
 describe('X12Core', () => {
@@ -40,6 +41,14 @@ describe('X12Core', () => {
 
     if (error.message !== 'test') {
       throw new Error('QuerySyntaxError did not return the correct message.')
+    }
+  })
+
+  it('should create X12Diagnostic', () => {
+    const diag = new X12Diagnostic()
+
+    if (!(diag instanceof X12Diagnostic)) {
+      throw new Error('Could not create X12Diagnostic.')
     }
   })
 })

@@ -26,31 +26,21 @@ export class X12FunctionalGroup {
   /**
    * @description Set a GS header on this functional group.
    * @param {string[]} elements - An array of elements for a GS header.
-   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  setHeader (elements: string[], options?: X12SerializationOptions): void {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
-
-    this.header = new X12Segment(GSSegmentHeader.tag, options)
+  setHeader (elements: string[]): void {
+    this.header = new X12Segment(GSSegmentHeader.tag, this.options)
 
     this.header.setElements(elements)
 
-    this._setTrailer(options)
+    this._setTrailer()
   }
 
   /**
    * @description Add a transaction set to this functional group.
-   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    * @returns {X12Transaction} The transaction which was added to this functional group.
    */
-  addTransaction (options?: X12SerializationOptions): X12Transaction {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
-
-    const transaction = new X12Transaction(options)
+  addTransaction (): X12Transaction {
+    const transaction = new X12Transaction(this.options)
 
     this.transactions.push(transaction)
 
@@ -109,14 +99,9 @@ export class X12FunctionalGroup {
   /**
    * @private
    * @description Set a GE trailer on this functional group.
-   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  private _setTrailer (options?: X12SerializationOptions): void {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
-
-    this.trailer = new X12Segment(GSSegmentHeader.trailer, options)
+  private _setTrailer (): void {
+    this.trailer = new X12Segment(GSSegmentHeader.trailer, this.options)
 
     this.trailer.setElements([`${this.transactions.length}`, this.header.valueOf(6)])
   }

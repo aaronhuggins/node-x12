@@ -46,18 +46,13 @@ export class X12Interchange {
   /**
    * @description Set an ISA header on this interchange.
    * @param {string[]} elements - An array of elements for an ISA header.
-   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  setHeader (elements: string[], options?: X12SerializationOptions): void {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
-
-    this.header = new X12Segment(ISASegmentHeader.tag, options)
+  setHeader (elements: string[]): void {
+    this.header = new X12Segment(ISASegmentHeader.tag, this.options)
 
     this.header.setElements(elements)
 
-    this._setTrailer(options)
+    this._setTrailer()
   }
 
   /**
@@ -141,14 +136,9 @@ export class X12Interchange {
   /**
    * @private
    * @description Set an ISA trailer on this interchange.
-   * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  private _setTrailer (options?: X12SerializationOptions): void {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
-
-    this.trailer = new X12Segment(ISASegmentHeader.trailer, options)
+  private _setTrailer (): void {
+    this.trailer = new X12Segment(ISASegmentHeader.trailer, this.options)
 
     this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)])
   }

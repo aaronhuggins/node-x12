@@ -82,17 +82,17 @@ The table of filters should not be considered exhaustive; see [Liquid's official
 
 |Property|Parameters|Example|Description|
 |--------|----------|-------|-----------|
-|**sequence**|string|`{{ 'LX' \| sequence }}`|Method for assigning sequence values in a loop.|
-|**in_loop**|string|`{{ input.someValue \| in_loop }}`|Method for serializing values within a loop to preserve them for use by the loop; only use this as the last filter, see example for defining loops.|
-|**json_parse**|string|<!-- {% raw %} -->`{{ '{\"example\": \"content\"\}' \| json_parse }}`<!-- {% endraw %} -->|Method for returning an object from valid JSON.|
-|**json_stringify**|string|`{{ inport.someObject \| json_stringify }}`|Method for converting a value to valid JSON.|
-|**size**|any[] |`{{ input.someArray \| size }}`|Method for returning the length of an array or string. Default Liquid filter.|
-|**map**|any[], string|`{{ input.someArray \| map: 'someProperty' }}`|Method for returning an array of a specific property in array of objects.|
-|**sum_array**|any[] |`{{ input.someArray \| sum_array }}`|Method for returning the sum of an array of numbers.|
-|**truncate**|string \| string[], number|`{{ input.someArray \| truncate: 45 }}`|Method for truncating a string or array of strings to the desired character length. Overrides default Liquid implementation.|
-|**random**|N/A|`{{ macro \| random }}`|Method for returning a random 4 digit number.|
-|**edi_date**|N/A,string|`{{ macro \| edi_date: 'long' }}`|The current date; takes argument of `'long'` for YYYYmmdd or `'short'` for YYmmdd.|
-|**edi_time**|N/A|`{{ macro \| edi_time }}`|The current time in HHMM format.|
+|**sequence**|string|<!-- {% raw %} Start Liquid Code Example -->`{{ 'LX' \| sequence }}`<!-- End Liquid Code Example {% endraw %} -->|Method for assigning sequence values in a loop.|
+|**in_loop**|string|<!-- {% raw %} Start Liquid Code Example -->`{{ input.someValue \| in_loop }}`<!-- End Liquid Code Example {% endraw %} -->|Method for serializing values within a loop to preserve them for use by the loop; only use this as the last filter, see example for defining loops.|
+|**json_parse**|string|<!-- {% raw %} Start Liquid Code Example -->`{{ '{\"example\": \"content\"\}' \| json_parse }}`<!-- End Liquid Code Example {% endraw %} -->|Method for returning an object from valid JSON.|
+|**json_stringify**|string|<!-- {% raw %} Start Liquid Code Example -->`{{ inport.someObject \| json_stringify }}`<!-- End Liquid Code Example {% endraw %} -->|Method for converting a value to valid JSON.|
+|**size**|any[] |<!-- {% raw %} Start Liquid Code Example -->`{{ input.someArray \| size }}`<!-- End Liquid Code Example {% endraw %} -->|Method for returning the length of an array or string. Default Liquid filter.|
+|**map**|any[], string|<!-- {% raw %} Start Liquid Code Example -->`{{ input.someArray \| map: 'someProperty' }}`<!-- End Liquid Code Example {% endraw %} -->|Method for returning an array of a specific property in array of objects.|
+|**sum_array**|any[] |<!-- {% raw %} Start Liquid Code Example -->`{{ input.someArray \| sum_array }}`<!-- End Liquid Code Example {% endraw %} -->|Method for returning the sum of an array of numbers.|
+|**truncate**|string \| string[], number|<!-- {% raw %} Start Liquid Code Example -->`{{ input.someArray \| truncate: 45 }}`<!-- End Liquid Code Example {% endraw %} -->|Method for truncating a string or array of strings to the desired character length. Overrides default Liquid implementation.|
+|**random**|N/A|<!-- {% raw %} Start Liquid Code Example -->`{{ macro \| random }}`<!-- End Liquid Code Example {% endraw %} -->|Method for returning a random 4 digit number.|
+|**edi_date**|N/A,string|<!-- {% raw %} Start Liquid Code Example -->`{{ macro \| edi_date: 'long' }}`<!-- End Liquid Code Example {% endraw %} -->|The current date; takes argument of `'long'` for YYYYmmdd or `'short'` for YYmmdd.|
+|**edi_time**|N/A|<!-- {% raw %} Start Liquid Code Example -->`{{ macro \| edi_time }}`<!-- End Liquid Code Example {% endraw %} -->|The current time in HHMM format.|
 
 #### Legacy Macro Language
 

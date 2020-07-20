@@ -8,6 +8,9 @@ module.exports = {
     filename: 'index.js',
     path: __dirname
   },
+  externals: {
+    '../nodeRequire.js': './nodeRequire.js'
+  },
   resolve: {
     extensions: ['.ts']
   },

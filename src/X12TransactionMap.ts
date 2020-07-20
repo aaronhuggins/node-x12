@@ -5,6 +5,8 @@ import { X12Interchange } from './X12Interchange'
 import { X12QueryEngine } from './X12QueryEngine'
 import { X12Transaction } from './X12Transaction'
 import { TxEngine } from './X12SerializationOptions'
+// @ts-ignore
+import * as nodeRequire from '../nodeRequire.js'
 import * as crypto from 'crypto'
 
 export class X12TransactionMap {
@@ -326,7 +328,7 @@ export class X12TransactionMap {
     map = map === undefined ? this._map : map
 
     if (this.txEngine === 'liquidjs') {
-      const { Liquid } = require('liquidjs')
+      const { Liquid } = nodeRequire('liquidjs')
       const engine = new Liquid({ strictFilters: true })
 
       for (const [name, func] of Object.entries(LIQUID_FILTERS)) {

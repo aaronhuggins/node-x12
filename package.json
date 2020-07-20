@@ -1,6 +1,6 @@
 {
     "name": "node-x12",
-    "version": "1.5.0",
+    "version": "1.5.1",
     "description": "ASC X12 parser, generator, query engine, and mapper; now with support for streams.",
     "main": "index.js",
     "keywords": [
@@ -12,7 +12,8 @@
     ],
     "files": [
         "index.js",
-        "index.d.ts"
+        "index.d.ts",
+        "nodeRequire.js"
     ],
     "homepage": "https://ahuggins-nhs.github.io/node-x12/",
     "bugs": {

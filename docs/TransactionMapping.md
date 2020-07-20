@@ -79,12 +79,12 @@ When mapping from an object to a transaction set, an object may be passed as an 
 To use Liquid, simply install `liquidjs` via npm in your project, and then set your options when mapping to use `'liquidjs'`. This library will attempt to `require` Liquid and use it as the engine for mapping from an object.
 
 The table of filters should not be considered exhaustive; see [Liquid's official site](https://shopify.github.io/liquid/) for details on filters, keeping in mind the custom filters that this library uses and provides in the table below.
-
+<!-- {% raw %} -->
 |Property|Parameters|Example|Description|
 |--------|----------|-------|-----------|
 |**sequence**|string|`{{ 'LX' \| sequence }}`|Method for assigning sequence values in a loop.|
 |**in_loop**|string|`{{ input.someValue \| in_loop }}`|Method for serializing values within a loop to preserve them for use by the loop; only use this as the last filter, see example for defining loops.|
-|**json_parse**|string|`{{ '{\"example\": \"content\"}' \| json_parse }}`|Method for returning an object from valid JSON.|
+|**json_parse**|string|`{{ '{\"example\": \"content\"\}' \| json_parse }}`|Method for returning an object from valid JSON.|
 |**json_stringify**|string|`{{ inport.someObject \| json_stringify }}`|Method for converting a value to valid JSON.|
 |**size**|any[] |`{{ input.someArray \| size }}`|Method for returning the length of an array or string. Default Liquid filter.|
 |**map**|any[], string|`{{ input.someArray \| map: 'someProperty' }}`|Method for returning an array of a specific property in array of objects.|
@@ -93,6 +93,7 @@ The table of filters should not be considered exhaustive; see [Liquid's official
 |**random**|N/A|`{{ macro \| random }}`|Method for returning a random 4 digit number.|
 |**edi_date**|N/A,string|`{{ macro \| edi_date: 'long' }}`|The current date; takes argument of `'long'` for YYYYmmdd or `'short'` for YYmmdd.|
 |**edi_time**|N/A|`{{ macro \| edi_time }}`|The current time in HHMM format.|
+<!-- {% endraw %} -->
 
 #### Legacy Macro Language
 

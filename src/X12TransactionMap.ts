@@ -230,6 +230,7 @@ export class X12TransactionMap {
         return counter[value]
       },
       sum_array: (value: any[]) => {
+        if (typeof value === 'undefined') return 0
         let sum = 0
 
         value.forEach((item) => { sum += item })
@@ -243,11 +244,18 @@ export class X12TransactionMap {
         return JSON.stringify(value)
       },
       json_parse: (value: string) => {
+        if (typeof value === 'undefined') return ''
+
         return JSON.parse(value)
       },
       truncate: (value: string|string[], maxChars: number) => {
+        if (typeof value === 'undefined') return ''
         if (Array.isArray(value)) {
-          return value.map((str) => str.substring(0, maxChars))
+          return value.map((str) => {
+            if (typeof str === 'undefined') return ''
+
+            return str.substring(0, maxChars)
+          })
         }
 
         return `${value}`.substring(0, maxChars)

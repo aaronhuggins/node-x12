@@ -43,7 +43,7 @@ For convenience, every instance of the `X12Transaction` class contains a `fromOb
 #### Liquid Macro Language
 
 The object map for mapping data to a transaction set differs significantly. It has more in common with [JS EDI Notation](./JSEDINotation.md). For example:
-<!-- {% raw -%} Start Liquid Code Sample -->
+<!-- {% raw %}Start Liquid Code Sample -->
 ```json
 {
   "header": ["940", "{{ macro | random }}"],
@@ -55,10 +55,10 @@ The object map for mapping data to a transaction set differs significantly. It h
   ]
 }
 ```
-<!-- End Liquid Code Sample {%- endraw %} -->
+<!-- End Liquid Code Sample{% endraw %} -->
 
 When loops are defined, it is done sequentially. Loops can either be manually written out, or some helper macros can be used to assist in generating them. If loops are to be generated dynamically, the first segment in the loop must have a `loopStart` and a `loopLength` property. The last segment in the loop must have a `loopEnd` property to signal that the loop has ended. For example:
-<!-- {% raw -%} Start Liquid Code Sample -->
+<!-- {% raw %}Start Liquid Code Sample -->
 ```json
     { "tag": "LX", "elements": ["{{ 'LX' | sequence }}"], "loopStart": true, "loopLength": "{{ input.orderItems | json_parse | size }}" },
     { "tag": "W01", "elements":
@@ -72,7 +72,7 @@ When loops are defined, it is done sequentially. Loops can either be manually wr
     },
     { "tag": "G69", "elements": ["{{ input.orderItems | json_parse | map: 'title' | truncate: 45 | in_loop }}"], "loopEnd": true },
 ```
-<!-- End Liquid Code Sample {%- endraw %} -->
+<!-- End Liquid Code Sample{% endraw %} -->
 
 #### Liquid Macro API
 The syntax for mapping is pure [Liquid](https://liquidjs.com/) with some additional macros for convenience. The object to map from is always referred to as `input`. There are some macros which do not take an input; it is considered useful to access them with the word `macro`, but any value can be passed to them since the value will be discarded.
@@ -85,17 +85,17 @@ The table of filters should not be considered exhaustive; see [Liquid's official
 
 |Property|Parameters|Example|Description|
 |--------|----------|-------|-----------|
-|**sequence**|string|<!-- {% raw -%} Start Liquid Code Sample -->`{{ 'LX' \| sequence }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for assigning sequence values in a loop.|
-|**in_loop**|string|<!-- {% raw -%} Start Liquid Code Sample -->`{{ input.someValue \| in_loop }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for serializing values within a loop to preserve them for use by the loop; only use this as the last filter, see example for defining loops.|
-|**json_parse**|string|<!-- {% raw -%} Start Liquid Code Sample -->`{{ '{\"example\": \"content\"\}' \| json_parse }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for returning an object from valid JSON.|
-|**json_stringify**|string|<!-- {% raw -%} Start Liquid Code Sample -->`{{ inport.someObject \| json_stringify }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for converting a value to valid JSON.|
-|**size**|any[] |<!-- {% raw -%} Start Liquid Code Sample -->`{{ input.someArray \| size }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for returning the length of an array or string. Default Liquid filter.|
-|**map**|any[], string|<!-- {% raw -%} Start Liquid Code Sample -->`{{ input.someArray \| map: 'someProperty' }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for returning an array of a specific property in array of objects.|
-|**sum_array**|any[] |<!-- {% raw -%} Start Liquid Code Sample -->`{{ input.someArray \| sum_array }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for returning the sum of an array of numbers.|
-|**truncate**|string \| string[], number|<!-- {% raw -%} Start Liquid Code Sample -->`{{ input.someArray \| truncate: 45 }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for truncating a string or array of strings to the desired character length. Overrides default Liquid implementation.|
-|**random**|N/A|<!-- {% raw -%} Start Liquid Code Sample -->`{{ macro \| random }}`<!-- End Liquid Code Sample {%- endraw %} -->|Method for returning a random 4 digit number.|
-|**edi_date**|N/A,string|<!-- {% raw -%} Start Liquid Code Sample -->`{{ macro \| edi_date: 'long' }}`<!-- End Liquid Code Sample {%- endraw %} -->|The current date; takes argument of `'long'` for YYYYmmdd or `'short'` for YYmmdd.|
-|**edi_time**|N/A|<!-- {% raw -%} Start Liquid Code Sample -->`{{ macro \| edi_time }}`<!-- End Liquid Code Sample {%- endraw %} -->|The current time in HHMM format.|
+|**sequence**|string|<!-- {% raw %}Start Liquid Code Sample -->`{{ 'LX' \| sequence }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for assigning sequence values in a loop.|
+|**in_loop**|string|<!-- {% raw %}Start Liquid Code Sample -->`{{ input.someValue \| in_loop }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for serializing values within a loop to preserve them for use by the loop; only use this as the last filter, see example for defining loops.|
+|**json_parse**|string|<!-- {% raw %}Start Liquid Code Sample -->`{{ '{\"example\": \"content\"\}' \| json_parse }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for returning an object from valid JSON.|
+|**json_stringify**|string|<!-- {% raw %}Start Liquid Code Sample -->`{{ inport.someObject \| json_stringify }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for converting a value to valid JSON.|
+|**size**|any[] |<!-- {% raw %}Start Liquid Code Sample -->`{{ input.someArray \| size }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for returning the length of an array or string. Default Liquid filter.|
+|**map**|any[], string|<!-- {% raw %}Start Liquid Code Sample -->`{{ input.someArray \| map: 'someProperty' }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for returning an array of a specific property in array of objects.|
+|**sum_array**|any[] |<!-- {% raw %}Start Liquid Code Sample -->`{{ input.someArray \| sum_array }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for returning the sum of an array of numbers.|
+|**truncate**|string \| string[], number|<!-- {% raw %}Start Liquid Code Sample -->`{{ input.someArray \| truncate: 45 }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for truncating a string or array of strings to the desired character length. Overrides default Liquid implementation.|
+|**random**|N/A|<!-- {% raw %}Start Liquid Code Sample -->`{{ macro \| random }}`<!-- End Liquid Code Sample{% endraw %} -->|Method for returning a random 4 digit number.|
+|**edi_date**|N/A,string|<!-- {% raw %}Start Liquid Code Sample -->`{{ macro \| edi_date: 'long' }}`<!-- End Liquid Code Sample{% endraw %} -->|The current date; takes argument of `'long'` for YYYYmmdd or `'short'` for YYmmdd.|
+|**edi_time**|N/A|<!-- {% raw %}Start Liquid Code Sample -->`{{ macro \| edi_time }}`<!-- End Liquid Code Sample{% endraw %} -->|The current time in HHMM format.|
 
 #### Legacy Macro Language
 

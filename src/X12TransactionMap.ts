@@ -203,12 +203,12 @@ export class X12TransactionMap {
           val: value.length
         }
       },
-      map: function map (value: any[], property: string) {
+      map: function (value: any[], property: string) {
         return {
           val: value.map(item => item[property])
         }
       },
-      sum: function sum (value: any[], property: string, dec: number) {
+      sum: function (value: any[], property: string, dec: number) {
         let sum = 0
 
         value.forEach(item => {
@@ -336,12 +336,12 @@ export class X12TransactionMap {
       }
     }
 
-    const resolveLoop = function resolveLoop (loop: any[], transaction: X12Transaction): void {
-      const start = loop[0]
+    const resolveLoop = function resolveLoop (lp: any[], tx: X12Transaction): void {
+      const start = lp[0]
       const length = parseFloat(resolveKey(start.loopLength))
 
       for (let i = 0; i < length; i += 1) {
-        loop.forEach(segment => {
+        lp.forEach(segment => {
           const elements = []
 
           for (let j = 0; j < segment.elements.length; j += 1) {
@@ -354,7 +354,7 @@ export class X12TransactionMap {
             }
           }
 
-          transaction.addSegment(segment.tag, elements)
+          tx.addSegment(segment.tag, elements)
         })
       }
     }

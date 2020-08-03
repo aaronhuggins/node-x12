@@ -28,7 +28,11 @@ export class X12Parser extends Transform {
    * @param {string|X12SerializationOptions} [encoding] - The encoding to use for this instance when parsing a stream; defaults to UTF-8.
    * @param {X12SerializationOptions} [options] - The options to use when parsing a stream.
    */
-  constructor (strict?: boolean | X12SerializationOptions, encoding?: 'ascii' | 'utf8' | X12SerializationOptions, options?: X12SerializationOptions) {
+  constructor (
+    strict?: boolean | X12SerializationOptions,
+    encoding?: 'ascii' | 'utf8' | X12SerializationOptions,
+    options?: X12SerializationOptions
+  ) {
     if (strict === undefined) {
       strict = false
     } else if (typeof strict !== 'boolean') {
@@ -92,16 +96,14 @@ export class X12Parser extends Transform {
     const segments = this._parseSegments(edi, this._options.segmentTerminator, this._options.elementDelimiter)
 
     if (segments.length > 2) {
-      segments.forEach((segment) => {
+      segments.forEach(segment => {
         this._processSegment(segment)
       })
     } else {
       this._validateEdiSegmentCount()
     }
 
-    return this._fatInterchange === undefined
-      ? this._interchange
-      : this._fatInterchange
+    return this._fatInterchange === undefined ? this._interchange : this._fatInterchange
   }
 
   /**
@@ -110,20 +112,22 @@ export class X12Parser extends Transform {
    * @param {X12SerializationOptions} [options] - Options for serializing from EDI.
    * @returns {X12Interchange|X12FatInterchange} An interchange or fat interchange.
    */
-  getInterchangeFromSegments (segments: X12Segment[], options?: X12SerializationOptions): X12Interchange | X12FatInterchange {
+  getInterchangeFromSegments (
+    segments: X12Segment[],
+    options?: X12SerializationOptions
+  ): X12Interchange | X12FatInterchange {
     this._options = options === undefined ? this._options : defaultSerializationOptions(options)
 
-    segments.forEach((segment) => {
+    segments.forEach(segment => {
       this._processSegment(segment)
     })
 
-    return this._fatInterchange === undefined
-      ? this._interchange
-      : this._fatInterchange
+    return this._fatInterchange === undefined ? this._interchange : this._fatInterchange
   }
 
   private _validateEdiSegmentCount (): void {
-    const errorMessage = 'X12 Standard: An EDI document must contain at least one functional group; verify the document contains valid control characters.'
+    const errorMessage =
+      'X12 Standard: An EDI document must contain at least one functional group; verify the document contains valid control characters.'
 
     if (this._strict) {
       throw new ParserError(errorMessage)
@@ -140,13 +144,16 @@ export class X12Parser extends Transform {
         throw new ParserError(errorMessage)
       }
 
-      this.diagnostics.push(new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, new Range(0, 0, 0, edi.length - 1)))
+      this.diagnostics.push(
+        new X12Diagnostic(X12DiagnosticLevel.Error, errorMessage, new Range(0, 0, 0, edi.length - 1))
+      )
     }
   }
 
   private _validateIsaLength (edi: string, elementDelimiter: string): void {
     if (edi.charAt(103) !== elementDelimiter) {
-      const errorMessage = 'X12 Standard: The ISA segment is not the correct length (106 characters, including segment terminator).'
+      const errorMessage =
+        'X12 Standard: The ISA segment is not the correct length (106 characters, including segment terminator).'
 
       if (this._strict) {
         throw new ParserError(errorMessage)
@@ -199,30 +206,30 @@ export class X12Parser extends Transform {
 
     for (let i = 0, l = 0, c = 0; i < edi.length; i++) {
       // segment not yet named and not whitespace or delimiter - begin naming segment
-      if (!tagged && (edi[i].search(/\s/) === -1) && (edi[i] !== elementDelimiter) && (edi[i] !== segmentTerminator)) {
+      if (!tagged && edi[i].search(/\s/) === -1 && edi[i] !== elementDelimiter && edi[i] !== segmentTerminator) {
         currentSegment.tag += edi[i]
 
         if (currentSegment.range.start === undefined) {
           currentSegment.range.start = new Position(l, c)
         }
 
-      // trailing line breaks - consume them and increment line number
-      } else if (!tagged && (edi[i].search(/\s/) > -1)) {
+        // trailing line breaks - consume them and increment line number
+      } else if (!tagged && edi[i].search(/\s/) > -1) {
         if (edi[i] === '\n') {
           l++
           c = -1
         }
 
-      // segment tag/name is completed - mark as tagged
-      } else if (!tagged && (edi[i] === elementDelimiter)) {
+        // segment tag/name is completed - mark as tagged
+      } else if (!tagged && edi[i] === elementDelimiter) {
         tagged = true
 
         currentElement = new X12Element()
         currentElement.range.start = new Position(l, c)
 
-      // segment terminator
+        // segment terminator
       } else if (edi[i] === segmentTerminator) {
-        currentElement.range.end = new Position(l, (c - 1))
+        currentElement.range.end = new Position(l, c - 1)
         currentSegment.elements.push(currentElement)
 
         if (currentSegment.tag === 'IEA' && currentSegment.elements.length === 2) {
@@ -241,9 +248,9 @@ export class X12Parser extends Transform {
           c = -1
         }
 
-      // element delimiter
-      } else if (tagged && (edi[i] === elementDelimiter)) {
-        currentElement.range.end = new Position(l, (c - 1))
+        // element delimiter
+      } else if (tagged && edi[i] === elementDelimiter) {
+        currentElement.range.end = new Position(l, c - 1)
         currentSegment.elements.push(currentElement)
 
         if (currentSegment.tag === 'ISA' && currentSegment.elements.length === 13) {
@@ -253,7 +260,7 @@ export class X12Parser extends Transform {
         currentElement = new X12Element()
         currentElement.range.start = new Position(l, c + 1)
 
-      // element data
+        // element data
       } else {
         currentElement.value += edi[i]
       }
@@ -376,7 +383,9 @@ export class X12Parser extends Transform {
     interchange.trailer = segment
 
     if (parseInt(segment.valueOf(1)) !== interchange.functionalGroups.length) {
-      const errorMessage = `X12 Standard: The value in IEA01 (${segment.valueOf(1)}) does not match the number of GS segments in the interchange (${interchange.functionalGroups.length}).`
+      const errorMessage = `X12 Standard: The value in IEA01 (${segment.valueOf(
+        1
+      )}) does not match the number of GS segments in the interchange (${interchange.functionalGroups.length}).`
 
       if (this._strict) {
         throw new ParserError(errorMessage)
@@ -386,7 +395,9 @@ export class X12Parser extends Transform {
     }
 
     if (segment.valueOf(2) !== interchange.header.valueOf(13)) {
-      const errorMessage = `X12 Standard: The value in IEA02 (${segment.valueOf(2)}) does not match the value in ISA13 (${interchange.header.valueOf(13)}).`
+      const errorMessage = `X12 Standard: The value in IEA02 (${segment.valueOf(
+        2
+      )}) does not match the value in ISA13 (${interchange.header.valueOf(13)}).`
 
       if (this._strict) {
         throw new ParserError(errorMessage)
@@ -404,7 +415,9 @@ export class X12Parser extends Transform {
     group.trailer = segment
 
     if (parseInt(segment.valueOf(1)) !== group.transactions.length) {
-      const errorMessage = `X12 Standard: The value in GE01 (${segment.valueOf(1)}) does not match the number of ST segments in the functional group (${group.transactions.length}).`
+      const errorMessage = `X12 Standard: The value in GE01 (${segment.valueOf(
+        1
+      )}) does not match the number of ST segments in the functional group (${group.transactions.length}).`
 
       if (this._strict) {
         throw new ParserError(errorMessage)
@@ -414,7 +427,9 @@ export class X12Parser extends Transform {
     }
 
     if (segment.valueOf(2) !== group.header.valueOf(6)) {
-      const errorMessage = `X12 Standard: The value in GE02 (${segment.valueOf(2)}) does not match the value in GS06 (${group.header.valueOf(6)}).`
+      const errorMessage = `X12 Standard: The value in GE02 (${segment.valueOf(
+        2
+      )}) does not match the value in GS06 (${group.header.valueOf(6)}).`
 
       if (this._strict) {
         throw new ParserError(errorMessage)
@@ -431,10 +446,12 @@ export class X12Parser extends Transform {
   private _processSE (transaction: X12Transaction, segment: X12Segment): void {
     transaction.trailer = segment
 
-    const expectedNumberOfSegments = (transaction.segments.length + 2)
+    const expectedNumberOfSegments = transaction.segments.length + 2
 
     if (parseInt(segment.valueOf(1)) !== expectedNumberOfSegments) {
-      const errorMessage = `X12 Standard: The value in SE01 (${segment.valueOf(1)}) does not match the number of segments in the transaction (${expectedNumberOfSegments}).`
+      const errorMessage = `X12 Standard: The value in SE01 (${segment.valueOf(
+        1
+      )}) does not match the number of segments in the transaction (${expectedNumberOfSegments}).`
 
       if (this._strict) {
         throw new ParserError(errorMessage)
@@ -444,7 +461,9 @@ export class X12Parser extends Transform {
     }
 
     if (segment.valueOf(2) !== transaction.header.valueOf(2)) {
-      const errorMessage = `X12 Standard: The value in SE02 (${segment.valueOf(2)}) does not match the value in ST02 (${transaction.header.valueOf(2)}).`
+      const errorMessage = `X12 Standard: The value in SE02 (${segment.valueOf(
+        2
+      )}) does not match the value in ST02 (${transaction.header.valueOf(2)}).`
 
       if (this._strict) {
         throw new ParserError(errorMessage)
@@ -483,9 +502,13 @@ export class X12Parser extends Transform {
     if (Array.isArray(rawSegments)) {
       for (let i = 0; i < rawSegments.length; i += 1) {
         if (rawSegments[i].length > 0) {
-          const segments = this._parseSegments(rawSegments[i] + this._options.segmentTerminator, this._options.segmentTerminator, this._options.elementDelimiter)
+          const segments = this._parseSegments(
+            rawSegments[i] + this._options.segmentTerminator,
+            this._options.segmentTerminator,
+            this._options.elementDelimiter
+          )
 
-          segments.forEach((segment) => {
+          segments.forEach(segment => {
             this.push(segment)
             this._segmentCounter += 1
           })

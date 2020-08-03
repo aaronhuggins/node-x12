@@ -6,7 +6,7 @@ export class ArgumentNullError extends Error {
     this.name = 'ArgumentNullError'
   }
 
-  name: string;
+  name: string
 }
 
 export class GeneratorError extends Error {
@@ -15,7 +15,7 @@ export class GeneratorError extends Error {
     this.name = 'GeneratorError'
   }
 
-  name: string;
+  name: string
 }
 
 export class ParserError extends Error {
@@ -24,7 +24,7 @@ export class ParserError extends Error {
     this.name = 'ParserError'
   }
 
-  name: string;
+  name: string
 }
 
 export class QuerySyntaxError extends Error {
@@ -33,5 +33,5 @@ export class QuerySyntaxError extends Error {
     this.name = 'QuerySyntaxError'
   }
 
-  name: string;
+  name: string
 }

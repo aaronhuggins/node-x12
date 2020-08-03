@@ -3,10 +3,7 @@
 import { JSEDISegment } from './JSEDINotation'
 import { Range } from './Positioning'
 import { X12Element } from './X12Element'
-import {
-  defaultSerializationOptions,
-  X12SerializationOptions
-} from './X12SerializationOptions'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
 import { ISASegmentHeader } from './X12SegmentHeader'
 import { GeneratorError } from './Errors'
 
@@ -23,10 +20,10 @@ export class X12Segment {
     this.options = defaultSerializationOptions(options)
   }
 
-  tag: string;
-  elements: X12Element[];
-  range: Range;
-  options: X12SerializationOptions;
+  tag: string
+  elements: X12Element[]
+  range: Range
+  options: X12SerializationOptions
 
   /**
    * @description Set the tag name for the segment if not provided when constructed.
@@ -39,13 +36,16 @@ export class X12Segment {
   /**
    * @description Set the elements of this segment.
    * @param {string[]} values - An array of element values.
+   * @returns {this} The current instance of X12Segment.
    */
-  setElements (values: string[]): void {
+  setElements (values: string[]): X12Segment {
     this._formatValues(values)
     this.elements = new Array<X12Element>()
-    values.forEach((value) => {
+    values.forEach(value => {
       this.elements.push(new X12Element(value))
     })
+
+    return this
   }
 
   /**
@@ -136,9 +136,7 @@ export class X12Segment {
    * @returns {string} This segment converted to an EDI string.
    */
   toString (options?: X12SerializationOptions): string {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
+    options = options !== undefined ? defaultSerializationOptions(options) : this.options
 
     let edi = this.tag
 
@@ -161,7 +159,10 @@ export class X12Segment {
    * @returns {object} This segment converted to an object.
    */
   toJSON (): object {
-    return new JSEDISegment(this.tag, this.elements.map(x => x.value)) as object
+    return new JSEDISegment(
+      this.tag,
+      this.elements.map(x => x.value)
+    ) as object
   }
 
   /**
@@ -170,7 +171,11 @@ export class X12Segment {
    * @returns {boolean} True if segment is predefined.
    */
   private _checkSupportedSegment (): boolean {
-    return this.options.segmentHeaders.findIndex((sh) => { return sh.tag === this.tag }) > -1
+    return (
+      this.options.segmentHeaders.findIndex(sh => {
+        return sh.tag === this.tag
+      }) > -1
+    )
   }
 
   /**
@@ -179,7 +184,9 @@ export class X12Segment {
    * @returns {object} The definition of this segment.
    */
   private _getX12Enumerable (): any {
-    const match = this.options.segmentHeaders.find((sh) => { return sh.tag === this.tag })
+    const match = this.options.segmentHeaders.find(sh => {
+      return sh.tag === this.tag
+    })
 
     if (match !== undefined) {
       return match.layout
@@ -210,14 +217,21 @@ export class X12Segment {
           values[i] = `${values[i]}`
 
           if (values[i].length > max && values[i].length !== 0) {
-            throw new GeneratorError(`Segment element "${name}" with value of "${values[i]}" exceeds maximum of ${max} characters.`)
+            throw new GeneratorError(
+              `Segment element "${name}" with value of "${values[i]}" exceeds maximum of ${max} characters.`
+            )
           }
 
           if (values[i].length < min && values[i].length !== 0) {
-            throw new GeneratorError(`Segment element "${name}" with value of "${values[i]}" does not meet minimum of ${min} characters.`)
+            throw new GeneratorError(
+              `Segment element "${name}" with value of "${values[i]}" does not meet minimum of ${min} characters.`
+            )
           }
 
-          if (enumerable.PADDING as boolean && ((values[i].length < max && values[i].length > min) || values[i].length === 0)) {
+          if (
+            (enumerable.PADDING as boolean) &&
+            ((values[i].length < max && values[i].length > min) || values[i].length === 0)
+          ) {
             if (name === 'ISA13') {
               values[i] = String.prototype.padStart.call(values[i], max, '0')
             } else {
@@ -226,7 +240,9 @@ export class X12Segment {
           }
         }
       } else {
-        throw new GeneratorError(`Segment "${this.tag}" with ${values.length} elements does meet the required count of ${enumerable.COUNT}.`)
+        throw new GeneratorError(
+          `Segment "${this.tag}" with ${values.length} elements does meet the required count of ${enumerable.COUNT}.`
+        )
       }
     }
   }

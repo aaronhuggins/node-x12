@@ -27,10 +27,10 @@ export class X12TransactionMap {
     this.txEngine = txEngine === undefined ? 'internal' : txEngine
   }
 
-  protected _map: any;
-  protected _transaction: X12Transaction;
+  protected _map: any
+  protected _transaction: X12Transaction
   protected _object: any
-  helper: Function;
+  helper: Function
   txEngine: TxEngine
 
   /**
@@ -64,15 +64,32 @@ export class X12TransactionMap {
     let clones: object[] = null
     const engine = new X12QueryEngine(false)
     const interchange = new X12Interchange()
-    interchange.setHeader(['00', '', '00', '', 'ZZ', '00000000', '01', '00000000', '000000', '0000', '|', '00000', '00000000', '0', 'P', '>'])
+    interchange.setHeader([
+      '00',
+      '',
+      '00',
+      '',
+      'ZZ',
+      '00000000',
+      '01',
+      '00000000',
+      '000000',
+      '0000',
+      '|',
+      '00000',
+      '00000000',
+      '0',
+      'P',
+      '>'
+    ])
     interchange.addFunctionalGroup().transactions = [this._transaction]
 
-    Object.keys(map).forEach((key) => {
+    Object.keys(map).forEach(key => {
       if (Object.prototype.hasOwnProperty.call(map, key) as boolean) {
         if (Array.isArray(map[key]) && typeof map[key][0] === 'string') {
-          const newArray = new Array<string | string[]>();
+          const newArray = new Array<string | string[]>()
 
-          (map[key] as string[]).forEach((query) => {
+          ;(map[key] as string[]).forEach(query => {
             try {
               const result = engine.querySingle(interchange, query, '')
 
@@ -145,9 +162,7 @@ export class X12TransactionMap {
       }
     })
 
-    return Array.isArray(clones)
-      ? clones
-      : clone
+    return Array.isArray(clones) ? clones : clone
   }
 
   /**
@@ -163,7 +178,10 @@ export class X12TransactionMap {
     let liquidjs: any
     const macro: any = {
       counter: {},
-      currentDate: `${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${new Date().getDate().toString().padStart(2, '0')}`,
+      currentDate: `${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${new Date()
+        .getDate()
+        .toString()
+        .padStart(2, '0')}`,
       sequence: function sequence (value: string) {
         if (macro.counter[value] === undefined) {
           macro.counter[value] = 1
@@ -187,13 +205,15 @@ export class X12TransactionMap {
       },
       map: function map (value: any[], property: string) {
         return {
-          val: value.map((item) => item[property])
+          val: value.map(item => item[property])
         }
       },
       sum: function sum (value: any[], property: string, dec: number) {
         let sum = 0
 
-        value.forEach((item) => { sum += item[property] })
+        value.forEach(item => {
+          sum += item[property]
+        })
 
         return {
           val: sum.toFixed(dec === undefined ? 0 : dec)
@@ -204,9 +224,9 @@ export class X12TransactionMap {
           val: Math.floor(1000 + Math.random() * 10000)
         }
       },
-      truncate: function truncate (value: string|string[], maxChars: number) {
+      truncate: function truncate (value: string | string[], maxChars: number) {
         if (Array.isArray(value)) {
-          value = value.map((str) => str.substring(0, maxChars))
+          value = value.map(str => str.substring(0, maxChars))
         } else {
           value = `${value}`.substring(0, maxChars)
         }
@@ -233,7 +253,9 @@ export class X12TransactionMap {
         if (typeof value === 'undefined') return 0
         let sum = 0
 
-        value.forEach((item) => { sum += item })
+        value.forEach(item => {
+          sum += item
+        })
 
         return sum
       },
@@ -248,10 +270,10 @@ export class X12TransactionMap {
 
         return JSON.parse(value)
       },
-      truncate: (value: string|string[], maxChars: number) => {
+      truncate: (value: string | string[], maxChars: number) => {
         if (typeof value === 'undefined') return ''
         if (Array.isArray(value)) {
-          return value.map((str) => {
+          return value.map(str => {
             if (typeof str === 'undefined') return ''
 
             return str.substring(0, maxChars)
@@ -265,22 +287,33 @@ export class X12TransactionMap {
         const buffer = crypto.randomBytes(bytes)
         const hex = buffer.toString('hex')
 
-        return parseInt(hex, 16).toString().substring(0, maxLength)
+        return parseInt(hex, 16)
+          .toString()
+          .substring(0, maxLength)
       },
       edi_date: (val: string, length: string = 'long') => {
         const date = new Date()
-        const ediDate = `${date.getUTCFullYear()}${(date.getUTCMonth() + 1).toString().padStart(2, '0')}${date.getUTCDate().toString().padStart(2, '0')}`
+        const ediDate = `${date.getUTCFullYear()}${(date.getUTCMonth() + 1).toString().padStart(2, '0')}${date
+          .getUTCDate()
+          .toString()
+          .padStart(2, '0')}`
 
         if (length !== 'long') {
           return ediDate.substring(2, ediDate.length)
         }
-    
+
         return ediDate
       },
       edi_time: () => {
         const date = new Date()
 
-        return `${date.getUTCHours().toString().padStart(2, '0')}${date.getUTCMinutes().toString().padStart(2, '0')}`
+        return `${date
+          .getUTCHours()
+          .toString()
+          .padStart(2, '0')}${date
+          .getUTCMinutes()
+          .toString()
+          .padStart(2, '0')}`
       }
     }
 
@@ -295,7 +328,7 @@ export class X12TransactionMap {
         if (clean.test(key)) {
           // eslint-disable-next-line no-eval
           const result: any = eval(key)
-  
+
           return result === undefined ? '' : result
         } else {
           return key
@@ -308,7 +341,7 @@ export class X12TransactionMap {
       const length = parseFloat(resolveKey(start.loopLength))
 
       for (let i = 0; i < length; i += 1) {
-        loop.forEach((segment) => {
+        loop.forEach(segment => {
           const elements = []
 
           for (let j = 0; j < segment.elements.length; j += 1) {

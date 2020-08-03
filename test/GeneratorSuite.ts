@@ -5,7 +5,7 @@ import { JSEDINotation, X12Generator, X12Parser, ISASegmentHeader, GSSegmentHead
 import fs = require('fs')
 
 describe('X12Generator', () => {
-  it ('should create X12Generator', () => {
+  it('should create X12Generator', () => {
     const generator = new X12Generator()
     const notation = generator.getJSEDINotation()
     const options = generator.getOptions()

@@ -15,7 +15,7 @@ describe('X12Core', () => {
   it('should create ArgumentNullError', () => {
     const error = new ArgumentNullError('test')
 
-    if (error.message !== 'The argument, \'test\', cannot be null.') {
+    if (error.message !== "The argument, 'test', cannot be null.") {
       throw new Error('ArgumentNullError did not return the correct message.')
     }
   })

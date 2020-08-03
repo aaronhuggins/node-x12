@@ -16,10 +16,10 @@ export class X12Transaction {
     this.options = defaultSerializationOptions(options)
   }
 
-  header: X12Segment;
-  trailer: X12Segment;
+  header: X12Segment
+  trailer: X12Segment
 
-  segments: X12Segment[];
+  segments: X12Segment[]
 
   options: X12SerializationOptions
 
@@ -83,9 +83,7 @@ export class X12Transaction {
    * @returns {string} This transaction set converted to an EDI string.
    */
   toString (options?: X12SerializationOptions): string {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
+    options = options !== undefined ? defaultSerializationOptions(options) : this.options
 
     let edi = this.header.toString(options)
 
@@ -113,8 +111,11 @@ export class X12Transaction {
   toJSON (): object {
     const jsen = new JSEDITransaction(this.header.elements.map(x => x.value))
 
-    this.segments.forEach((segment) => {
-      jsen.addSegment(segment.tag, segment.elements.map(x => x.value))
+    this.segments.forEach(segment => {
+      jsen.addSegment(
+        segment.tag,
+        segment.elements.map(x => x.value)
+      )
     })
 
     return jsen as object

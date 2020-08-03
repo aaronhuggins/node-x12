@@ -4,8 +4,9 @@
     { "tag": "W05", "elements": ["N", "input['internalOrderId']", "input['orderId']"] },
     { "tag": "N1", "elements": ["ST", "`${input['shippingFirstName']} ${input['shippingLastName']}`"] },
     { "tag": "N3", "elements": ["input['shippingStreet1']", "input['shippingStreet2']"] },
-    { "tag": "N4", "elements":
-      [
+    {
+      "tag": "N4",
+      "elements": [
         "input['shippingCity']",
         "input['shippingStateCode']",
         "input['shippingPostalCode']",
@@ -22,9 +23,15 @@
     { "tag": "N9", "elements": ["23", "12345"] },
     { "tag": "G62", "elements": ["37", "macro['currentDate']"] },
     { "tag": "W66", "elements": ["PP", "M", "", "", "GR", "", "", "", "", "UPSN"] },
-    { "tag": "LX", "elements": ["macro['sequence']('LX')['val']"], "loopStart": true, "loopLength": "macro['length'](macro['json'](input['orderItems'])['val'])['val']" },
-    { "tag": "W01", "elements":
-      [
+    {
+      "tag": "LX",
+      "elements": ["macro['sequence']('LX')['val']"],
+      "loopStart": true,
+      "loopLength": "macro['length'](macro['json'](input['orderItems'])['val'])['val']"
+    },
+    {
+      "tag": "W01",
+      "elements": [
         "macro['map'](macro['json'](input['orderItems'])['val'], 'quantity')['val']",
         "EA",
         "",
@@ -32,9 +39,16 @@
         "macro['map'](macro['json'](input['orderItems'])['val'], 'sku')['val']"
       ]
     },
-    { "tag": "G69", "elements": ["macro['truncate'](macro['map'](macro['json'](input['orderItems'])['val'], 'title')['val'], 45)['val']"], "loopEnd": true },
-    { "tag": "W76", "elements":
-      [
+    {
+      "tag": "G69",
+      "elements": [
+        "macro['truncate'](macro['map'](macro['json'](input['orderItems'])['val'], 'title')['val'], 45)['val']"
+      ],
+      "loopEnd": true
+    },
+    {
+      "tag": "W76",
+      "elements": [
         "macro['sum'](macro['json'](input['orderItems'])['val'], 'quantity')['val']",
         "macro['toFixed'](macro['sum'](macro['json'](input['orderItems'])['val'], 'weight', 2)['val'], 2)['val']",
         "LB",

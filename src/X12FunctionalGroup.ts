@@ -16,10 +16,10 @@ export class X12FunctionalGroup {
     this.options = defaultSerializationOptions(options)
   }
 
-  header: X12Segment;
-  trailer: X12Segment;
+  header: X12Segment
+  trailer: X12Segment
 
-  transactions: X12Transaction[];
+  transactions: X12Transaction[]
 
   options: X12SerializationOptions
 
@@ -55,9 +55,7 @@ export class X12FunctionalGroup {
    * @returns {string} This functional group converted to EDI string.
    */
   toString (options?: X12SerializationOptions): string {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
+    options = options !== undefined ? defaultSerializationOptions(options) : this.options
 
     let edi = this.header.toString(options)
 
@@ -85,11 +83,14 @@ export class X12FunctionalGroup {
   toJSON (): object {
     const jsen = new JSEDIFunctionalGroup(this.header.elements.map(x => x.value))
 
-    this.transactions.forEach((transaction) => {
+    this.transactions.forEach(transaction => {
       const jsenTransaction = jsen.addTransaction(transaction.header.elements.map(x => x.value))
 
-      transaction.segments.forEach((segment) => {
-        jsenTransaction.addSegment(segment.tag, segment.elements.map(x => x.value))
+      transaction.segments.forEach(segment => {
+        jsenTransaction.addSegment(
+          segment.tag,
+          segment.elements.map(x => x.value)
+        )
       })
     })
 

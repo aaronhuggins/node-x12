@@ -25,9 +25,9 @@ export class X12Generator {
     this.interchange = new X12Interchange(this.options)
   }
 
-  private jsen: JSEDINotation;
-  private interchange: X12Interchange;
-  private options: X12SerializationOptions;
+  private jsen: JSEDINotation
+  private interchange: X12Interchange
+  private options: X12SerializationOptions
 
   /**
    * @description Set the JS EDI Notation for this instance.
@@ -68,7 +68,7 @@ export class X12Generator {
   validate (): X12Interchange {
     this._generate()
 
-    return (new X12Parser(true)).parse(this.interchange.toString(this.options)) as X12Interchange
+    return new X12Parser(true).parse(this.interchange.toString(this.options)) as X12Interchange
   }
 
   /**
@@ -88,17 +88,17 @@ export class X12Generator {
 
     genInterchange.setHeader(this.jsen.header)
 
-    this.jsen.functionalGroups.forEach((functionalGroup) => {
+    this.jsen.functionalGroups.forEach(functionalGroup => {
       const genFunctionalGroup = genInterchange.addFunctionalGroup()
 
       genFunctionalGroup.setHeader(functionalGroup.header)
 
-      functionalGroup.transactions.forEach((transaction) => {
+      functionalGroup.transactions.forEach(transaction => {
         const genTransaction = genFunctionalGroup.addTransaction()
 
         genTransaction.setHeader(transaction.header)
 
-        transaction.segments.forEach((segment) => {
+        transaction.segments.forEach(segment => {
           genTransaction.addSegment(segment.tag, segment.elements)
         })
       })

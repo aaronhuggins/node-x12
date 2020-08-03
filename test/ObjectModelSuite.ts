@@ -41,8 +41,13 @@ describe('X12ObjectModel', () => {
     segment.insertElement('2', 1)
     segment.removeElement(2)
 
-    if (noElement !== null || noInsert !== null || noneToRemove !== false ||
-      defaultVal !== '2' || segment.elements.length !== 1 || segment.elements[0].value !== '2'
+    if (
+      noElement !== null ||
+      noInsert !== null ||
+      noneToRemove !== false ||
+      defaultVal !== '2' ||
+      segment.elements.length !== 1 ||
+      segment.elements[0].value !== '2'
     ) {
       throw new Error('Instance of segment or methods did not execute as expected.')
     }
@@ -86,7 +91,11 @@ describe('X12ObjectModel', () => {
     const group = new JSEDIFunctionalGroup()
     const transaction = new JSEDITransaction()
 
-    if (!(notation instanceof JSEDINotation) || !(group instanceof JSEDIFunctionalGroup) || !(transaction instanceof JSEDITransaction)) {
+    if (
+      !(notation instanceof JSEDINotation) ||
+      !(group instanceof JSEDIFunctionalGroup) ||
+      !(transaction instanceof JSEDITransaction)
+    ) {
       throw new Error('One or more JS EDI Notation objects could not be constructed.')
     }
   })

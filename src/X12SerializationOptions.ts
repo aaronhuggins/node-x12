@@ -1,7 +1,7 @@
 'use strict'
 import { X12SegmentHeader, GSSegmentHeader, ISASegmentHeader, STSegmentHeader } from './X12SegmentHeader'
 
-export type TxEngine = 'liquidjs'|'internal'
+export type TxEngine = 'liquidjs' | 'internal'
 
 /**
  * @description Options for serializing to and from EDI.
@@ -26,25 +26,33 @@ export interface X12SerializationOptions {
 }
 
 /**
+ * Class instance wrapper for serialization options.
+ */
+export class X12SerializationOptions {
+  constructor (options: X12SerializationOptions = {}) {
+    this.elementDelimiter = options.elementDelimiter === undefined ? '*' : options.elementDelimiter
+    this.endOfLine = options.endOfLine === undefined ? '\n' : options.endOfLine
+    this.format = options.format === undefined ? false : options.format
+    this.segmentTerminator = options.segmentTerminator === undefined ? '~' : options.segmentTerminator
+    this.subElementDelimiter = options.subElementDelimiter === undefined ? '>' : options.subElementDelimiter
+    this.repetitionDelimiter = options.repetitionDelimiter === undefined ? '^' : options.repetitionDelimiter
+    this.segmentHeaders =
+      options.segmentHeaders === undefined
+        ? [GSSegmentHeader, ISASegmentHeader, STSegmentHeader]
+        : options.segmentHeaders
+    this.txEngine = options.txEngine === undefined ? 'internal' : options.txEngine
+
+    if (this.segmentTerminator === '\n') {
+      this.endOfLine = ''
+    }
+  }
+}
+
+/**
  * @description Set default values for any missing X12SerializationOptions in an options object.
  * @param {X12SerializationOptions} [options] - Options for serializing to and from EDI.
  * @returns {X12SerializationOptions} Serialization options with defaults filled in.
  */
 export function defaultSerializationOptions (options?: X12SerializationOptions): X12SerializationOptions {
-  options = options === undefined ? {} : options
-
-  options.elementDelimiter = options.elementDelimiter === undefined ? '*' : options.elementDelimiter
-  options.endOfLine = options.endOfLine === undefined ? '\n' : options.endOfLine
-  options.format = options.format === undefined ? false : options.format
-  options.segmentTerminator = options.segmentTerminator === undefined ? '~' : options.segmentTerminator
-  options.subElementDelimiter = options.subElementDelimiter === undefined ? '>' : options.subElementDelimiter
-  options.repetitionDelimiter = options.repetitionDelimiter === undefined ? '^' : options.repetitionDelimiter
-  options.segmentHeaders = options.segmentHeaders === undefined ? [GSSegmentHeader, ISASegmentHeader, STSegmentHeader] : options.segmentHeaders
-  options.txEngine = options.txEngine === undefined ? 'internal' : options.txEngine
-
-  if (options.segmentTerminator === '\n') {
-    options.endOfLine = ''
-  }
-
-  return options
+  return new X12SerializationOptions(options)
 }

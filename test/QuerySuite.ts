@@ -70,7 +70,9 @@ describe('X12QueryEngine', () => {
     const result = engine.querySingle(edi, 'FOREACH(PO1)=>PID05:PID01["F"]')
 
     if (result.values.length !== 6) {
-      throw new Error(`Expected six matching elements for FOREACH(PO1)=>PID05:PID01["F"]; received ${result.values.length}.`)
+      throw new Error(
+        `Expected six matching elements for FOREACH(PO1)=>PID05:PID01["F"]; received ${result.values.length}.`
+      )
     }
   })
 
@@ -104,7 +106,9 @@ describe('X12QueryEngine', () => {
     }
 
     if (result.element.range.start.character !== 10) {
-      throw new Error(`Start char for element is incorrect; found ${result.element.range.start.character}, expected 10.`)
+      throw new Error(
+        `Start char for element is incorrect; found ${result.element.range.start.character}, expected 10.`
+      )
     }
 
     if (result.segment.range.end.line !== 3) {

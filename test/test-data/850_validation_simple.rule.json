@@ -1,0 +1,271 @@
+{
+  "group": {
+    "transaction": {
+      "segments": [
+        {
+          "tag": "BEG",
+          "elements": [
+            {
+              "maxLength": 2,
+              "checkType": "number"
+            },
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            },
+            {
+              "skip": true
+            },
+            {
+              "checkType": "date"
+            },
+            {
+              "engine": "^[0-9]+$"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "REF",
+          "elements": [
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "REF",
+          "elements": [
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "ITD",
+          "elements": [
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            },
+            {
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            },
+            {
+              "skip": true
+            },
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "skip": true
+            },
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "DTM",
+          "elements": [
+            {
+              "maxLength": 3,
+              "checkType": "id"
+            },
+            {
+              "checkType": "datelong"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "PKG",
+          "elements": [
+            {
+              "maxLength": 1,
+              "checkType": "id"
+            },
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "skip": true
+            },
+            {
+              "skip": true
+            },
+            {
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "PKG",
+          "elements": [
+            {
+              "maxLength": 1,
+              "checkType": "id"
+            },
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "skip": true
+            },
+            {
+              "skip": true
+            },
+            {
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "TD5",
+          "elements": [
+            {
+              "maxLength": 1,
+              "checkType": "id"
+            },
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "skip": true
+            },
+            {
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "N1",
+          "elements": "skip",
+          "mandatory": true
+        },
+        {
+          "tag": "N3",
+          "elements": "skip",
+          "mandatory": true
+        },
+        {
+          "tag": "N4",
+          "elements": "skip",
+          "mandatory": true
+        },
+        {
+          "tag": "PO1",
+          "elements": [
+            {
+              "minMax": [1, 20],
+              "checkType": "alphanumeric"
+            },
+            {
+              "minMax": [1, 15],
+              "checkType": "decimal"
+            },
+            {
+              "expect": "EA"
+            },
+            {
+              "minMax": [1, 17],
+              "checkType": "decimal"
+            },
+            {
+              "expect": "TE"
+            },
+            {
+              "expect": "CB"
+            },
+            {
+              "minMax": [10, 10],
+              "checkType": "alphanumeric"
+            },
+            {
+              "expect": "PR"
+            },
+            {
+              "expect": "RO"
+            },
+            {
+              "expect": "VN"
+            },
+            {
+              "checkType": "alphanumeric"
+            }
+          ],
+          "loopStart": true,
+          "mandatory": true
+        },
+        {
+          "tag": "PID",
+          "elements": "skip",
+          "mandatory": true
+        },
+        {
+          "tag": "PO4",
+          "elements": "skip",
+          "loopEnd": true,
+          "mandatory": true
+        },
+        {
+          "tag": "CTT",
+          "elements": [
+            {
+              "minMax": [1, 6],
+              "checkType": "number"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "tag": "AMT",
+          "elements": [
+            {
+              "maxLength": 1,
+              "checkType": "id"
+            },
+            {
+              "checkType": "decimal"
+            }
+          ],
+          "mandatory": true
+        }
+      ]
+    }
+  }
+}

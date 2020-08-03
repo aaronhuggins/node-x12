@@ -24,17 +24,19 @@ describe('X12Parser', () => {
       const parser = new X12Parser()
       const segments: X12Segment[] = []
 
-      ediStream.on('error', (error) => {
+      ediStream.on('error', error => {
         reject(error)
       })
 
-      parser.on('error', (error) => {
+      parser.on('error', error => {
         reject(error)
       })
 
-      ediStream.pipe(parser).on('data', (data) => {
-        segments.push(data)
-      })
+      ediStream
+        .pipe(parser)
+        .on('data', data => {
+          segments.push(data)
+        })
         .on('end', () => {
           const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
           const interchange = parser.getInterchangeFromSegments(segments)
@@ -53,9 +55,17 @@ describe('X12Parser', () => {
     const interchange = parser.parse(edi) as X12Interchange
 
     const segments = [].concat(
-      [interchange.header, interchange.functionalGroups[0].header, interchange.functionalGroups[0].transactions[0].header],
+      [
+        interchange.header,
+        interchange.functionalGroups[0].header,
+        interchange.functionalGroups[0].transactions[0].header
+      ],
       interchange.functionalGroups[0].transactions[0].segments,
-      [interchange.functionalGroups[0].transactions[0].trailer, interchange.functionalGroups[0].trailer, interchange.trailer]
+      [
+        interchange.functionalGroups[0].transactions[0].trailer,
+        interchange.functionalGroups[0].trailer,
+        interchange.trailer
+      ]
     )
 
     for (let i = 0; i < segments.length; i++) {

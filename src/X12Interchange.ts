@@ -13,7 +13,11 @@ export class X12Interchange {
    * @param {string} [elementDelimiter] - A character to separate elements when serializing; only required when segmentTerminator is a character.
    * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  constructor (segmentTerminator?: string | X12SerializationOptions, elementDelimiter?: string, options?: X12SerializationOptions) {
+  constructor (
+    segmentTerminator?: string | X12SerializationOptions,
+    elementDelimiter?: string,
+    options?: X12SerializationOptions
+  ) {
     this.functionalGroups = new Array<X12FunctionalGroup>()
 
     if (typeof segmentTerminator === 'string') {
@@ -34,14 +38,14 @@ export class X12Interchange {
     }
   }
 
-  header: X12Segment;
-  trailer: X12Segment;
+  header: X12Segment
+  trailer: X12Segment
 
-  functionalGroups: X12FunctionalGroup[];
+  functionalGroups: X12FunctionalGroup[]
 
-  segmentTerminator: string;
-  elementDelimiter: string;
-  options: X12SerializationOptions;
+  segmentTerminator: string
+  elementDelimiter: string
+  options: X12SerializationOptions
 
   /**
    * @description Set an ISA header on this interchange.
@@ -61,9 +65,7 @@ export class X12Interchange {
    * @returns {X12FunctionalGroup} The functional group added to this interchange.
    */
   addFunctionalGroup (options?: X12SerializationOptions): X12FunctionalGroup {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
+    options = options !== undefined ? defaultSerializationOptions(options) : this.options
 
     const functionalGroup = new X12FunctionalGroup(options)
 
@@ -80,9 +82,7 @@ export class X12Interchange {
    * @returns {string} This interchange converted to an EDI string.
    */
   toString (options?: X12SerializationOptions): string {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
+    options = options !== undefined ? defaultSerializationOptions(options) : this.options
 
     let edi = this.header.toString(options)
 
@@ -108,16 +108,22 @@ export class X12Interchange {
    * @returns {JSEDINotation} This interchange converted to JS EDI Notation object.
    */
   toJSEDINotation (): JSEDINotation {
-    const jsen = new JSEDINotation(this.header.elements.map(x => x.value.trim()), this.options)
+    const jsen = new JSEDINotation(
+      this.header.elements.map(x => x.value.trim()),
+      this.options
+    )
 
-    this.functionalGroups.forEach((functionalGroup) => {
+    this.functionalGroups.forEach(functionalGroup => {
       const jsenFunctionalGroup = jsen.addFunctionalGroup(functionalGroup.header.elements.map(x => x.value))
 
-      functionalGroup.transactions.forEach((transaction) => {
+      functionalGroup.transactions.forEach(transaction => {
         const jsenTransaction = jsenFunctionalGroup.addTransaction(transaction.header.elements.map(x => x.value))
 
-        transaction.segments.forEach((segment) => {
-          jsenTransaction.addSegment(segment.tag, segment.elements.map(x => x.value))
+        transaction.segments.forEach(segment => {
+          jsenTransaction.addSegment(
+            segment.tag,
+            segment.elements.map(x => x.value)
+          )
         })
       })
     })

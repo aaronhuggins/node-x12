@@ -1,1 +1,23 @@
-{"SetID":"850","ControlNumber":"000000010","OrderNumber":"08292233294","Date":"","ShipTo":{"Name":"XYZ RETAIL","Destination":"0003947268292","Address":"31875 SOLON RD","City":"SOLON","State":"OH","Zip":"44139"},"OrderLines":[{"Quantity":"120"},{"Quantity":"220"},{"Quantity":"126"},{"Quantity":"76"},{"Quantity":"72"},{"Quantity":"696"}],"Trailer":["33","000000010"]}
+{
+  "SetID": "850",
+  "ControlNumber": "000000010",
+  "OrderNumber": "08292233294",
+  "Date": "",
+  "ShipTo": {
+    "Name": "XYZ RETAIL",
+    "Destination": "0003947268292",
+    "Address": "31875 SOLON RD",
+    "City": "SOLON",
+    "State": "OH",
+    "Zip": "44139"
+  },
+  "OrderLines": [
+    { "Quantity": "120" },
+    { "Quantity": "220" },
+    { "Quantity": "126" },
+    { "Quantity": "76" },
+    { "Quantity": "72" },
+    { "Quantity": "696" }
+  ],
+  "Trailer": ["33", "000000010"]
+}

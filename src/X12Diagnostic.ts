@@ -15,7 +15,7 @@ export class X12Diagnostic {
     this.range = range
   }
 
-  level: X12DiagnosticLevel;
-  message: string;
-  range: Range;
+  level: X12DiagnosticLevel
+  message: string
+  range: Range
 }

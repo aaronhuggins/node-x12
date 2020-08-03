@@ -4,8 +4,9 @@
     { "tag": "W05", "elements": ["N", "{{ input.internalOrderId }}", "{{ input.orderId }}"] },
     { "tag": "N1", "elements": ["ST", "{{ input.shippingFirstName }} {{ input.shippingLastName }}"] },
     { "tag": "N3", "elements": ["{{ input.shippingStreet1 }}", "{{ input.shippingStreet2 }}"] },
-    { "tag": "N4", "elements":
-      [
+    {
+      "tag": "N4",
+      "elements": [
         "{{ input.shippingCity }}",
         "{{ input.shippingStateCode }}",
         "{{ input.shippingPostalCode }}",
@@ -22,9 +23,15 @@
     { "tag": "N9", "elements": ["23", "12345"] },
     { "tag": "G62", "elements": ["37", "{{ macro | edi_date }}"] },
     { "tag": "W66", "elements": ["PP", "M", "", "", "GR", "", "", "", "", "UPSN"] },
-    { "tag": "LX", "elements": ["{{ 'LX' | sequence }}"], "loopStart": true, "loopLength": "{{ input.orderItems | json_parse | size }}" },
-    { "tag": "W01", "elements":
-      [
+    {
+      "tag": "LX",
+      "elements": ["{{ 'LX' | sequence }}"],
+      "loopStart": true,
+      "loopLength": "{{ input.orderItems | json_parse | size }}"
+    },
+    {
+      "tag": "W01",
+      "elements": [
         "{{ input.orderItems | json_parse | map: 'quantity' | in_loop }}",
         "EA",
         "",
@@ -32,9 +39,14 @@
         "{{ input.orderItems | json_parse | map: 'sku' | in_loop }}"
       ]
     },
-    { "tag": "G69", "elements": ["{{ input.orderItems | json_parse | map: 'title' | truncate: 45 | in_loop }}"], "loopEnd": true },
-    { "tag": "W76", "elements":
-      [
+    {
+      "tag": "G69",
+      "elements": ["{{ input.orderItems | json_parse | map: 'title' | truncate: 45 | in_loop }}"],
+      "loopEnd": true
+    },
+    {
+      "tag": "W76",
+      "elements": [
         "{{ input.orderItems | json_parse | map: 'quantity' | sum_array }}",
         "{{ input.orderItems | json_parse | map: 'weight' | sum_array | to_fixed: 2 }}",
         "LB",

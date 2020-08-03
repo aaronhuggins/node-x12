@@ -9,9 +9,9 @@ export class JSEDINotation {
     this.functionalGroups = new Array<JSEDIFunctionalGroup>()
   }
 
-  options?: X12SerializationOptions;
-  header: string[];
-  functionalGroups: JSEDIFunctionalGroup[];
+  options?: X12SerializationOptions
+  header: string[]
+  functionalGroups: JSEDIFunctionalGroup[]
 
   addFunctionalGroup (header: string[]): JSEDIFunctionalGroup {
     const functionalGroup = new JSEDIFunctionalGroup(header)
@@ -28,8 +28,8 @@ export class JSEDIFunctionalGroup {
     this.transactions = new Array<JSEDITransaction>()
   }
 
-  header: string[];
-  transactions: JSEDITransaction[];
+  header: string[]
+  transactions: JSEDITransaction[]
 
   addTransaction (header: string[]): JSEDITransaction {
     const transaction = new JSEDITransaction(header)
@@ -46,8 +46,8 @@ export class JSEDITransaction {
     this.segments = new Array<JSEDISegment>()
   }
 
-  header: string[];
-  segments: JSEDISegment[];
+  header: string[]
+  segments: JSEDISegment[]
 
   addSegment (tag: string, elements: string[]): JSEDISegment {
     const segment = new JSEDISegment(tag, elements)
@@ -64,6 +64,6 @@ export class JSEDISegment {
     this.elements = elements
   }
 
-  tag: string;
-  elements: string[];
+  tag: string
+  elements: string[]
 }

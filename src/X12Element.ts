@@ -12,6 +12,6 @@ export class X12Element {
     this.value = value
   }
 
-  range: Range;
-  value: string;
+  range: Range
+  value: string
 }

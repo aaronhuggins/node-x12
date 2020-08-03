@@ -1,0 +1,662 @@
+{
+  "ruleType": "interchange",
+  "engine": "rule",
+  "header": {
+    "ruleType": "segment",
+    "engine": "rule",
+    "tag": "ISA",
+    "elements": [
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [2, 2],
+        "mandatory": true,
+        "checkType": "id"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "allowBlank": true,
+        "minMax": [10, 10],
+        "mandatory": true,
+        "checkType": "alphanumeric"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [2, 2],
+        "mandatory": true,
+        "checkType": "id"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "allowBlank": true,
+        "minMax": [10, 10],
+        "mandatory": true,
+        "checkType": "alphanumeric"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [2, 2],
+        "mandatory": true,
+        "checkType": "id"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [15, 15],
+        "mandatory": true,
+        "checkType": "alphanumeric"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [2, 2],
+        "mandatory": true,
+        "checkType": "id"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [15, 15],
+        "mandatory": true,
+        "checkType": "alphanumeric"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "mandatory": true,
+        "checkType": "dateshort"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "mandatory": true,
+        "checkType": "timeshort"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [1, 1],
+        "mandatory": true,
+        "checkType": "id"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [5, 5],
+        "mandatory": true,
+        "checkType": "id"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [9, 9],
+        "padLength": true,
+        "mandatory": true,
+        "checkType": "number"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [1, 1],
+        "mandatory": true,
+        "checkType": "id"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [1, 1],
+        "mandatory": true,
+        "checkType": "id"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [1, 1],
+        "mandatory": true,
+        "checkType": "alphanumeric"
+      }
+    ],
+    "mandatory": true
+  },
+  "group": {
+    "ruleType": "group",
+    "engine": "rule",
+    "header": {
+      "ruleType": "segment",
+      "engine": "rule",
+      "tag": "GS",
+      "elements": [
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "checkType": "gs01"
+        },
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "minMax": [2, 15],
+          "checkType": "alphanumeric"
+        },
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "minMax": [2, 15],
+          "checkType": "alphanumeric"
+        },
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "checkType": "date"
+        },
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "checkType": "time"
+        },
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "minMax": [1, 9],
+          "checkType": "number"
+        },
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "minMax": [1, 2],
+          "checkType": "alphanumeric"
+        },
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "minMax": [1, 12],
+          "checkType": "alphanumeric"
+        }
+      ],
+      "mandatory": true
+    },
+    "transaction": {
+      "ruleType": "transaction",
+      "engine": "rule",
+      "header": {
+        "ruleType": "segment",
+        "engine": "rule",
+        "tag": "ST",
+        "elements": [
+          {
+            "ruleType": "element",
+            "engine": "rule",
+            "checkType": "st01"
+          },
+          {
+            "ruleType": "element",
+            "engine": "rule",
+            "minMax": [4, 9],
+            "checkType": "number"
+          }
+        ],
+        "mandatory": true
+      },
+      "segments": [
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "BEG",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "number"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "skip": true
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "checkType": "date"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "REF",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "REF",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "ITD",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minLength": 1,
+              "checkType": "alphanumeric"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "skip": true
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "skip": true
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "DTM",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 3,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "checkType": "datelong"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "PKG",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 1,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "skip": true
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "skip": true
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "PKG",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 1,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "skip": true
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "skip": true
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "TD5",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 1,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 2,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "skip": true
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "checkType": "alphanumeric"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "N1",
+          "elements": "skip",
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "N3",
+          "elements": "skip",
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "N4",
+          "elements": "skip",
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "PO1",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minMax": [1, 20],
+              "checkType": "alphanumeric"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minMax": [1, 15],
+              "checkType": "decimal"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "expect": "EA"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minMax": [1, 17],
+              "checkType": "decimal"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "expect": "TE"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "expect": "CB"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minMax": [10, 10],
+              "checkType": "alphanumeric"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "expect": "PR"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "expect": "RO"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "expect": "VN"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "checkType": "alphanumeric"
+            }
+          ],
+          "loopStart": true,
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "PID",
+          "elements": "skip",
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "PO4",
+          "elements": "skip",
+          "loopEnd": true,
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "CTT",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "minMax": [1, 6],
+              "checkType": "number"
+            }
+          ],
+          "mandatory": true
+        },
+        {
+          "ruleType": "segment",
+          "engine": "rule",
+          "tag": "AMT",
+          "elements": [
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "maxLength": 1,
+              "checkType": "id"
+            },
+            {
+              "ruleType": "element",
+              "engine": "rule",
+              "checkType": "decimal"
+            }
+          ],
+          "mandatory": true
+        }
+      ],
+      "trailer": {
+        "ruleType": "segment",
+        "engine": "rule",
+        "tag": "SE",
+        "elements": [
+          {
+            "ruleType": "element",
+            "engine": "rule",
+            "maxLength": 10,
+            "mandatory": true,
+            "checkType": "number"
+          },
+          {
+            "ruleType": "element",
+            "engine": "rule",
+            "minMax": [4, 9],
+            "checkType": "number"
+          }
+        ],
+        "mandatory": true
+      }
+    },
+    "trailer": {
+      "ruleType": "segment",
+      "engine": "rule",
+      "tag": "GE",
+      "elements": [
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "minMax": [1, 6],
+          "checkType": "number"
+        },
+        {
+          "ruleType": "element",
+          "engine": "rule",
+          "minMax": [1, 9],
+          "checkType": "number"
+        }
+      ],
+      "mandatory": true
+    }
+  },
+  "trailer": {
+    "ruleType": "segment",
+    "engine": "rule",
+    "tag": "IEA",
+    "elements": [
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "maxLength": 5,
+        "mandatory": true,
+        "checkType": "number"
+      },
+      {
+        "ruleType": "element",
+        "engine": "rule",
+        "minMax": [9, 9],
+        "padLength": true,
+        "mandatory": true,
+        "checkType": "number"
+      }
+    ]
+  }
+}

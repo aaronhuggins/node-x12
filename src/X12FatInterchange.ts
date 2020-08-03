@@ -23,8 +23,8 @@ export class X12FatInterchange extends Array<X12Interchange> {
     this.interchanges = this
   }
 
-  interchanges: X12Interchange[];
-  options: X12SerializationOptions;
+  interchanges: X12Interchange[]
+  options: X12SerializationOptions
 
   /**
    * @description Serialize fat interchange to EDI string.
@@ -32,9 +32,7 @@ export class X12FatInterchange extends Array<X12Interchange> {
    * @returns {string} This fat interchange converted to EDI string.
    */
   toString (options?: X12SerializationOptions): string {
-    options = options !== undefined
-      ? defaultSerializationOptions(options)
-      : this.options
+    options = options !== undefined ? defaultSerializationOptions(options) : this.options
 
     let edi = ''
 
@@ -56,7 +54,7 @@ export class X12FatInterchange extends Array<X12Interchange> {
   toJSEDINotation (): JSEDINotation[] {
     const jsen = new Array<JSEDINotation>()
 
-    this.interchanges.forEach((interchange) => {
+    this.interchanges.forEach(interchange => {
       jsen.push(interchange.toJSEDINotation())
     })
 

@@ -1,5 +1,15 @@
 import { ValidationType, ValidationError } from './Interfaces'
 
+function codeResult (description?: string, codeType?: ValidationType, code?: string, position?: number, dataSample?: string): ValidationError {
+  return {
+    description,
+    codeType,
+    code,
+    position,
+    dataSample
+  }
+}
+
 // Error codes taken from publicly available documentation
 // at https://docs.microsoft.com/en-us/biztalk/core/x12-997-acknowledgment-error-codes
 // and at https://support.edifabric.com/hc/en-us/articles/360000380131-X12-997-Acknowledgment-Error-Codes
@@ -7,323 +17,322 @@ export class X12ValidationErrorCode {
   static element (code: string, position?: number, dataSample?: string): ValidationError {
     switch (code) {
       case '1':
-        return {
-          description: 'Mandatory data element missing',
-          codeType: 'element',
+        return codeResult(
+          'Mandatory data element missing',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '2':
-        return {
-          description: 'Conditional and required data element missing',
-          codeType: 'element',
+        return codeResult(
+          'Conditional and required data element missing',
+          'element',
           code,
           position,
           dataSample
-        }
-      case '3':
-        return {
-          description: 'Too many data elements', // Return this for any elements outside the validation range.
-          codeType: 'element',
+        )
+      case '3': // Return this for any elements outside the validation range.
+        return codeResult(
+          'Too many data elements',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '4':
-        return {
-          description: 'The data element is too short',
-          codeType: 'element',
+        return codeResult(
+          'The data element is too short',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '5':
-        return {
-          description: 'The data element is too long',
-          codeType: 'element',
+        return codeResult(
+          'The data element is too long',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '6':
-        return {
-          description: 'Invalid character in data element',
-          codeType: 'element',
+        return codeResult(
+          'Invalid character in data element',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '8':
-        return {
-          description: 'Invalid date',
-          codeType: 'element',
+        return codeResult(
+          'Invalid date',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '9':
-        return {
-          description: 'Invalid time',
-          codeType: 'element',
+        return codeResult(
+          'Invalid time',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '10':
-        return {
-          description: 'Exclusion condition violated',
-          codeType: 'element',
+        return codeResult(
+          'Exclusion condition violated',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '11':
-        return {
-          description: 'Too many repetitions',
-          codeType: 'element',
+        return codeResult(
+          'Too many repetitions',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '12':
-        return {
-          description: 'Too many components',
-          codeType: 'element',
+        return codeResult(
+          'Too many components',
+          'element',
           code,
           position,
           dataSample
-        }
+        )
       case '7':
       default:
-        return {
-          description: 'Invalid code value',
-          codeType: 'element',
-          code: '7',
+        return codeResult(
+          'Invalid code value',
+          'element',
+          '7',
           position,
           dataSample
-        }
+        )
     }
   }
 
   static segment (code: string, position?: number): ValidationError {
     switch (code) {
       case '1':
-        return {
-          description: 'Unrecognized segment ID',
-          codeType: 'segment',
+        return codeResult(
+          'Unrecognized segment ID',
+          'segment',
           code,
           position
-        }
+        )
       case '2':
-        return {
-          description: 'Unexpected segment',
-          codeType: 'segment',
+        return codeResult(
+          'Unexpected segment',
+          'segment',
           code,
           position
-        }
+        )
       case '3':
-        return {
-          description: 'Mandatory segment missing',
-          codeType: 'segment',
+        return codeResult(
+          'Mandatory segment missing',
+          'segment',
           code,
           position
-        }
+        )
       case '4':
-        return {
-          description: 'A loop occurs over maximum times',
-          codeType: 'segment',
+        return codeResult(
+          'A loop occurs over maximum times',
+          'segment',
           code,
           position
-        }
+        )
       case '5':
-        return {
-          description: 'Segment exceeds maximum use',
-          codeType: 'segment',
+        return codeResult(
+          'Segment exceeds maximum use',
+          'segment',
           code,
           position
-        }
+        )
       case '6':
-        return {
-          description: 'Segment not in a defined transaction set',
-          codeType: 'segment',
+        return codeResult(
+          'Segment not in a defined transaction set',
+          'segment',
           code,
           position
-        }
+        )
       case '7':
-        return {
-          description: 'Segment not in proper sequence',
-          codeType: 'segment',
+        return codeResult(
+          'Segment not in proper sequence',
+          'segment',
           code,
           position
-        }
+        )
       case '8':
       default:
-        return {
-          description: 'The segment has data element errors',
-          codeType: 'segment',
-          code: '8',
+        return codeResult(
+          'The segment has data element errors',
+          'segment',
+          '8',
           position
-        }
+        )
     }
   }
 
   static transaction (code: string, position?: number): ValidationError {
     switch (code) {
       case '1':
-        return {
-          description: 'The transaction set not supported',
-          codeType: 'transaction',
+        return codeResult(
+          'The transaction set not supported',
+          'transaction',
           code,
           position
-        }
+        )
       case '2':
-        return {
-          description: 'Transaction set trailer missing',
-          codeType: 'transaction',
+        return codeResult(
+          'Transaction set trailer missing',
+          'transaction',
           code,
           position
-        }
+        )
       case '3':
-        return {
-          description: 'The transaction set control number in header and trailer do not match',
-          codeType: 'transaction',
+        return codeResult(
+          'The transaction set control number in header and trailer do not match',
+          'transaction',
           code,
           position
-        }
+        )
       case '4':
-        return {
-          description: 'Number of included segments does not match actual count',
-          codeType: 'transaction',
+        return codeResult(
+          'Number of included segments does not match actual count',
+          'transaction',
           code,
           position
-        }
+        )
       case '5':
-        return {
-          description: 'One or more segments in error',
-          codeType: 'transaction',
+        return codeResult(
+          'One or more segments in error',
+          'transaction',
           code,
           position
-        }
+        )
       case '6':
-        return {
-          description: 'Missing or invalid transaction set identifier',
-          codeType: 'transaction',
+        return codeResult(
+          'Missing or invalid transaction set identifier',
+          'transaction',
           code,
           position
-        }
+        )
       case '7':
       default:
-        return {
-          description:
-            'Missing or invalid transaction set control number (a duplicate transaction number may have occurred)',
-          codeType: 'transaction',
-          code: '7',
+        return codeResult(
+          'Missing or invalid transaction set control number (a duplicate transaction number may have occurred)',
+          'transaction',
+          '7',
           position
-        }
+        )
     }
   }
 
   static group (code: string, position?: number): ValidationError {
     switch (code) {
       case '1':
-        return {
-          description: 'The functional group not supported',
-          codeType: 'group',
+        return codeResult(
+          'The functional group not supported',
+          'group',
           code,
           position
-        }
+        )
       case '2':
-        return {
-          description: 'Functional group version not supported',
-          codeType: 'group',
+        return codeResult(
+          'Functional group version not supported',
+          'group',
           code,
           position
-        }
+        )
       case '3':
-        return {
-          description: 'Functional group trailer missing',
-          codeType: 'group',
+        return codeResult(
+          'Functional group trailer missing',
+          'group',
           code,
           position
-        }
+        )
       case '4':
-        return {
-          description: 'Group control number in the functional group header and trailer do not agree',
-          codeType: 'group',
+        return codeResult(
+          'Group control number in the functional group header and trailer do not agree',
+          'group',
           code,
           position
-        }
+        )
       case '5':
-        return {
-          description: 'Number of included transaction sets does not match actual count',
-          codeType: 'group',
+        return codeResult(
+          'Number of included transaction sets does not match actual count',
+          'group',
           code,
           position
-        }
+        )
       case '6':
       default:
-        return {
-          description: 'Group control number violates syntax (a duplicate group control number may have occurred)',
-          codeType: 'group',
-          code: '6',
+        return codeResult(
+          'Group control number violates syntax (a duplicate group control number may have occurred)',
+          'group',
+          '6',
           position
-        }
+        )
     }
   }
 
   static acknowledgement (codeType: ValidationType, code: string, position?: number) {
     switch (code) {
       case 'A':
-        return {
-          description: 'Accepted',
+        return codeResult(
+          'Accepted',
           codeType,
           code,
           position
-        }
+        )
       case 'M':
-        return {
-          description: 'Rejected, message authentication code (MAC) failed',
+        return codeResult(
+          'Rejected, message authentication code (MAC) failed',
           codeType,
           code,
           position
-        }
+        )
       case 'P':
-        return {
-          description: 'Partially accepted, at least one transaction set was rejected',
+        return codeResult(
+          'Partially accepted, at least one transaction set was rejected',
           codeType,
           code,
           position
-        }
+        )
       case 'R':
-        return {
-          description: 'Rejected',
+        return codeResult(
+          'Rejected',
           codeType,
           code,
           position
-        }
+        )
       case 'W':
-        return {
-          description: 'Rejected, assurance failed validity tests',
+        return codeResult(
+          'Rejected, assurance failed validity tests',
           codeType,
           code,
           position
-        }
+        )
       case 'X':
-        return {
-          description: 'Rejected, content after decryption could not be analyzed',
+        return codeResult(
+          'Rejected, content after decryption could not be analyzed',
           codeType,
           code,
           position
-        }
+        )
       case 'E':
       default:
-        return {
-          description: 'Accepted but errors were noted',
+        return codeResult(
+          'Accepted but errors were noted',
           codeType,
-          code: 'E',
+          'E',
           position
-        }
+        )
     }
   }
 }

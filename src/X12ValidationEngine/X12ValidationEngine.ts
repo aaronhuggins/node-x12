@@ -67,9 +67,9 @@ export class X12ValidationEngine {
     this.ackMap = ackMap || simpleAckMap
 
     if (typeof acknowledgement === 'object') {
-      const { isa, gs, options } = acknowledgement
+      const { isa, gs, options: x12options } = acknowledgement
 
-      this.setAcknowledgement(isa, gs, { ...options, txEngine: 'liquidjs' })
+      this.setAcknowledgement(isa, gs, { ...x12options, txEngine: 'liquidjs' })
     }
 
     if (throwError) this.throwError = true

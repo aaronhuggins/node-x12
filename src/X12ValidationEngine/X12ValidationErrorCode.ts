@@ -1,338 +1,211 @@
 import { ValidationType, ValidationError } from './Interfaces'
 
-function codeResult (description?: string, codeType?: ValidationType, code?: string, position?: number, dataSample?: string): ValidationError {
-  return {
-    description,
-    codeType,
-    code,
-    position,
-    dataSample
-  }
-}
-
 // Error codes taken from publicly available documentation
 // at https://docs.microsoft.com/en-us/biztalk/core/x12-997-acknowledgment-error-codes
 // and at https://support.edifabric.com/hc/en-us/articles/360000380131-X12-997-Acknowledgment-Error-Codes
 export class X12ValidationErrorCode {
   static element (code: string, position?: number, dataSample?: string): ValidationError {
+    const codeType = 'element'
+    let description
+
     switch (code) {
       case '1':
-        return codeResult(
-          'Mandatory data element missing',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Mandatory data element missing'
+        break
       case '2':
-        return codeResult(
-          'Conditional and required data element missing',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Conditional and required data element missing'
+        break
       case '3': // Return this for any elements outside the validation range.
-        return codeResult(
-          'Too many data elements',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Too many data elements'
+        break
       case '4':
-        return codeResult(
-          'The data element is too short',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'The data element is too short'
+        break
       case '5':
-        return codeResult(
-          'The data element is too long',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'The data element is too long'
+        break
       case '6':
-        return codeResult(
-          'Invalid character in data element',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Invalid character in data element'
+        break
       case '8':
-        return codeResult(
-          'Invalid date',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Invalid date'
+        break
       case '9':
-        return codeResult(
-          'Invalid time',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Invalid time'
+        break
       case '10':
-        return codeResult(
-          'Exclusion condition violated',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Exclusion condition violated'
+        break
       case '11':
-        return codeResult(
-          'Too many repetitions',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Too many repetitions'
+          break
       case '12':
-        return codeResult(
-          'Too many components',
-          'element',
-          code,
-          position,
-          dataSample
-        )
+        description = 'Too many components'
+          break
       case '7':
       default:
-        return codeResult(
-          'Invalid code value',
-          'element',
-          '7',
-          position,
-          dataSample
-        )
+        description = 'Invalid code value'
+        code = '7'
+        break
+    }
+
+    return {
+      description,
+      codeType,
+      code,
+      position,
+      dataSample
     }
   }
 
   static segment (code: string, position?: number): ValidationError {
+    const codeType = 'segment'
+    let description
+
     switch (code) {
       case '1':
-        return codeResult(
-          'Unrecognized segment ID',
-          'segment',
-          code,
-          position
-        )
+        description = 'Unrecognized segment ID'
+        break
       case '2':
-        return codeResult(
-          'Unexpected segment',
-          'segment',
-          code,
-          position
-        )
+        description = 'Unexpected segment'
+        break
       case '3':
-        return codeResult(
-          'Mandatory segment missing',
-          'segment',
-          code,
-          position
-        )
+        description = 'Mandatory segment missing'
+        break
       case '4':
-        return codeResult(
-          'A loop occurs over maximum times',
-          'segment',
-          code,
-          position
-        )
+        description = 'A loop occurs over maximum times'
+        break
       case '5':
-        return codeResult(
-          'Segment exceeds maximum use',
-          'segment',
-          code,
-          position
-        )
+        description = 'Segment exceeds maximum use'
+        break
       case '6':
-        return codeResult(
-          'Segment not in a defined transaction set',
-          'segment',
-          code,
-          position
-        )
+        description = 'Segment not in a defined transaction set'
+        break
       case '7':
-        return codeResult(
-          'Segment not in proper sequence',
-          'segment',
-          code,
-          position
-        )
+        description = 'Segment not in proper sequence'
+        break
       case '8':
       default:
-        return codeResult(
-          'The segment has data element errors',
-          'segment',
-          '8',
-          position
-        )
+        description = 'The segment has data element errors'
+        code = '8'
+        break
+    }
+
+    return {
+      description,
+      codeType,
+      code,
+      position
     }
   }
 
   static transaction (code: string, position?: number): ValidationError {
+    const codeType = 'transaction'
+    let description
+
     switch (code) {
       case '1':
-        return codeResult(
-          'The transaction set not supported',
-          'transaction',
-          code,
-          position
-        )
+        description = 'The transaction set not supported'
+        break
       case '2':
-        return codeResult(
-          'Transaction set trailer missing',
-          'transaction',
-          code,
-          position
-        )
+        description = 'Transaction set trailer missing'
+        break
       case '3':
-        return codeResult(
-          'The transaction set control number in header and trailer do not match',
-          'transaction',
-          code,
-          position
-        )
+        description = 'The transaction set control number in header and trailer do not match'
+        break
       case '4':
-        return codeResult(
-          'Number of included segments does not match actual count',
-          'transaction',
-          code,
-          position
-        )
+        description = 'Number of included segments does not match actual count'
+        break
       case '5':
-        return codeResult(
-          'One or more segments in error',
-          'transaction',
-          code,
-          position
-        )
+        description = 'One or more segments in error'
+        break
       case '6':
-        return codeResult(
-          'Missing or invalid transaction set identifier',
-          'transaction',
-          code,
-          position
-        )
+        description = 'Missing or invalid transaction set identifier'
+        break
       case '7':
       default:
-        return codeResult(
-          'Missing or invalid transaction set control number (a duplicate transaction number may have occurred)',
-          'transaction',
-          '7',
-          position
-        )
+        description = 'Missing or invalid transaction set control number (a duplicate transaction number may have occurred)'
+        code = '7'
+        break
+    }
+
+    return {
+      description,
+      codeType,
+      code,
+      position
     }
   }
 
   static group (code: string, position?: number): ValidationError {
+    const codeType = 'group'
+    let description
+
     switch (code) {
       case '1':
-        return codeResult(
-          'The functional group not supported',
-          'group',
-          code,
-          position
-        )
+        description = 'The functional group not supported'
+        break
       case '2':
-        return codeResult(
-          'Functional group version not supported',
-          'group',
-          code,
-          position
-        )
+        description = 'Functional group version not supported'
+        break
       case '3':
-        return codeResult(
-          'Functional group trailer missing',
-          'group',
-          code,
-          position
-        )
+        description = 'Functional group trailer missing'
+        break
       case '4':
-        return codeResult(
-          'Group control number in the functional group header and trailer do not agree',
-          'group',
-          code,
-          position
-        )
+        description = 'Group control number in the functional group header and trailer do not agree'
+        break
       case '5':
-        return codeResult(
-          'Number of included transaction sets does not match actual count',
-          'group',
-          code,
-          position
-        )
+        description = 'Number of included transaction sets does not match actual count'
+        break
       case '6':
       default:
-        return codeResult(
-          'Group control number violates syntax (a duplicate group control number may have occurred)',
-          'group',
-          '6',
-          position
-        )
+        description = 'Group control number violates syntax (a duplicate group control number may have occurred)'
+        code = '6'
+        break
+    }
+
+    return {
+      description,
+      codeType,
+      code,
+      position
     }
   }
 
   static acknowledgement (codeType: ValidationType, code: string, position?: number) {
+    let description
+
     switch (code) {
       case 'A':
-        return codeResult(
-          'Accepted',
-          codeType,
-          code,
-          position
-        )
+        description = 'Accepted'
+        break
       case 'M':
-        return codeResult(
-          'Rejected, message authentication code (MAC) failed',
-          codeType,
-          code,
-          position
-        )
+        description = 'Rejected, message authentication code (MAC) failed'
+        break
       case 'P':
-        return codeResult(
-          'Partially accepted, at least one transaction set was rejected',
-          codeType,
-          code,
-          position
-        )
+        description = 'Partially accepted, at least one transaction set was rejected'
+        break
       case 'R':
-        return codeResult(
-          'Rejected',
-          codeType,
-          code,
-          position
-        )
+        description = 'Rejected'
+        break
       case 'W':
-        return codeResult(
-          'Rejected, assurance failed validity tests',
-          codeType,
-          code,
-          position
-        )
+        description = 'Rejected, assurance failed validity tests'
+        break
       case 'X':
-        return codeResult(
-          'Rejected, content after decryption could not be analyzed',
-          codeType,
-          code,
-          position
-        )
+        description = 'Rejected, content after decryption could not be analyzed'
+        break
       case 'E':
       default:
-        return codeResult(
-          'Accepted but errors were noted',
-          codeType,
-          'E',
-          position
-        )
+        description = 'Accepted but errors were noted'
+        code = 'E'
+        break
+    }
+
+    return {
+      description,
+      codeType,
+      code,
+      position
     }
   }
 }

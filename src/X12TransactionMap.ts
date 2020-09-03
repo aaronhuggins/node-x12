@@ -87,9 +87,10 @@ export class X12TransactionMap {
     Object.keys(map).forEach(key => {
       if (Object.prototype.hasOwnProperty.call(map, key) as boolean) {
         if (Array.isArray(map[key]) && typeof map[key][0] === 'string') {
+          const typedArray: string[] = map[key] as string[]
           const newArray = new Array<string | string[]>()
 
-          ;(map[key] as string[]).forEach(query => {
+          typedArray.forEach(query => {
             try {
               const result = engine.querySingle(interchange, query, '')
 

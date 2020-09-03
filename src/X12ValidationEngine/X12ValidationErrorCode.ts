@@ -38,10 +38,10 @@ export const X12ValidationErrorCode: Record<string, (...args: any[]) => Validati
         break
       case '11':
         description = 'Too many repetitions'
-          break
+        break
       case '12':
         description = 'Too many components'
-          break
+        break
       case '7':
       default:
         description = 'Invalid code value'
@@ -124,7 +124,8 @@ export const X12ValidationErrorCode: Record<string, (...args: any[]) => Validati
         break
       case '7':
       default:
-        description = 'Missing or invalid transaction set control number (a duplicate transaction number may have occurred)'
+        description =
+          'Missing or invalid transaction set control number (a duplicate transaction number may have occurred)'
         code = '7'
         break
     }

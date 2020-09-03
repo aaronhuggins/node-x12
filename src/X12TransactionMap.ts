@@ -9,6 +9,19 @@ import { TxEngine } from './X12SerializationOptions'
 import * as nodeRequire from '../nodeRequire.js'
 import * as crypto from 'crypto'
 
+/**
+ * @private
+ * @description Check if a value is empty.
+ * @param {any} val - A value to check.
+ * @returns {boolean} Whether the value is empty.
+ */
+function isEmpty (val: any): boolean {
+  if (val === undefined || val === null) return true
+  if (typeof val === 'string' && val.trim() === '') return true
+
+  return false
+}
+
 export class X12TransactionMap {
   /**
    * @description Factory for mapping transaction set data to javascript object map.
@@ -314,7 +327,7 @@ export class X12TransactionMap {
           .substring(0, maxLength)
       },
       edi_date: (val: string, length: string = 'long') => {
-        const date = new Date()
+        const date = !isEmpty(val) ? new Date(val) : new Date()
         const ediDate = `${date.getUTCFullYear()}${(date.getUTCMonth() + 1).toString().padStart(2, '0')}${date
           .getUTCDate()
           .toString()
@@ -326,8 +339,8 @@ export class X12TransactionMap {
 
         return ediDate
       },
-      edi_time: () => {
-        const date = new Date()
+      edi_time: (val: string) => {
+        const date = !isEmpty(val) ? new Date(val) : new Date()
 
         return `${date
           .getUTCHours()

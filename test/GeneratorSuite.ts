@@ -2,7 +2,7 @@
 
 import 'mocha'
 import { JSEDINotation, X12Generator, X12Parser, ISASegmentHeader, GSSegmentHeader, X12Interchange } from '../core'
-import fs = require('fs')
+import * as fs from 'fs'
 
 describe('X12Generator', () => {
   it('should create X12Generator', () => {

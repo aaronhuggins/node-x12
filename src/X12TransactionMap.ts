@@ -5,7 +5,7 @@ import { X12Interchange } from './X12Interchange'
 import { X12QueryEngine } from './X12QueryEngine'
 import { X12Transaction } from './X12Transaction'
 import { TxEngine } from './X12SerializationOptions'
-// @ts-ignore
+// @ts-expect-error
 import * as nodeRequire from '../nodeRequire.js'
 import * as crypto from 'crypto'
 
@@ -173,10 +173,14 @@ export class X12TransactionMap {
    * @returns {X12Transaction} The transaction created from the object values.
    */
   fromObject (input: any, map?: any, macroObj: any = {}): X12Transaction {
-    const counter = {}
-    let inLoop = false
+    const counter: { [key: string]: number } = {}
+    const levels: { [key: string]: number[] } = {}
     let liquidjs: any
-    const macro: any = {
+    const macro: {
+      counter: { [key: string]: number }
+      [key: string]: any
+    } = {
+      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
       counter: {},
       currentDate: `${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}${new Date()
         .getDate()
@@ -211,7 +215,7 @@ export class X12TransactionMap {
       sum: function (value: any[], property: string, dec: number) {
         let sum = 0
 
-        value.forEach(item => {
+        value.forEach((item: { [key: string]: number }) => {
           sum += item[property]
         })
 
@@ -240,6 +244,23 @@ export class X12TransactionMap {
     const LIQUID_FILTERS: {
       [name: string]: (...args: any[]) => any
     } = {
+      hl_root: (value: string, depth: number = 0) => {
+        if (counter[value] === undefined) {
+          counter[value] = 0
+        }
+
+        counter[value] += 1
+        levels[value][depth] = counter[value]
+
+        return counter[value]
+      },
+      hl_parent: (value: string, depth: number) => {
+        if (levels[value][depth] === undefined) {
+          return 1
+        }
+
+        return levels[value][depth]
+      },
       sequence: (value: string) => {
         if (counter[value] === undefined) {
           counter[value] = 1
@@ -253,7 +274,7 @@ export class X12TransactionMap {
         if (typeof value === 'undefined') return 0
         let sum = 0
 
-        value.forEach(item => {
+        value.forEach((item: number) => {
           sum += item
         })
 

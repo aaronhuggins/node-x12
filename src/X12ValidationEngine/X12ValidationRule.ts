@@ -506,7 +506,7 @@ export class X12ElementRule extends X12ValidationRule {
     const value = element.value
     const errors: ValidationError[] = []
     const _this = this
-    const isLessThanMin = function isLessThanMin (val: string) {
+    const isLessThanMin = function isLessThanMin (val: string): boolean {
       if (_this.padLength) return false
 
       return (
@@ -514,7 +514,7 @@ export class X12ElementRule extends X12ValidationRule {
         (Array.isArray(_this.minMax) && val.length < _this.minMax[0])
       )
     }
-    const isGreaterThanMax = function isGreaterThanMax (val: string) {
+    const isGreaterThanMax = function isGreaterThanMax (val: string): boolean {
       return (
         (typeof _this.minLength === 'number' && val.length > _this.maxLength) ||
         (Array.isArray(_this.minMax) && val.length > _this.minMax[1])
@@ -550,7 +550,7 @@ export class X12ElementRule extends X12ValidationRule {
       }
 
       if (typeof this.checkType === 'string') {
-        const AN = /^[a-zA-Z0-9!&()*+,-./:;?= '"%@[\]_{}\|<>~#$]+$/gu
+        const AN = /^[a-zA-Z0-9!&()*+,-./:;?= '"%@[\]_{}|<>~#$]+$/gu
         const N0 = /^[0-9]+$/gu
         const R = /^[-]{0,1}[.0-9]+$/gu
         const DT = /^[0-9]{6,8}$/gu

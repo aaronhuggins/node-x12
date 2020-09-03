@@ -64,7 +64,7 @@ export class X12ValidationEngine {
     const { acknowledgement, throwError, ackMap } = options
     this.pass = true
     this.throwError = false
-    this.ackMap = ackMap || simpleAckMap
+    this.ackMap = typeof ackMap === 'object' ? ackMap : simpleAckMap
 
     if (typeof acknowledgement === 'object') {
       const { isa, gs, options: x12options } = acknowledgement
@@ -80,9 +80,9 @@ export class X12ValidationEngine {
   acknowledgement?: X12Interchange
   hardErrors?: Error[]
   throwError: boolean
-  private ackMap: any
+  private readonly ackMap: any
 
-  private setAcknowledgement (isa?: X12Segment, gs?: X12Segment, options?: X12SerializationOptions) {
+  private setAcknowledgement (isa?: X12Segment, gs?: X12Segment, options?: X12SerializationOptions): void {
     if (isa instanceof X12Segment && gs instanceof X12Segment) {
       this.acknowledgement = new X12Interchange(options)
 
@@ -105,11 +105,10 @@ export class X12ValidationEngine {
     groupResponse?: GroupResponseCode
   ): true | ValidationReport
   assert (actual: any, expected: X12ValidationRule, groupResponse?: GroupResponseCode): true | ValidationReport {
-    const _this = this
-    const setReport = function setReport (results: true | ValidationReport) {
+    const setReport = (results: true | ValidationReport): void => {
       if (results !== true) {
-        _this.pass = false
-        _this.report = results
+        this.pass = false
+        this.report = results
       }
     }
     const passingReport = function (groupId: string, groupNumber: number, transactionCount: number): ValidationReport {
@@ -126,10 +125,11 @@ export class X12ValidationEngine {
 
       setReport(expected.assert(actual))
 
-      if (this.pass)
+      if (this.pass) {
         this.report = {
           groups: [passingReport(groupId, groupNumber, transactionCount)]
         }
+      }
     }
 
     if (actual instanceof X12FunctionalGroup && expected instanceof X12GroupRule) {
@@ -173,7 +173,7 @@ export class X12ValidationEngine {
     ) {
       this.acknowledgement.functionalGroups[0].addTransaction().fromObject(
         {
-          group: this.report.groups ? this.report.groups[0].group : this.report.group
+          group: typeof this.report.groups === 'object' ? this.report.groups[0].group : this.report.group
         },
         this.ackMap
       )

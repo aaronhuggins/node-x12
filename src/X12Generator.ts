@@ -14,7 +14,7 @@ export class X12Generator {
   constructor (jsen?: JSEDINotation, options?: X12SerializationOptions) {
     this.jsen = jsen === undefined ? new JSEDINotation() : jsen
 
-    if (jsen && jsen.options !== undefined) {
+    if (typeof jsen === 'object' && jsen.options !== undefined) {
       this.options = defaultSerializationOptions(jsen.options)
     }
 

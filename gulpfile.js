@@ -47,7 +47,7 @@ gulp.task('mocha:coverage', shell.task(['nyc mocha']))
 
 gulp.task('mocha:xunit', shell.task(['nyc mocha --reporter=xunit --reporter-options output=./coverage/mocha.xml']))
 
-gulp.task('eslint', shell.task(['eslint --ext .ts .']))
+gulp.task('eslint', shell.task(['eslint --ext .ts .'], { ignoreErrors: true }))
 
 gulp.task('eslint:fix', shell.task(['eslint --ext .ts --fix .']))
 
@@ -60,6 +60,6 @@ gulp.task(
 
 gulp.task('codecov', shell.task(['codecov -t 710da1b2-17ab-40d3-86e3-d8cbce8b8ce3']))
 
-gulp.task('test', gulp.parallel(gulp.series('mkdir', 'eslint:xunit'), 'mocha:xunit'))
+gulp.task('test', gulp.series(gulp.series('mkdir', 'eslint:xunit'), 'mocha:xunit'))
 
-gulp.task('test:local', gulp.parallel('eslint', 'mocha:coverage'))
+gulp.task('test:local', gulp.series('eslint', 'mocha:coverage'))

@@ -2,9 +2,8 @@
 
 import 'mocha'
 import { JSEDINotation, X12Parser, X12Interchange, X12FatInterchange, X12Segment } from '../core'
-
-import fs = require('fs')
 import { JSEDIFunctionalGroup, JSEDITransaction } from '../src/JSEDINotation'
+import * as fs from 'fs'
 
 const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
 
@@ -44,7 +43,7 @@ describe('X12ObjectModel', () => {
     if (
       noElement !== null ||
       noInsert !== null ||
-      noneToRemove !== false ||
+      typeof noneToRemove !== 'boolean' ||
       defaultVal !== '2' ||
       segment.elements.length !== 1 ||
       segment.elements[0].value !== '2'

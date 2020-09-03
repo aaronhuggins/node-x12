@@ -2,8 +2,7 @@
 
 import 'mocha'
 import { X12Parser, X12Interchange, X12Segment } from '../core'
-
-import fs = require('fs')
+import * as fs from 'fs'
 
 describe('X12Parser', () => {
   it('should parse a valid X12 document without throwing an error', () => {
@@ -19,7 +18,7 @@ describe('X12Parser', () => {
   })
 
   it('should parse and reconstruct a valid X12 stream without throwing an error', async () => {
-    return new Promise((resolve, reject) => {
+    return await new Promise((resolve, reject) => {
       const ediStream = fs.createReadStream('test/test-data/850.edi', 'utf8')
       const parser = new X12Parser()
       const segments: X12Segment[] = []

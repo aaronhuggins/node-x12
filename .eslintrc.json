@@ -3,6 +3,13 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
+  "rules": {
+    "@typescript-eslint/no-this-alias": ["off"],
+    "@typescript-eslint/prefer-includes": ["off"],
+    "@typescript-eslint/restrict-template-expressions": ["off"],
+    "@typescript-eslint/indent": ["off"],
+    "jsdoc/require-property-description": ["off"]
+  },
   "globals": {
     "mocha": "readonly"
   }

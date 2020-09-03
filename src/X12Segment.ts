@@ -29,14 +29,14 @@ export class X12Segment {
    * @description Set the tag name for the segment if not provided when constructed.
    * @param {string} tag - The tag for this segment.
    */
-  setTag (tag: string) {
+  setTag (tag: string): void {
     this.tag = tag
   }
 
   /**
    * @description Set the elements of this segment.
    * @param {string[]} values - An array of element values.
-   * @returns {this} The current instance of X12Segment.
+   * @returns {X12Segment} The current instance of X12Segment.
    */
   setElements (values: string[]): X12Segment {
     this._formatValues(values)
@@ -143,7 +143,7 @@ export class X12Segment {
     for (let i = 0; i < this.elements.length; i++) {
       edi += options.elementDelimiter
       if ((this.tag === 'ISA' && i === 12) || (this.tag === 'IEA' && i === 1)) {
-        edi += String.prototype.padStart.call(this.elements[i].value, 9, '0')
+        edi += String.prototype.padStart.call(this.elements[i].value, 9, '0') as string
       } else {
         edi += this.elements[i].value
       }

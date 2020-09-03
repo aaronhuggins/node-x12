@@ -214,8 +214,9 @@ export class X12QueryEngine {
   private _evaluateSegmentPathQueryPart (segments: X12Segment[], segmentPath: string): X12Segment[] {
     let qualified = false
     const pathParts = segmentPath.split('-').filter((value, index, array) => {
+      // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       return !!value
-    }) // eslint-disable-line @typescript-eslint/strict-boolean-expressions
+    })
     const matches = new Array<X12Segment>()
 
     for (let i = 0, j = 0; i < segments.length; i++) {

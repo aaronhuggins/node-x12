@@ -1,8 +1,8 @@
 'use strict'
 
 import 'mocha'
-import fs = require('fs')
-import assert = require('assert')
+import * as fs from 'fs'
+import * as assert from 'assert'
 import {
   X12Parser,
   X12ValidationEngine,

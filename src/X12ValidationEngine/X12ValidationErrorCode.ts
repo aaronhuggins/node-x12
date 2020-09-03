@@ -3,8 +3,8 @@ import { ValidationType, ValidationError } from './Interfaces'
 // Error codes taken from publicly available documentation
 // at https://docs.microsoft.com/en-us/biztalk/core/x12-997-acknowledgment-error-codes
 // and at https://support.edifabric.com/hc/en-us/articles/360000380131-X12-997-Acknowledgment-Error-Codes
-export class X12ValidationErrorCode {
-  static element (code: string, position?: number, dataSample?: string): ValidationError {
+export const X12ValidationErrorCode: Record<string, (...args: any[]) => ValidationError> = {
+  element (code: string, position?: number, dataSample?: string): ValidationError {
     const codeType = 'element'
     let description
 
@@ -56,9 +56,9 @@ export class X12ValidationErrorCode {
       position,
       dataSample
     }
-  }
+  },
 
-  static segment (code: string, position?: number): ValidationError {
+  segment (code: string, position?: number): ValidationError {
     const codeType = 'segment'
     let description
 
@@ -97,9 +97,9 @@ export class X12ValidationErrorCode {
       code,
       position
     }
-  }
+  },
 
-  static transaction (code: string, position?: number): ValidationError {
+  transaction (code: string, position?: number): ValidationError {
     const codeType = 'transaction'
     let description
 
@@ -135,9 +135,9 @@ export class X12ValidationErrorCode {
       code,
       position
     }
-  }
+  },
 
-  static group (code: string, position?: number): ValidationError {
+  group (code: string, position?: number): ValidationError {
     const codeType = 'group'
     let description
 
@@ -170,9 +170,9 @@ export class X12ValidationErrorCode {
       code,
       position
     }
-  }
+  },
 
-  static acknowledgement (codeType: ValidationType, code: string, position?: number) {
+  acknowledgement (codeType: ValidationType, code: string, position?: number): ValidationError {
     let description
 
     switch (code) {
@@ -214,6 +214,14 @@ export function errorLookup (codeType: 'group', code: string, position?: number)
 export function errorLookup (codeType: 'transaction', code: string, position?: number): ValidationError
 export function errorLookup (codeType: 'segment', code: string, position?: number): ValidationError
 export function errorLookup (codeType: 'element', code: string, position?: number, dataSample?: string): ValidationError
+/**
+ * @description Look up a validation error by type and code.
+ * @param {ValidationType} codeType - The type of validation being performed.
+ * @param {string} code - The actual code to look up.
+ * @param {number} [position] - The position at which the error occured.
+ * @param {string} [dataSample] - A sample of data assciated with the error.
+ * @returns {ValidationError} The validation error for the lookup.
+ */
 export function errorLookup (
   codeType: ValidationType,
   code: string,

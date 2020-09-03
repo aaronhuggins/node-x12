@@ -3,8 +3,7 @@
 import 'mocha'
 import { X12FatInterchange } from '../src/X12FatInterchange'
 import { X12Interchange, X12Parser, X12SerializationOptions } from '../core'
-
-import fs = require('fs')
+import * as fs from 'fs'
 
 describe('X12Formatting', () => {
   it('should replicate the source data unless changes are made', () => {

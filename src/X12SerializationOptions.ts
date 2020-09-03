@@ -14,16 +14,6 @@ export type TxEngine = 'liquidjs' | 'internal'
  * @property {X12SegmentHeader[]} [segmentHeaders] Default array of known, pre-defined segment headers.
  * @property {'liquidjs'|'internal'} [txEngine='internal'] The engine to use for macros when mapping transaction sets from objects.
  */
-export interface X12SerializationOptions {
-  elementDelimiter?: string
-  endOfLine?: string
-  format?: boolean
-  segmentTerminator?: string
-  subElementDelimiter?: string
-  repetitionDelimiter?: string
-  segmentHeaders?: X12SegmentHeader[]
-  txEngine?: TxEngine
-}
 
 /**
  * Class instance wrapper for serialization options.
@@ -46,6 +36,15 @@ export class X12SerializationOptions {
       this.endOfLine = ''
     }
   }
+
+  elementDelimiter?: string
+  endOfLine?: string
+  format?: boolean
+  segmentTerminator?: string
+  subElementDelimiter?: string
+  repetitionDelimiter?: string
+  segmentHeaders?: X12SegmentHeader[]
+  txEngine?: TxEngine
 }
 
 /**

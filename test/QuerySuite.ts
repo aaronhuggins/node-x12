@@ -2,8 +2,7 @@
 
 import 'mocha'
 import { X12Parser, X12QueryEngine } from '../core'
-
-import fs = require('fs')
+import * as fs from 'fs'
 
 describe('X12QueryEngine', () => {
   it('should handle basic element references', () => {

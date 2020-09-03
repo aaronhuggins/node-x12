@@ -2,9 +2,8 @@
 
 import 'mocha'
 import { X12Parser, X12Transaction, X12TransactionMap, X12Interchange } from '../core'
-
-import fs = require('fs')
-import assert = require('assert')
+import * as fs from 'fs'
+import * as assert from 'assert'
 
 const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
 const mapJson = fs.readFileSync('test/test-data/850_map.json', 'utf8')
@@ -36,7 +35,7 @@ describe('X12Mapping', () => {
     })
 
     if (!(result instanceof X12Transaction)) {
-      throw new Error(`An error occured when mapping an object to a transaction.`)
+      throw new Error('An error occured when mapping an object to a transaction.')
     }
   })
 
@@ -49,7 +48,7 @@ describe('X12Mapping', () => {
     })
 
     if (!(result instanceof X12Transaction)) {
-      throw new Error(`An error occured when mapping an object to a transaction.`)
+      throw new Error('An error occured when mapping an object to a transaction.')
     }
   })
 })

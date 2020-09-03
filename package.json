@@ -1,6 +1,6 @@
 {
   "name": "node-x12",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "ASC X12 parser, generator, query engine, and mapper; now with support for streams.",
   "main": "index.js",
   "keywords": [

@@ -61,7 +61,9 @@ export const STSegmentHeader: X12SegmentHeader = {
     ST01: 3,
     ST02: 9,
     ST02_MIN: 4,
-    COUNT: 2,
+    ST03: 1,
+    ST03_MIN: 35,
+    COUNT: 3,
     PADDING: false
   }
 }

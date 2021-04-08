@@ -13,12 +13,13 @@ export class X12QueryEngine {
    * @description Factory for querying EDI using the node-x12 object model.
    * @param {X12Parser|boolean} [parser] - Pass an external parser or set the strictness of the internal parser.
    */
-  constructor (parser: X12Parser | boolean = true) {
+  constructor (parser: X12Parser | boolean = true, mode: 'strict' | 'loose' = 'strict') {
     this._parser = typeof parser === 'boolean' ? new X12Parser(parser) : parser
+    this._mode = mode
   }
 
   private readonly _parser: X12Parser
-
+  private readonly _mode: 'strict' | 'loose'
   private readonly _forEachPattern: RegExp = /FOREACH\([A-Z0-9]{2,3}\)=>.+/g
   private readonly _concatPattern: RegExp = /CONCAT\(.+,.+\)=>.+/g
 
@@ -270,10 +271,16 @@ export class X12QueryEngine {
 
       const value = segment.valueOf(posint, defaultValue)
 
-      if (value !== null && this._testQualifiers(transaction, segment, qualifiers)) {
-        results.push(
-          new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1], value)
-        )
+      if (this._testQualifiers(transaction, segment, qualifiers)) {
+        if ((typeof value !== 'undefined' && value !== null)) {
+          results.push(
+            new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1], value)
+          )
+        } else if (this._mode === 'loose') {
+          results.push(
+            new X12QueryResult(interchange, functionalGroup, transaction, segment, new X12Element(), undefined)
+          )
+        }
       }
     }
 

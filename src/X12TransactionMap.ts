@@ -29,8 +29,9 @@ export class X12TransactionMap {
    * @param {X12Transaction} [transaction] - A transaction set to map.
    * @param {Function|'liquidjs'|'internal'} [helper] - A helper function which will be executed on every resolved query value, or a macro engine.
    * @param {'liquidjs'|'internal'} [txEngine] - A macro engine to use; either 'internal' or 'liquidjs'; defaults to internal for backwords compatibility.
+   * @param {'strict'|'loose'} [mode='strict'] - The mode for transforming, passed to the query engine, and defaults to 'strict'; may be set to 'loose' for new behavior with missing elements in the dom.
    */
-  constructor (map: any, transaction?: X12Transaction, helper?: Function | TxEngine, txEngine?: TxEngine) {
+  constructor (map: any, transaction?: X12Transaction, helper?: Function | TxEngine, txEngine?: TxEngine, mode?: 'strict' | 'loose') {
     this._map = map
     this._transaction = transaction
     this.helper = typeof helper === 'function' ? helper : this._helper
@@ -38,11 +39,13 @@ export class X12TransactionMap {
       txEngine = helper
     }
     this.txEngine = txEngine === undefined ? 'internal' : txEngine
+    this._mode = mode === undefined ? 'strict' : mode
   }
 
   protected _map: any
   protected _transaction: X12Transaction
   protected _object: any
+  protected _mode: 'strict' | 'loose'
   helper: Function
   txEngine: TxEngine
 
@@ -75,7 +78,7 @@ export class X12TransactionMap {
 
     const clone = JSON.parse(JSON.stringify(map))
     let clones: object[] = null
-    const engine = new X12QueryEngine(false)
+    const engine = new X12QueryEngine(false, this._mode)
     const interchange = new X12Interchange()
     interchange.setHeader([
       '00',

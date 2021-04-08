@@ -288,8 +288,8 @@ export class X12QueryEngine {
       return true
     }
 
-    for (const value of qualifiers) {
-      const qualifier = value.substr(1)
+    for (const qualifierValue of qualifiers) {
+      const qualifier = qualifierValue.substr(1)
       const elementReference = qualifier.substring(0, qualifier.indexOf('['))
       const elementValue = qualifier.substring(qualifier.indexOf('[') + 2, qualifier.lastIndexOf(']') - 1)
       const tag = elementReference.substr(0, elementReference.length - 2)

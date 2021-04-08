@@ -382,8 +382,8 @@ export class X12TransactionMap {
         lp.forEach(segment => {
           const elements = []
 
-          for (let j = 0; j < segment.elements.length; j += 1) {
-            const resolved = resolveKey(segment.elements[j])
+          for (const segElement of segment.elements) {
+            const resolved = resolveKey(segElement)
 
             if (Array.isArray(resolved)) {
               elements.push(resolved[i])
@@ -432,14 +432,13 @@ export class X12TransactionMap {
     let looper: any[] = []
     let loop = false
 
-    for (let i = 0; i < map.header.length; i += 1) {
-      header.push(resolveKey(map.header[i]))
+    for (const headerElement of map.header) {
+      header.push(resolveKey(headerElement))
     }
 
     transaction.setHeader(header)
 
-    for (let i = 0; i < map.segments.length; i += 1) {
-      const segment = map.segments[i]
+    for (const segment of map.segments) {
       const elements = []
 
       if (segment.loopStart as boolean) {
@@ -450,8 +449,8 @@ export class X12TransactionMap {
       }
 
       if (!loop) {
-        for (let j = 0; j < segment.elements.length; j += 1) {
-          elements.push(resolveKey(segment.elements[j]))
+        for (const segElement of segment.elements) {
+          elements.push(resolveKey(segElement))
         }
 
         transaction.addSegment(segment.tag, elements)

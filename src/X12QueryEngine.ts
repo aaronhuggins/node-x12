@@ -12,6 +12,7 @@ export class X12QueryEngine {
   /**
    * @description Factory for querying EDI using the node-x12 object model.
    * @param {X12Parser|boolean} [parser] - Pass an external parser or set the strictness of the internal parser.
+   * @param {'strict'|'loose'} [mode='strict'] - Sets the mode of the query engine, defaults to classic 'strict'; adds new behavior of 'loose', which will return an empty value for a missing element so long as the segment exists.
    */
   constructor (parser: X12Parser | boolean = true, mode: 'strict' | 'loose' = 'strict') {
     this._parser = typeof parser === 'boolean' ? new X12Parser(parser) : parser

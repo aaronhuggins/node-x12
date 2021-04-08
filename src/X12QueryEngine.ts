@@ -55,11 +55,8 @@ export class X12QueryEngine {
 
     const results = new Array<X12QueryResult>()
 
-    for (let i = 0; i < interchange.functionalGroups.length; i++) {
-      const group = interchange.functionalGroups[i]
-
-      for (let j = 0; j < group.transactions.length; j++) {
-        const txn = group.transactions[j]
+    for (const group of interchange.functionalGroups) {
+      for (const txn of group.transactions) {
         let segments = txn.segments
 
         if (hlPathMatch !== null) {
@@ -259,9 +256,7 @@ export class X12QueryEngine {
 
     const results = new Array<X12QueryResult>()
 
-    for (let i = 0; i < segments.length; i++) {
-      const segment = segments[i]
-
+    for (const segment of segments) {
       if (segment === null || segment === undefined) {
         continue
       }
@@ -293,8 +288,8 @@ export class X12QueryEngine {
       return true
     }
 
-    for (let i = 0; i < qualifiers.length; i++) {
-      const qualifier = qualifiers[i].substr(1)
+    for (const value of qualifiers) {
+      const qualifier = value.substr(1)
       const elementReference = qualifier.substring(0, qualifier.indexOf('['))
       const elementValue = qualifier.substring(qualifier.indexOf('[') + 2, qualifier.lastIndexOf(']') - 1)
       const tag = elementReference.substr(0, elementReference.length - 2)

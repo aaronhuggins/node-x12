@@ -152,7 +152,7 @@ export class X12TransactionMap {
             } else if (result.value === null || Array.isArray(clones)) {
               if (result.value !== null) {
                 clones.forEach((cloned: object[]) => {
-                  cloned[key] = this.helper(key, result.value, map[key], callback)
+                  cloned[key as unknown as number] = this.helper(key, result.value, map[key], callback)
                 })
               } else {
                 if (!Array.isArray(clones)) {

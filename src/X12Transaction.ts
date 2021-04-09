@@ -93,8 +93,8 @@ export class X12Transaction {
       edi += options.endOfLine
     }
 
-    for (let i = 0; i < this.segments.length; i++) {
-      edi += this.segments[i].toString(options)
+    for (const segment of this.segments) {
+      edi += segment.toString(options)
 
       if (options.format) {
         edi += options.endOfLine

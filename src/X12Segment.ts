@@ -241,9 +241,9 @@ export class X12Segment {
         }
       } else {
         throw new GeneratorError(
-          typeof enumerable.COUNT === 'number'
-            ? `Segment "${this.tag}" with ${values.length} elements does meet the required count of min ${enumerable.COUNT_MIN} or max ${enumerable.COUNT}.`
-            : `Segment "${this.tag}" with ${values.length} elements does meet the required count of ${enumerable.COUNT}.`
+          typeof enumerable.COUNT_MIN === 'number'
+            ? `Segment "${this.tag}" with ${values.length} elements does not meet the required count of min ${enumerable.COUNT_MIN} or max ${enumerable.COUNT}.`
+            : `Segment "${this.tag}" with ${values.length} elements does not meet the required count of ${enumerable.COUNT}.`
         )
       }
     }

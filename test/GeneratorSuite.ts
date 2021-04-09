@@ -48,7 +48,7 @@ describe('X12Generator', () => {
     }
   })
 
-  it('should not generate 271 with 3 ST elements using default segment headers', () => {
+  it('should not generate 271 with 4 ST elements using default segment headers', () => {
     const fileEdi = fs.readFileSync('test/test-data/271.edi', 'utf8').split('~')
 
     const i = new X12Interchange()
@@ -63,13 +63,13 @@ describe('X12Generator', () => {
 
     let error
     try {
-      t.setHeader(fileEdi[2].split('*').slice(1))
+      t.setHeader([...fileEdi[2].split('*').slice(1), 'N'])
     } catch (err) {
       error = err.message
     }
 
-    if (error !== 'Segment "ST" with 3 elements does meet the required count of 2.') {
-      throw new Error('271 with 3 ST elements parsing succeed which should not happen')
+    if (error !== 'Segment "ST" with 4 elements does not meet the required count of min 2 or max 3.') {
+      throw new Error('271 with 4 ST elements parsing succeed which should not happen')
     }
   })
 
@@ -153,7 +153,7 @@ describe('X12Generator', () => {
       error = err.message
     }
 
-    if (error !== 'Segment "HL" with 4 elements does meet the required count of 3.') {
+    if (error !== 'Segment "HL" with 4 elements does not meet the required count of 3.') {
       throw new Error('271 with custom segment headers parsing succeed which should not happen')
     }
   })

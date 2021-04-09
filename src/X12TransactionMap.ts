@@ -2,7 +2,7 @@
 
 import { QuerySyntaxError } from './Errors'
 import { X12Interchange } from './X12Interchange'
-import { X12QueryEngine } from './X12QueryEngine'
+import { X12QueryEngine, X12QueryMode } from './X12QueryEngine'
 import { X12Transaction } from './X12Transaction'
 import { TxEngine } from './X12SerializationOptions'
 // @ts-expect-error
@@ -22,30 +22,70 @@ function isEmpty (val: any): boolean {
   return false
 }
 
+/**
+ * @private
+ * @description Check if a string is query mode.
+ * @param {any} str - The string to check.
+ * @returns {boolean} Whether the string is a query mode.
+ */
+function isX12QueryMode (str: any): str is X12QueryMode {
+  return str === 'loose' || str === 'strict'
+}
+
+/**
+ * @private
+ * @description Check if a string is query mode.
+ * @param {any} str - The string to check.
+ * @returns {boolean} Whether the string is a query mode.
+ */
+ function isTxEngine (str: any): str is TxEngine {
+  return str === 'internal' || str === 'liquidjs'
+}
+
 export class X12TransactionMap {
   /**
    * @description Factory for mapping transaction set data to javascript object map.
    * @param {object} map - The javascript object containing keys and querys to resolve.
    * @param {X12Transaction} [transaction] - A transaction set to map.
-   * @param {Function|'liquidjs'|'internal'} [helper] - A helper function which will be executed on every resolved query value, or a macro engine.
-   * @param {'liquidjs'|'internal'} [txEngine] - A macro engine to use; either 'internal' or 'liquidjs'; defaults to internal for backwords compatibility.
+   * @param {Function|'liquidjs'|'internal'|'strict'|'loose'} [helper] - A helper function which will be executed on every resolved query value, a macro engine, or mode.
+   * @param {'liquidjs'|'internal'|'strict'|'loose'} [txEngine] - A macro engine to use; either 'internal' or 'liquidjs'; defaults to internal for backwords compatibility, or the mode.
    * @param {'strict'|'loose'} [mode='strict'] - The mode for transforming, passed to the query engine, and defaults to 'strict'; may be set to 'loose' for new behavior with missing elements in the dom.
    */
-  constructor (map: any, transaction?: X12Transaction, helper?: Function | TxEngine, txEngine?: TxEngine, mode?: 'strict' | 'loose') {
+  constructor (map: any, transaction?: X12Transaction, mode?: X12QueryMode)
+  constructor (map: any, transaction?: X12Transaction, txEngine?: TxEngine)
+  constructor (map: any, transaction?: X12Transaction, txEngine?: TxEngine, mode?: X12QueryMode)
+  constructor (map: any, transaction?: X12Transaction, helper?: Function, mode?: X12QueryMode)
+  constructor (map: any, transaction?: X12Transaction, helper?: Function, txEngine?: TxEngine)
+  constructor (map: any, transaction?: X12Transaction, helper?: Function, txEngine?: TxEngine, mode?: X12QueryMode)
+  constructor (map: any, transaction?: X12Transaction, helper?: Function | TxEngine | X12QueryMode, txEngine?: TxEngine | X12QueryMode, mode?: X12QueryMode) {
     this._map = map
     this._transaction = transaction
     this.helper = typeof helper === 'function' ? helper : this._helper
-    if (typeof helper === 'string' && typeof txEngine === 'undefined') {
-      txEngine = helper
+
+    if (typeof helper === 'string' && (typeof txEngine === 'undefined' || typeof mode === 'undefined')) {
+      if (isTxEngine(helper)) {
+        if (isX12QueryMode(txEngine)) {
+          mode = txEngine
+        }
+
+        txEngine = helper
+      } else if (isX12QueryMode(helper)) {
+        mode = helper
+      }
     }
-    this.txEngine = txEngine === undefined ? 'internal' : txEngine
-    this._mode = mode === undefined ? 'strict' : mode
+
+    if (typeof txEngine === 'string' && typeof mode === 'undefined' && isX12QueryMode(txEngine)) {
+      mode = txEngine
+    }
+
+    this.txEngine = isTxEngine(txEngine) ? txEngine : 'internal'
+    this._mode = isX12QueryMode(mode) ? mode : 'strict'
   }
 
   protected _map: any
   protected _transaction: X12Transaction
   protected _object: any
-  protected _mode: 'strict' | 'loose'
+  protected _mode: X12QueryMode
   helper: Function
   txEngine: TxEngine
 

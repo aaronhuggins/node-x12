@@ -8,19 +8,21 @@ import { X12Transaction } from './X12Transaction'
 import { X12Segment } from './X12Segment'
 import { X12Element } from './X12Element'
 
+export type X12QueryMode = 'strict' | 'loose'
+
 export class X12QueryEngine {
   /**
    * @description Factory for querying EDI using the node-x12 object model.
    * @param {X12Parser|boolean} [parser] - Pass an external parser or set the strictness of the internal parser.
    * @param {'strict'|'loose'} [mode='strict'] - Sets the mode of the query engine, defaults to classic 'strict'; adds new behavior of 'loose', which will return an empty value for a missing element so long as the segment exists.
    */
-  constructor (parser: X12Parser | boolean = true, mode: 'strict' | 'loose' = 'strict') {
+  constructor (parser: X12Parser | boolean = true, mode: X12QueryMode = 'strict') {
     this._parser = typeof parser === 'boolean' ? new X12Parser(parser) : parser
     this._mode = mode
   }
 
   private readonly _parser: X12Parser
-  private readonly _mode: 'strict' | 'loose'
+  private readonly _mode: X12QueryMode
   private readonly _forEachPattern: RegExp = /FOREACH\([A-Z0-9]{2,3}\)=>.+/g
   private readonly _concatPattern: RegExp = /CONCAT\(.+,.+\)=>.+/g
 

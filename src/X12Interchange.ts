@@ -1,3 +1,4 @@
+// deno-lint-ignore-file ban-types
 'use strict'
 
 import { JSEDINotation } from './JSEDINotation.ts'
@@ -27,19 +28,20 @@ export class X12Interchange {
       } else {
         throw new TypeError('Parameter "elementDelimiter" must be type of string.')
       }
-    } else {
-      this.options = defaultSerializationOptions(segmentTerminator)
-      this.segmentTerminator = this.options.segmentTerminator
-      this.elementDelimiter = this.options.elementDelimiter
-    }
-
-    if (this.options === undefined) {
       this.options = defaultSerializationOptions(options)
+    } else if (typeof segmentTerminator === 'object') {
+      this.options = defaultSerializationOptions(segmentTerminator)
+      this.segmentTerminator = this.options.segmentTerminator as string
+      this.elementDelimiter = this.options.elementDelimiter as string
+    } else {
+      this.options = defaultSerializationOptions(options)
+      this.segmentTerminator = this.options.segmentTerminator as string
+      this.elementDelimiter = this.options.elementDelimiter as string
     }
   }
 
-  header: X12Segment
-  trailer: X12Segment
+  header!: X12Segment
+  trailer!: X12Segment
 
   functionalGroups: X12FunctionalGroup[]
 

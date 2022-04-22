@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 'use strict'
 
 import { QuerySyntaxError } from './Errors.ts'
@@ -33,7 +34,7 @@ export class X12QueryEngine {
    * @param {string} [defaultValue=null] - A default value to return if result not found.
    * @returns {X12QueryResult[]} An array of results from the EDI document.
    */
-  query (rawEdi: string | X12Interchange, reference: string, defaultValue: string = null): X12QueryResult[] {
+  query (rawEdi: string | X12Interchange, reference: string, defaultValue: string | null = null): X12QueryResult[] {
     const interchange = typeof rawEdi === 'string' ? (this._parser.parse(rawEdi) as X12Interchange) : rawEdi
 
     const forEachMatch = reference.match(this._forEachPattern) // ex. FOREACH(LX)=>MAN02
@@ -77,7 +78,7 @@ export class X12QueryEngine {
           interchange,
           group,
           txn,
-          [].concat(segments, [
+          ([] as X12Segment[]).concat(segments, [
             interchange.header,
             group.header,
             txn.header,
@@ -86,7 +87,7 @@ export class X12QueryEngine {
             interchange.trailer
           ]),
           elmRefMatch[0],
-          qualMatch,
+          qualMatch as string[],
           defaultValue
         )
 
@@ -110,7 +111,7 @@ export class X12QueryEngine {
    * @param {string} [defaultValue=null] - A default value to return if result not found.
    * @returns {X12QueryResult} A result from the EDI document.
    */
-  querySingle (rawEdi: string | X12Interchange, reference: string, defaultValue: string = null): X12QueryResult {
+  querySingle (rawEdi: string | X12Interchange, reference: string, _defaultValue: string | null = null): X12QueryResult | null {
     const results = this.query(rawEdi, reference)
 
     if (reference.match(this._forEachPattern) !== null) {
@@ -176,7 +177,7 @@ export class X12QueryEngine {
     const pathParts = hlPath
       .replace('-', '')
       .split('+')
-      .filter((value, index, array) => {
+      .filter((value) => {
         return value !== 'HL' && value !== '' && value !== null
       })
     const matches = new Array<X12Segment>()
@@ -214,7 +215,7 @@ export class X12QueryEngine {
 
   private _evaluateSegmentPathQueryPart (segments: X12Segment[], segmentPath: string): X12Segment[] {
     let qualified = false
-    const pathParts = segmentPath.split('-').filter((value, index, array) => {
+    const pathParts = segmentPath.split('-').filter((value) => {
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
       return !!value
     })
@@ -249,7 +250,7 @@ export class X12QueryEngine {
     segments: X12Segment[],
     elementReference: string,
     qualifiers: string[],
-    defaultValue: string = null
+    defaultValue: string | null = null
   ): X12QueryResult[] {
     const reference = elementReference.replace(':', '')
     const tag = reference.substr(0, reference.length - 2)
@@ -267,7 +268,7 @@ export class X12QueryEngine {
         continue
       }
 
-      const value = segment.valueOf(posint, defaultValue)
+      const value = segment.valueOf(posint, defaultValue ?? undefined)
 
       if (this._testQualifiers(transaction, segment, qualifiers)) {
         if ((typeof value !== 'undefined' && value !== null)) {
@@ -344,15 +345,15 @@ export class X12QueryResult {
     this.transaction = transaction
     this.segment = segment
     this.element = element
-    this.value = value === null || value === undefined ? element.value : value
+    this.value = value === null || value === undefined ? element?.value ?? null : value
     this.values = new Array<string | string[]>()
   }
 
-  interchange: X12Interchange
-  functionalGroup: X12FunctionalGroup
-  transaction: X12Transaction
-  segment: X12Segment
-  element: X12Element
-  value: string
-  values: Array<string | string[]>
+  interchange?: X12Interchange
+  functionalGroup?: X12FunctionalGroup
+  transaction?: X12Transaction
+  segment?: X12Segment
+  element?: X12Element
+  value: string | null
+  values: Array<string | null | string[]>
 }

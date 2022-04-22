@@ -1,6 +1,6 @@
 {
   "name": "node-x12",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "ASC X12 parser, generator, query engine, and mapper; now with support for streams.",
   "main": "index.js",
   "keywords": [
@@ -15,18 +15,14 @@
     "index.d.ts",
     "nodeRequire.js"
   ],
-  "homepage": "https://ahuggins-nhs.github.io/node-x12/",
   "bugs": {
-    "url": "https://github.com/ahuggins-nhs/node-x12/issues"
+    "url": "https://github.com/aaronhuggins/node-x12/issues"
   },
   "license": "MIT",
-  "author": {
-    "name": "Net Health Shops LLC Tech Team",
-    "url": "https://serenityhealth.com/"
-  },
+  "author": "Aaron Huggins <aaron.huggins@runbox.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ahuggins-nhs/node-x12.git"
+    "url": "https://github.com/aaronhuggins/node-x12.git"
   },
   "eslintIgnore": [
     "typings/*"

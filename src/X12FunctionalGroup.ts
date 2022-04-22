@@ -1,3 +1,4 @@
+// deno-lint-ignore-file ban-types
 'use strict'
 
 import { JSEDIFunctionalGroup } from './JSEDINotation.ts'
@@ -16,8 +17,8 @@ export class X12FunctionalGroup {
     this.options = defaultSerializationOptions(options)
   }
 
-  header: X12Segment
-  trailer: X12Segment
+  header!: X12Segment;
+  trailer!: X12Segment
 
   transactions: X12Transaction[]
 

@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import { ValidationType, ValidationError } from './Interfaces.ts'
 
 // Error codes taken from publicly available documentation

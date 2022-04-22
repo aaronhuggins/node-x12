@@ -208,7 +208,7 @@ export class X12Segment {
         values[15] = this.options.subElementDelimiter
       }
 
-      if (values.length === enumerable.COUNT) {
+      if (values.length === enumerable.COUNT || values.length === enumerable.COUNT_MIN) {
         for (let i = 0; i < values.length; i++) {
           const name = `${this.tag}${String.prototype.padStart.call(i + 1, 2, '0')}`
           const max = enumerable[name]
@@ -241,7 +241,9 @@ export class X12Segment {
         }
       } else {
         throw new GeneratorError(
-          `Segment "${this.tag}" with ${values.length} elements does meet the required count of ${enumerable.COUNT}.`
+          typeof enumerable.COUNT_MIN === 'number'
+            ? `Segment "${this.tag}" with ${values.length} elements does not meet the required count of min ${enumerable.COUNT_MIN} or max ${enumerable.COUNT}.`
+            : `Segment "${this.tag}" with ${values.length} elements does not meet the required count of ${enumerable.COUNT}.`
         )
       }
     }

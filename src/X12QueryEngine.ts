@@ -8,17 +8,21 @@ import { X12Transaction } from './X12Transaction'
 import { X12Segment } from './X12Segment'
 import { X12Element } from './X12Element'
 
+export type X12QueryMode = 'strict' | 'loose'
+
 export class X12QueryEngine {
   /**
    * @description Factory for querying EDI using the node-x12 object model.
    * @param {X12Parser|boolean} [parser] - Pass an external parser or set the strictness of the internal parser.
+   * @param {'strict'|'loose'} [mode='strict'] - Sets the mode of the query engine, defaults to classic 'strict'; adds new behavior of 'loose', which will return an empty value for a missing element so long as the segment exists.
    */
-  constructor (parser: X12Parser | boolean = true) {
+  constructor (parser: X12Parser | boolean = true, mode: X12QueryMode = 'strict') {
     this._parser = typeof parser === 'boolean' ? new X12Parser(parser) : parser
+    this._mode = mode
   }
 
   private readonly _parser: X12Parser
-
+  private readonly _mode: X12QueryMode
   private readonly _forEachPattern: RegExp = /FOREACH\([A-Z0-9]{2,3}\)=>.+/g
   private readonly _concatPattern: RegExp = /CONCAT\(.+,.+\)=>.+/g
 
@@ -53,11 +57,8 @@ export class X12QueryEngine {
 
     const results = new Array<X12QueryResult>()
 
-    for (let i = 0; i < interchange.functionalGroups.length; i++) {
-      const group = interchange.functionalGroups[i]
-
-      for (let j = 0; j < group.transactions.length; j++) {
-        const txn = group.transactions[j]
+    for (const group of interchange.functionalGroups) {
+      for (const txn of group.transactions) {
         let segments = txn.segments
 
         if (hlPathMatch !== null) {
@@ -257,9 +258,7 @@ export class X12QueryEngine {
 
     const results = new Array<X12QueryResult>()
 
-    for (let i = 0; i < segments.length; i++) {
-      const segment = segments[i]
-
+    for (const segment of segments) {
       if (segment === null || segment === undefined) {
         continue
       }
@@ -270,10 +269,16 @@ export class X12QueryEngine {
 
       const value = segment.valueOf(posint, defaultValue)
 
-      if (value !== null && this._testQualifiers(transaction, segment, qualifiers)) {
-        results.push(
-          new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1], value)
-        )
+      if (this._testQualifiers(transaction, segment, qualifiers)) {
+        if ((typeof value !== 'undefined' && value !== null)) {
+          results.push(
+            new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1], value)
+          )
+        } else if (this._mode === 'loose') {
+          results.push(
+            new X12QueryResult(interchange, functionalGroup, transaction, segment, new X12Element(), undefined)
+          )
+        }
       }
     }
 
@@ -285,8 +290,8 @@ export class X12QueryEngine {
       return true
     }
 
-    for (let i = 0; i < qualifiers.length; i++) {
-      const qualifier = qualifiers[i].substr(1)
+    for (const qualifierValue of qualifiers) {
+      const qualifier = qualifierValue.substr(1)
       const elementReference = qualifier.substring(0, qualifier.indexOf('['))
       const elementValue = qualifier.substring(qualifier.indexOf('[') + 2, qualifier.lastIndexOf(']') - 1)
       const tag = elementReference.substr(0, elementReference.length - 2)

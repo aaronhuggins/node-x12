@@ -4,6 +4,7 @@
     "project": "./tsconfig.json"
   },
   "rules": {
+    "@typescript-eslint/strict-boolean-expressions": ["off"],
     "@typescript-eslint/no-this-alias": ["off"],
     "@typescript-eslint/prefer-includes": ["off"],
     "@typescript-eslint/restrict-template-expressions": ["off"],

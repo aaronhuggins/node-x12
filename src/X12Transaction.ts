@@ -5,6 +5,7 @@ import { X12Segment } from './X12Segment'
 import { STSegmentHeader } from './X12SegmentHeader'
 import { X12TransactionMap } from './X12TransactionMap'
 import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import type { X12QueryMode } from './X12QueryEngine'
 
 export class X12Transaction {
   /**
@@ -68,11 +69,12 @@ export class X12Transaction {
   /**
    * @description Map data from a transaction set to a javascript object.
    * @param {object} map - The javascript object containing keys and querys to resolve.
-   * @param {Function} helper - A helper function which will be executed on every resolved query value.
+   * @param {Function|'strict'|'loose'} [helper] - A helper function which will be executed on every resolved query value, or the mode for the query engine.
+   * @param {'strict'|'loose'} [mode] - The mode for the query engine when performing the transform.
    * @returns {object} An object containing resolved values mapped to object keys.
    */
-  toObject (map: object, helper?: Function): object {
-    const mapper = new X12TransactionMap(map, this, helper)
+  toObject (map: object, helper?: Function | X12QueryMode, mode?: X12QueryMode): object {
+    const mapper = new X12TransactionMap(map, this, helper as Function, mode)
 
     return mapper.toObject()
   }
@@ -91,8 +93,8 @@ export class X12Transaction {
       edi += options.endOfLine
     }
 
-    for (let i = 0; i < this.segments.length; i++) {
-      edi += this.segments[i].toString(options)
+    for (const segment of this.segments) {
+      edi += segment.toString(options)
 
       if (options.format) {
         edi += options.endOfLine

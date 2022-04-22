@@ -1,13 +1,13 @@
 'use strict'
 
-import { QuerySyntaxError } from './Errors'
-import { X12Interchange } from './X12Interchange'
-import { X12QueryEngine, X12QueryMode } from './X12QueryEngine'
-import { X12Transaction } from './X12Transaction'
-import { TxEngine } from './X12SerializationOptions'
+import { QuerySyntaxError } from './Errors.ts'
+import { X12Interchange } from './X12Interchange.ts'
+import { X12QueryEngine, X12QueryMode } from './X12QueryEngine.ts'
+import { X12Transaction } from './X12Transaction.ts'
+import { TxEngine } from './X12SerializationOptions.ts'
 // @ts-expect-error
 import * as nodeRequire from '../nodeRequire.js'
-import * as crypto from 'crypto'
+import { crypto } from '../deps.ts'
 
 /**
  * @private

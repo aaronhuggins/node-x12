@@ -1,11 +1,11 @@
 'use strict'
 
-import { JSEDITransaction } from './JSEDINotation'
-import { X12Segment } from './X12Segment'
-import { STSegmentHeader } from './X12SegmentHeader'
-import { X12TransactionMap } from './X12TransactionMap'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
-import type { X12QueryMode } from './X12QueryEngine'
+import { JSEDITransaction } from './JSEDINotation.ts'
+import { X12Segment } from './X12Segment.ts'
+import { STSegmentHeader } from './X12SegmentHeader.ts'
+import { X12TransactionMap } from './X12TransactionMap.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
+import type { X12QueryMode } from './X12QueryEngine.ts'
 
 export class X12Transaction {
   /**

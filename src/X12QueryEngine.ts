@@ -1,12 +1,12 @@
 'use strict'
 
-import { QuerySyntaxError } from './Errors'
-import { X12Parser } from './X12Parser'
-import { X12Interchange } from './X12Interchange'
-import { X12FunctionalGroup } from './X12FunctionalGroup'
-import { X12Transaction } from './X12Transaction'
-import { X12Segment } from './X12Segment'
-import { X12Element } from './X12Element'
+import { QuerySyntaxError } from './Errors.ts'
+import { X12Parser } from './X12Parser.ts'
+import { X12Interchange } from './X12Interchange.ts'
+import { X12FunctionalGroup } from './X12FunctionalGroup.ts'
+import { X12Transaction } from './X12Transaction.ts'
+import { X12Segment } from './X12Segment.ts'
+import { X12Element } from './X12Element.ts'
 
 export type X12QueryMode = 'strict' | 'loose'
 

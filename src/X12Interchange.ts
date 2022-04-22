@@ -1,10 +1,10 @@
 'use strict'
 
-import { JSEDINotation } from './JSEDINotation'
-import { X12FunctionalGroup } from './X12FunctionalGroup'
-import { X12Segment } from './X12Segment'
-import { ISASegmentHeader } from './X12SegmentHeader'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { JSEDINotation } from './JSEDINotation.ts'
+import { X12FunctionalGroup } from './X12FunctionalGroup.ts'
+import { X12Segment } from './X12Segment.ts'
+import { ISASegmentHeader } from './X12SegmentHeader.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
 
 export class X12Interchange {
   /**

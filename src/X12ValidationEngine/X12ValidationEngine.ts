@@ -1,10 +1,10 @@
-import { X12Segment } from '../X12Segment'
-import { X12Element } from '../X12Element'
-import { X12Transaction } from '../X12Transaction'
-import { X12FunctionalGroup } from '../X12FunctionalGroup'
-import { X12Interchange } from '../X12Interchange'
-import { X12SerializationOptions } from '../X12SerializationOptions'
-import { ValidationEngineOptions, ValidationReport, GroupResponseCode } from './Interfaces'
+import { X12Segment } from '../X12Segment.ts'
+import { X12Element } from '../X12Element.ts'
+import { X12Transaction } from '../X12Transaction.ts'
+import { X12FunctionalGroup } from '../X12FunctionalGroup.ts'
+import { X12Interchange } from '../X12Interchange.ts'
+import { X12SerializationOptions } from '../X12SerializationOptions.ts'
+import { ValidationEngineOptions, ValidationReport, GroupResponseCode } from './Interfaces.ts'
 import {
   X12ElementRule,
   X12SegmentRule,
@@ -12,7 +12,7 @@ import {
   X12GroupRule,
   X12InterchangeRule,
   X12ValidationRule
-} from './X12ValidationRule'
+} from './X12ValidationRule.ts'
 
 const simpleAckMap = {
   header: ['997', '{{ macro | random }}'],

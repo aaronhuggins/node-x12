@@ -1,10 +1,10 @@
 'use strict'
 
-import { JSEDIFunctionalGroup } from './JSEDINotation'
-import { X12Segment } from './X12Segment'
-import { GSSegmentHeader } from './X12SegmentHeader'
-import { X12Transaction } from './X12Transaction'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { JSEDIFunctionalGroup } from './JSEDINotation.ts'
+import { X12Segment } from './X12Segment.ts'
+import { GSSegmentHeader } from './X12SegmentHeader.ts'
+import { X12Transaction } from './X12Transaction.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
 
 export class X12FunctionalGroup {
   /**

@@ -1,10 +1,10 @@
-import { X12Segment } from '../X12Segment'
-import { X12Element } from '../X12Element'
-import { X12Transaction } from '../X12Transaction'
-import { X12FunctionalGroup } from '../X12FunctionalGroup'
-import { X12Interchange } from '../X12Interchange'
-import { ValidationError, ValidationType, ValidationReport } from './Interfaces'
-import { errorLookup } from './X12ValidationErrorCode'
+import { X12Segment } from '../X12Segment.ts'
+import { X12Element } from '../X12Element.ts'
+import { X12Transaction } from '../X12Transaction.ts'
+import { X12FunctionalGroup } from '../X12FunctionalGroup.ts'
+import { X12Interchange } from '../X12Interchange.ts'
+import { ValidationError, ValidationType, ValidationReport } from './Interfaces.ts'
+import { errorLookup } from './X12ValidationErrorCode.ts'
 
 export class X12ValidationRule {
   constructor (options: X12ValidationRule) {

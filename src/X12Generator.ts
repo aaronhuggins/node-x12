@@ -1,9 +1,9 @@
 'use strict'
 
-import { JSEDINotation } from './JSEDINotation'
-import { X12Interchange } from './X12Interchange'
-import { X12Parser } from './X12Parser'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { JSEDINotation } from './JSEDINotation.ts'
+import { X12Interchange } from './X12Interchange.ts'
+import { X12Parser } from './X12Parser.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
 
 export class X12Generator {
   /**

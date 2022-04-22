@@ -1,17 +1,16 @@
 'use strict'
 
-import { Transform } from 'stream'
-import { StringDecoder } from 'string_decoder'
-import { ArgumentNullError, ParserError } from './Errors'
-import { Range, Position } from './Positioning'
-import { X12Diagnostic, X12DiagnosticLevel } from './X12Diagnostic'
-import { X12FatInterchange } from './X12FatInterchange'
-import { X12Interchange } from './X12Interchange'
-import { X12FunctionalGroup } from './X12FunctionalGroup'
-import { X12Transaction } from './X12Transaction'
-import { X12Segment } from './X12Segment'
-import { X12Element } from './X12Element'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { Transform, StringDecoder } from '../deps.ts'
+import { ArgumentNullError, ParserError } from './Errors.ts'
+import { Range, Position } from './Positioning.ts'
+import { X12Diagnostic, X12DiagnosticLevel } from './X12Diagnostic.ts'
+import { X12FatInterchange } from './X12FatInterchange.ts'
+import { X12Interchange } from './X12Interchange.ts'
+import { X12FunctionalGroup } from './X12FunctionalGroup.ts'
+import { X12Transaction } from './X12Transaction.ts'
+import { X12Segment } from './X12Segment.ts'
+import { X12Element } from './X12Element.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
 
 const DOCUMENT_MIN_LENGTH: number = 113 // ISA = 106, IEA > 7
 const SEGMENT_TERMINATOR_POS: number = 105

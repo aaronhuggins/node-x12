@@ -1,6 +1,6 @@
 'use strict'
 
-import { X12SerializationOptions } from './X12SerializationOptions'
+import { X12SerializationOptions } from './X12SerializationOptions.ts'
 
 export class JSEDINotation {
   constructor (header?: string[], options?: X12SerializationOptions) {

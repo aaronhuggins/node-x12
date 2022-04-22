@@ -1,8 +1,8 @@
 'use strict'
 
-import { JSEDINotation } from './JSEDINotation'
-import { X12Interchange } from './X12Interchange'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { JSEDINotation } from './JSEDINotation.ts'
+import { X12Interchange } from './X12Interchange.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
 
 export class X12FatInterchange extends Array<X12Interchange> {
   /**

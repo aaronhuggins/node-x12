@@ -1,4 +1,4 @@
-import { ValidationType, ValidationError } from './Interfaces'
+import { ValidationType, ValidationError } from './Interfaces.ts'
 
 // Error codes taken from publicly available documentation
 // at https://docs.microsoft.com/en-us/biztalk/core/x12-997-acknowledgment-error-codes

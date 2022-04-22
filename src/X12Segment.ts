@@ -1,11 +1,11 @@
 'use strict'
 
-import { JSEDISegment } from './JSEDINotation'
-import { Range } from './Positioning'
-import { X12Element } from './X12Element'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
-import { ISASegmentHeader } from './X12SegmentHeader'
-import { GeneratorError } from './Errors'
+import { JSEDISegment } from './JSEDINotation.ts'
+import { Range } from './Positioning.ts'
+import { X12Element } from './X12Element.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
+import { ISASegmentHeader } from './X12SegmentHeader.ts'
+import { GeneratorError } from './Errors.ts'
 
 export class X12Segment {
   /**

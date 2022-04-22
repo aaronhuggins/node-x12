@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 import { X12Segment } from '../X12Segment.ts'
 import { X12Element } from '../X12Element.ts'
 import { X12Transaction } from '../X12Transaction.ts'
@@ -94,15 +95,15 @@ export class X12InterchangeRule extends X12ValidationRule {
     }
   }
 
-  engine?: 'rule'
-  ruleType?: 'interchange'
+  declare engine?: 'rule'
+  declare ruleType?: 'interchange'
   group: X12GroupRule
-  header?: X12SegmentRule
-  trailer?: X12SegmentRule
+  header: X12SegmentRule
+  trailer: X12SegmentRule
 
   assert? (interchange: X12Interchange): true | ValidationReport {
     const report: ValidationReport = {}
-    const headerResult = this.header.assert(interchange.header)
+    const headerResult = this.header.assert?.(interchange.header)
     let pass = true
 
     if (headerResult !== true) {
@@ -111,14 +112,14 @@ export class X12InterchangeRule extends X12ValidationRule {
     }
 
     const groupNumber = parseFloat(interchange.functionalGroups[0].header.valueOf(6, '0'))
-    const groupReport = this.group.assert(interchange.functionalGroups[0], groupNumber)
+    const groupReport = this.group.assert?.(interchange.functionalGroups[0], groupNumber) ?? {}
 
     if (groupReport !== true) {
       pass = false
       report.groups = [groupReport]
     }
 
-    const trailerResult = this.trailer.assert(interchange.trailer)
+    const trailerResult = this.trailer.assert?.(interchange.trailer)
 
     if (trailerResult !== true) {
       pass = false
@@ -171,20 +172,20 @@ export class X12GroupRule extends X12ValidationRule {
     }
   }
 
-  engine?: 'rule'
-  ruleType?: 'group'
+  declare engine?: 'rule'
+  declare ruleType?: 'group'
   transaction: X12TransactionRule
-  header?: X12SegmentRule
-  trailer?: X12SegmentRule
+  header: X12SegmentRule
+  trailer: X12SegmentRule
 
   assert? (group: X12FunctionalGroup, controlNumber: number): true | ValidationReport {
     const errors: ValidationError[] = []
     const transactionReports: ValidationReport[] = []
-    const headerResult = this.header.assert(group.header)
+    const headerResult = this.header.assert?.(group.header)
 
     if (headerResult !== true) {
-      const groupIdResult = headerResult.elements.find(error => error.position === 1)
-      const groupNumberResult = headerResult.elements.find(error => error.position === 6)
+      const groupIdResult = headerResult?.elements?.find(error => error.position === 1)
+      const groupNumberResult = headerResult?.elements?.find(error => error.position === 6)
 
       if (typeof groupIdResult === 'object') {
         errors.push(errorLookup(this.ruleType, '1', controlNumber))
@@ -197,12 +198,12 @@ export class X12GroupRule extends X12ValidationRule {
 
     for (const transaction of group.transactions) {
       const transactionNumber = parseFloat(transaction.header.valueOf(2, '0'))
-      const report = this.transaction.assert(transaction, transactionNumber)
+      const report = this.transaction.assert?.(transaction, transactionNumber)
 
-      if (report !== true) transactionReports.push(report)
+      if (report !== true) transactionReports.push(report ?? {})
     }
 
-    const trailerResult = this.trailer.assert(group.trailer)
+    const trailerResult = this.trailer.assert?.(group.trailer)
 
     if (trailerResult === true) {
       const transactionCount = parseFloat(group.trailer.valueOf(1, '0'))
@@ -263,15 +264,16 @@ export class X12TransactionRule extends X12ValidationRule {
     }
   }
 
-  engine?: 'rule'
-  ruleType?: 'transaction'
+  declare engine?: 'rule'
+  declare ruleType?: 'transaction'
   segments: X12SegmentRule[]
-  header?: X12SegmentRule
-  trailer?: X12SegmentRule
+  header: X12SegmentRule
+  trailer: X12SegmentRule
 
   assert? (transaction: X12Transaction, controlNumber: number): true | ValidationReport {
     const errors: ValidationError[] = []
     const segmentReports: ValidationReport[] = []
+    // deno-lint-ignore no-this-alias
     const _this = this
     const handleLoop = function handleLoop (
       index: number,
@@ -300,9 +302,9 @@ export class X12TransactionRule extends X12ValidationRule {
         const segmentRule = segmentLoop[loopPosition]
         const segmentPosition = i + 2 // This is because the transaction header is segment position 1.
         if (loopSegment.tag === segmentRule.tag) {
-          const report = segmentRule.assert(loopSegment, segmentPosition)
+          const report = segmentRule.assert?.(loopSegment, segmentPosition)
 
-          if (report !== true) segmentReports.push(report)
+          if (report !== true) segmentReports.push(report ?? {})
 
           if (segmentLoop.length === loopPosition + 1) {
             loopPosition = 0
@@ -317,13 +319,13 @@ export class X12TransactionRule extends X12ValidationRule {
 
       return _this.segments[ruleIndex].loopStart ? handleLoop(index, ruleIndex) : { index, ruleIndex }
     }
-    const headerResult = this.header.assert(transaction.header, 1)
+    const headerResult = this.header.assert?.(transaction.header, 1)
 
     if (headerResult !== true) {
-      const transactionIdResult = headerResult.elements.find(error => error.position === 1)
-      const transactionNumberResult = headerResult.elements.find(error => error.position === 2)
+      const transactionIdResult = headerResult?.elements?.find(error => error.position === 1)
+      const transactionNumberResult = headerResult?.elements?.find(error => error.position === 2)
 
-      segmentReports.push(headerResult)
+      segmentReports.push(headerResult ?? {})
 
       if (typeof transactionIdResult === 'object') {
         errors.push(errorLookup(this.ruleType, '6', controlNumber))
@@ -356,12 +358,12 @@ export class X12TransactionRule extends X12ValidationRule {
       const segment = transaction.segments[i]
       const segmentRule = this.segments[ri]
       const segmentPosition = i + 2 // This is because the transaction header is segment position 1.
-      const report = segmentRule.assert(segment, segmentPosition)
+      const report = segmentRule.assert?.(segment, segmentPosition)
 
-      if (report !== true) segmentReports.push(report)
+      if (report !== true) segmentReports.push(report ?? {})
     }
 
-    const trailerResult = this.trailer.assert(transaction.trailer, transaction.segments.length + 2)
+    const trailerResult = this.trailer.assert?.(transaction.trailer, transaction.segments.length + 2)
 
     if (trailerResult === true) {
       const segmentCount = parseFloat(transaction.trailer.valueOf(1, '0'))
@@ -375,7 +377,7 @@ export class X12TransactionRule extends X12ValidationRule {
         errors.push(errorLookup(this.ruleType, '4', controlNumber))
       }
     } else {
-      segmentReports.push(trailerResult)
+      segmentReports.push(trailerResult ?? {})
     }
 
     if (segmentReports.length > 0) {
@@ -409,15 +411,15 @@ export class X12SegmentRule extends X12ValidationRule {
     this.mandatory = options.mandatory
   }
 
-  engine?: 'rule'
-  ruleType?: 'segment'
+  declare engine?: 'rule'
+  declare ruleType?: 'segment'
   tag: string
   elements: X12ElementRule[] | 'skip'
   loopStart?: boolean
   loopEnd?: boolean
   mandatory?: boolean
 
-  assert? (segment: X12Segment, position?: number): true | ValidationReport {
+  assert? (segment: X12Segment, position = 1): true | ValidationReport {
     const errors: ValidationError[] = []
     const elements: ValidationError[] = []
 
@@ -432,9 +434,9 @@ export class X12SegmentRule extends X12ValidationRule {
         const element = segment.elements[i]
         const elementRule = this.elements[i]
         const elementPosition = i + 1
-        const report = elementRule.assert(element, elementPosition)
+        const report = elementRule.assert?.(element, elementPosition)
 
-        if (report !== true) elements.push(...report.elements)
+        if (report !== true) elements.push(...(report?.elements ?? []))
       }
 
       if (segment.elements.length > this.elements.length) {
@@ -474,8 +476,8 @@ export class X12ElementRule extends X12ValidationRule {
     this.checkType = options.checkType
   }
 
-  engine?: RegExp | 'rule'
-  ruleType?: 'element'
+  declare engine?: RegExp | 'rule'
+  declare ruleType?: 'element'
   expect?: string
   allowBlank?: boolean
   minLength?: number
@@ -505,6 +507,7 @@ export class X12ElementRule extends X12ValidationRule {
     }
     const value = element.value
     const errors: ValidationError[] = []
+    // deno-lint-ignore no-this-alias
     const _this = this
     const isLessThanMin = function isLessThanMin (val: string): boolean {
       if (_this.padLength) return false
@@ -516,13 +519,13 @@ export class X12ElementRule extends X12ValidationRule {
     }
     const isGreaterThanMax = function isGreaterThanMax (val: string): boolean {
       return (
-        (typeof _this.minLength === 'number' && val.length > _this.maxLength) ||
+        (typeof _this.maxLength === 'number' && val.length > _this.maxLength) ||
         (Array.isArray(_this.minMax) && val.length > _this.minMax[1])
       )
     }
 
     if (this.engine instanceof RegExp) {
-      return super.assert(value)
+      return super.assert?.(value) ?? {}
     } else {
       if (typeof this.expect === 'string') {
         if (value.toString().trim() === this.expect.trim()) {

@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-inferrable-types no-explicit-any ban-types
 'use strict'
 
 import { Transform, StringDecoder } from '../deps.ts'
@@ -52,7 +53,7 @@ export class X12Parser extends Transform {
     })
     this.diagnostics = new Array<X12Diagnostic>()
     this._strict = strict
-    this._options = options
+    this._options = options as any
     this._decoder = new StringDecoder(encoding)
     this._parsedISA = false
     this._flushing = false
@@ -62,14 +63,14 @@ export class X12Parser extends Transform {
 
   private readonly _strict: boolean
   private readonly _decoder: StringDecoder
-  private _options: X12SerializationOptions
+  private _options: Required<X12SerializationOptions>
   private _dataCache: string
   private _parsedISA: boolean
   private _flushing: boolean
-  private _fatInterchange: X12FatInterchange
-  private _interchange: X12Interchange
-  private _group: X12FunctionalGroup
-  private _transaction: X12Transaction
+  private _fatInterchange!: X12FatInterchange
+  private _interchange!: X12Interchange
+  private _group!: X12FunctionalGroup
+  private _transaction!: X12Transaction
   private _segmentCounter: number
   diagnostics: X12Diagnostic[]
 
@@ -115,7 +116,7 @@ export class X12Parser extends Transform {
     segments: X12Segment[],
     options?: X12SerializationOptions
   ): X12Interchange | X12FatInterchange {
-    this._options = options === undefined ? this._options : defaultSerializationOptions(options)
+    this._options = options === undefined ? this._options : defaultSerializationOptions(options) as any
 
     segments.forEach(segment => {
       this._processSegment(segment)
@@ -167,7 +168,7 @@ export class X12Parser extends Transform {
     const elementDelimiter = edi.charAt(ELEMENT_DELIMITER_POS)
     const subElementDelimiter = edi.charAt(SUBELEMENT_DELIMITER_POS)
     const repetitionDelimiter = edi.charAt(REPETITION_DELIMITER_POS)
-    let endOfLine = edi.charAt(END_OF_LINE_POS)
+    let endOfLine: string | undefined = edi.charAt(END_OF_LINE_POS)
     let format = false
 
     if (options === undefined) {
@@ -188,9 +189,9 @@ export class X12Parser extends Transform {
         repetitionDelimiter,
         endOfLine,
         format
-      })
+      }) as any
     } else {
-      this._options = defaultSerializationOptions(options)
+      this._options = defaultSerializationOptions(options) as any
     }
   }
 
@@ -198,10 +199,8 @@ export class X12Parser extends Transform {
     const segments = new Array<X12Segment>()
 
     let tagged = false
-    let currentSegment: X12Segment
-    let currentElement: X12Element
-
-    currentSegment = new X12Segment()
+    let currentSegment: X12Segment = new X12Segment()
+    let currentElement: X12Element = new X12Element()
 
     for (let i = 0, l = 0, c = 0; i < edi.length; i++) {
       // segment not yet named and not whitespace or delimiter - begin naming segment
@@ -310,7 +309,7 @@ export class X12Parser extends Transform {
       }
 
       this._processGE(this._group, seg)
-      this._group = undefined
+      this._group = undefined as any
     } else if (seg.tag === 'ST') {
       if (this._group === undefined) {
         const errorMessage = `X12 Standard: ${seg.tag} segment cannot appear outside of a functional group.`
@@ -348,7 +347,7 @@ export class X12Parser extends Transform {
       }
 
       this._processSE(this._transaction, seg)
-      this._transaction = undefined
+      this._transaction = undefined as any
     } else {
       if (this._group === undefined) {
         const errorMessage = `X12 Standard: ${seg.tag} segment cannot appear outside of a functional group.`
@@ -474,7 +473,7 @@ export class X12Parser extends Transform {
 
   private _consumeChunk (chunk: string): void {
     chunk = this._dataCache + chunk
-    let rawSegments: string[]
+    let rawSegments: string[] | undefined
 
     if (!this._parsedISA && chunk.length >= DOCUMENT_MIN_LENGTH) {
       this._detectOptions(chunk, this._options)
@@ -536,7 +535,7 @@ export class X12Parser extends Transform {
    * @param {string} encoding - Chunk enoding.
    * @param {Function} callback - Callback signalling chunk is processed and instance is ready for next chunk.
    */
-  public _transform (chunk: any, encoding: string, callback: Function): void {
+  public _transform (chunk: any, _encoding: string, callback: Function): void {
     this._consumeChunk(this._decoder.write(chunk))
 
     callback()

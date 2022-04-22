@@ -13,6 +13,7 @@ export interface ValidationEngineOptions {
     handling?: 'reject' | 'note_errors' | 'allow_partial'
   }
   throwError?: boolean
+  // deno-lint-ignore no-explicit-any
   ackMap?: any
 }
 

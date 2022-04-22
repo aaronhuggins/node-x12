@@ -1,3 +1,4 @@
+// deno-lint-ignore-file constructor-super ban-types
 'use strict'
 
 import { JSEDINotation } from './JSEDINotation.ts'

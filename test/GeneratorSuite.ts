@@ -1,8 +1,7 @@
 'use strict'
 
-import 'mocha'
-import { JSEDINotation, X12Generator, X12Parser, ISASegmentHeader, GSSegmentHeader, X12Interchange } from '../core'
-import * as fs from 'fs'
+import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
+import { JSEDINotation, X12Generator, X12Parser, ISASegmentHeader, GSSegmentHeader, X12Interchange } from '../core.ts'
 
 describe('X12Generator', () => {
   it('should create X12Generator', () => {
@@ -19,7 +18,7 @@ describe('X12Generator', () => {
   })
 
   it('should replicate the source data unless changes are made', () => {
-    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+    const edi = Deno.readTextFileSync('test/test-data/850.edi')
     const parser = new X12Parser(true)
     const notation: JSEDINotation = parser.parse(edi).toJSEDINotation() as JSEDINotation
 
@@ -33,7 +32,7 @@ describe('X12Generator', () => {
   })
 
   it('should replicate the source data to and from JSON unless changes are made', () => {
-    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+    const edi = Deno.readTextFileSync('test/test-data/850.edi')
     const parser = new X12Parser(true)
     const interchange = parser.parse(edi)
 
@@ -49,7 +48,7 @@ describe('X12Generator', () => {
   })
 
   it('should not generate 271 with 4 ST elements using default segment headers', () => {
-    const fileEdi = fs.readFileSync('test/test-data/271.edi', 'utf8').split('~')
+    const fileEdi = Deno.readTextFileSync('test/test-data/271.edi').split('~')
 
     const i = new X12Interchange()
 
@@ -74,7 +73,7 @@ describe('X12Generator', () => {
   })
 
   it('should generate 271 with 3 ST elements using custom segment headers', () => {
-    const fileEdi = fs.readFileSync('test/test-data/271.edi', 'utf8').split('~')
+    const fileEdi = Deno.readTextFileSync('test/test-data/271.edi').split('~')
 
     const i = new X12Interchange({
       segmentHeaders: [
@@ -107,7 +106,7 @@ describe('X12Generator', () => {
   })
 
   it('should validate custom segment headers', () => {
-    const edi = fs.readFileSync('test/test-data/271.edi', 'utf8')
+    const edi = Deno.readTextFileSync('test/test-data/271.edi')
 
     const options = {
       segmentHeaders: [

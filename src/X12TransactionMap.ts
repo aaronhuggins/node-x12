@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any ban-types
 'use strict'
 
 import { QuerySyntaxError } from './Errors.ts'
@@ -5,9 +6,7 @@ import { X12Interchange } from './X12Interchange.ts'
 import { X12QueryEngine, X12QueryMode } from './X12QueryEngine.ts'
 import { X12Transaction } from './X12Transaction.ts'
 import { TxEngine } from './X12SerializationOptions.ts'
-// @ts-expect-error
-import * as nodeRequire from '../nodeRequire.js'
-import { crypto } from '../deps.ts'
+import { crypto, Liquid } from '../deps.ts'
 
 /**
  * @private
@@ -59,7 +58,7 @@ export class X12TransactionMap {
   constructor (map: any, transaction?: X12Transaction, helper?: Function, txEngine?: TxEngine, mode?: X12QueryMode)
   constructor (map: any, transaction?: X12Transaction, helper?: Function | TxEngine | X12QueryMode, txEngine?: TxEngine | X12QueryMode, mode?: X12QueryMode) {
     this._map = map
-    this._transaction = transaction
+    if (transaction) this._transaction = transaction
     this.helper = typeof helper === 'function' ? helper : this._helper
 
     if (typeof helper === 'string' && (typeof txEngine === 'undefined' || typeof mode === 'undefined')) {
@@ -83,7 +82,7 @@ export class X12TransactionMap {
   }
 
   protected _map: any
-  protected _transaction: X12Transaction
+  protected _transaction!: X12Transaction
   protected _object: any
   protected _mode: X12QueryMode
   helper: Function
@@ -117,7 +116,7 @@ export class X12TransactionMap {
     map = map === undefined ? this._map : map
 
     const clone = JSON.parse(JSON.stringify(map))
-    let clones: object[] = null
+    const clones: object[] = []
     const engine = new X12QueryEngine(false, this._mode)
     const interchange = new X12Interchange()
     interchange.setHeader([
@@ -144,7 +143,7 @@ export class X12TransactionMap {
       if (Object.prototype.hasOwnProperty.call(map, key) as boolean) {
         if (Array.isArray(map[key]) && typeof map[key][0] === 'string') {
           const typedArray: string[] = map[key] as string[]
-          const newArray = new Array<string | string[]>()
+          const newArray = new Array<string | null | string[]>()
 
           typedArray.forEach(query => {
             try {
@@ -164,7 +163,7 @@ export class X12TransactionMap {
                     superArray = clone[key]
                   }
 
-                  result.values.forEach((value: string, index: number) => {
+                  result.values.forEach((value, index) => {
                     if (!Array.isArray(superArray[index])) {
                       superArray[index] = new Array<string>()
                     }
@@ -191,20 +190,15 @@ export class X12TransactionMap {
               clone[key] = null
             } else if (result.value === null || Array.isArray(clones)) {
               if (result.value !== null) {
-                clones.forEach((cloned: object[]) => {
+                clones.forEach((cloned: any) => {
                   cloned[key as unknown as number] = this.helper(key, result.value, map[key], callback)
                 })
-              } else {
-                if (!Array.isArray(clones)) {
-                  clones = new Array<object>()
-                }
-
-                result.values.forEach((value: string, index: number) => {
+                result.values.forEach((value, index) => {
                   if (clones[index] === undefined) {
                     clones[index] = JSON.parse(JSON.stringify(clone))
                   }
 
-                  clones[index][key] = this.helper(key, value, map[key], callback)
+                  (clones as any)[index][key] = this.helper(key, value, map[key], callback)
                 })
               }
             } else {
@@ -301,7 +295,7 @@ export class X12TransactionMap {
     const LIQUID_FILTERS: {
       [name: string]: (...args: any[]) => any
     } = {
-      hl_root: (value: string, depth: number = 0) => {
+      hl_root: (value: string, depth = 0) => {
         if (counter[value] === undefined) {
           counter[value] = 0
         }
@@ -360,7 +354,7 @@ export class X12TransactionMap {
 
         return `${value}`.substring(0, maxChars)
       },
-      random: (val: string, maxLength: number = 4) => {
+      random: (_val: string, maxLength = 4) => {
         const bytes = Math.ceil(maxLength / 2)
         const buffer = crypto.randomBytes(bytes)
         const hex = buffer.toString('hex')
@@ -369,7 +363,7 @@ export class X12TransactionMap {
           .toString()
           .substring(0, maxLength)
       },
-      edi_date: (val: string, length: string = 'long') => {
+      edi_date: (val: string, length = 'long') => {
         const date = !isEmpty(val) ? new Date(val) : new Date()
         const ediDate = `${date.getUTCFullYear()}${(date.getUTCMonth() + 1).toString().padStart(2, '0')}${date
           .getUTCDate()
@@ -447,7 +441,6 @@ export class X12TransactionMap {
     map = map === undefined ? this._map : map
 
     if (this.txEngine === 'liquidjs') {
-      const { Liquid } = nodeRequire('liquidjs')
       const engine = new Liquid({ strictFilters: true })
 
       for (const [name, func] of Object.entries(LIQUID_FILTERS)) {

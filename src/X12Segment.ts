@@ -1,3 +1,4 @@
+// deno-lint-ignore-file ban-types no-explicit-any
 'use strict'
 
 import { JSEDISegment } from './JSEDINotation.ts'
@@ -53,7 +54,7 @@ export class X12Segment {
    * @param {string} value - A string value.
    * @returns {X12Element} The element that was added to this segment.
    */
-  addElement (value: string = ''): X12Element {
+  addElement (value = ''): X12Element {
     const element = new X12Element(value)
 
     this.elements.push(element)
@@ -67,7 +68,7 @@ export class X12Segment {
    * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
    * @returns {X12Element} The new element if successful, or a null if failed.
    */
-  replaceElement (value: string, segmentPosition: number): X12Element {
+  replaceElement (value: string, segmentPosition: number): X12Element | null {
     const index = segmentPosition - 1
 
     if (this.elements.length <= index) {
@@ -83,13 +84,13 @@ export class X12Segment {
    * @description Insert an element at a position in the segment.
    * @param {string} value - A string value.
    * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
-   * @returns {X12Element} The new element if successful, or a null if failed.
+   * @returns {boolean} True if successful, or false if failed.
    */
-  insertElement (value: string = '', segmentPosition: number = 1): boolean {
+  insertElement (value = '', segmentPosition = 1): boolean {
     const index = segmentPosition - 1
 
     if (this.elements.length <= index) {
-      return null
+      return false
     }
 
     return this.elements.splice(index, 0, new X12Element(value)).length === 1
@@ -116,7 +117,7 @@ export class X12Segment {
    * @param {string} [defaultValue] - A default value to return if there is no element found.
    * @returns {string} If no element is at this position, null or the default value will be returned.
    */
-  valueOf (segmentPosition: number, defaultValue?: string): string {
+  valueOf (segmentPosition: number, defaultValue?: string): string | null {
     const index = segmentPosition - 1
 
     if (this.elements.length <= index) {
@@ -172,9 +173,9 @@ export class X12Segment {
    */
   private _checkSupportedSegment (): boolean {
     return (
-      this.options.segmentHeaders.findIndex(sh => {
+      (this.options.segmentHeaders?.findIndex(sh => {
         return sh.tag === this.tag
-      }) > -1
+      }) ?? -1) > -1
     )
   }
 
@@ -184,7 +185,7 @@ export class X12Segment {
    * @returns {object} The definition of this segment.
    */
   private _getX12Enumerable (): any {
-    const match = this.options.segmentHeaders.find(sh => {
+    const match = this.options.segmentHeaders?.find(sh => {
       return sh.tag === this.tag
     })
 
@@ -204,8 +205,8 @@ export class X12Segment {
     if (this._checkSupportedSegment()) {
       const enumerable = this._getX12Enumerable()
 
-      if (this.tag === ISASegmentHeader.tag && this.options.subElementDelimiter.length === 1) {
-        values[15] = this.options.subElementDelimiter
+      if (this.tag === ISASegmentHeader.tag && (this.options as any).subElementDelimiter.length === 1) {
+        values[15] = (this.options as any).subElementDelimiter
       }
 
       if (values.length === enumerable.COUNT || values.length === enumerable.COUNT_MIN) {

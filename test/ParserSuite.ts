@@ -1,25 +1,26 @@
+// deno-lint-ignore-file no-explicit-any
 'use strict'
 
-import 'mocha'
-import { X12Parser, X12Interchange, X12Segment } from '../core'
-import * as fs from 'fs'
+import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
+import { X12Parser, X12Interchange, X12Segment } from '../core.ts'
+import fs from 'https://deno.land/std@0.136.0/node/fs.ts'
 
 describe('X12Parser', () => {
   it('should parse a valid X12 document without throwing an error', () => {
-    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+    const edi = Deno.readTextFileSync('test/test-data/850.edi')
     const parser = new X12Parser()
     parser.parse(edi)
   })
 
   it('should parse a fat X12 document without throwing an error', () => {
-    const edi = fs.readFileSync('test/test-data/850_fat.edi', 'utf8')
+    const edi = Deno.readTextFileSync('test/test-data/850_fat.edi')
     const parser = new X12Parser(true)
     parser.parse(edi)
   })
 
   it('should parse and reconstruct a valid X12 stream without throwing an error', async () => {
-    return await new Promise((resolve, reject) => {
-      const ediStream = fs.createReadStream('test/test-data/850.edi', 'utf8')
+    return await new Promise<void>((resolve, reject) => {
+      const ediStream = fs.createReadStream('test/test-data/850.edi') // TODO: Replicate utf8 encoding mode
       const parser = new X12Parser()
       const segments: X12Segment[] = []
 
@@ -37,7 +38,7 @@ describe('X12Parser', () => {
           segments.push(data)
         })
         .on('end', () => {
-          const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+          const edi = Deno.readTextFileSync('test/test-data/850.edi')
           const interchange = parser.getInterchangeFromSegments(segments)
 
           if (interchange.toString() !== edi) {
@@ -49,11 +50,11 @@ describe('X12Parser', () => {
   })
 
   it('should produce accurate line numbers for files with line breaks', () => {
-    const edi = fs.readFileSync('test/test-data/850_3.edi', 'utf8')
+    const edi = Deno.readTextFileSync('test/test-data/850_3.edi')
     const parser = new X12Parser()
     const interchange = parser.parse(edi) as X12Interchange
 
-    const segments = [].concat(
+    const segments = ([] as X12Segment[]).concat(
       [
         interchange.header,
         interchange.functionalGroups[0].header,
@@ -81,7 +82,7 @@ describe('X12Parser', () => {
     let error
 
     try {
-      parser.parse(undefined)
+      parser.parse(undefined as any)
     } catch (err) {
       error = err
     }
@@ -107,7 +108,7 @@ describe('X12Parser', () => {
   })
 
   it('should find mismatched elementDelimiter', () => {
-    const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+    const edi = Deno.readTextFileSync('test/test-data/850.edi')
     const parser = new X12Parser(true)
     let error
 

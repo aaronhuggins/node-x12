@@ -5,14 +5,11 @@ export class Position {
     if (typeof line === 'number' && typeof character === 'number') {
       this.line = line
       this.character = character
-    } else {
-      this.line = NaN
-      this.character = NaN
     }
   }
 
-  line: number
-  character: number
+  line!: number
+  character!: number
 }
 
 export class Range {
@@ -25,12 +22,9 @@ export class Range {
     ) {
       this.start = new Position(startLine, startChar)
       this.end = new Position(endLine, endChar)
-    } else {
-      this.start = new Position()
-      this.end = new Position()
     }
   }
 
-  start: Position
-  end: Position
+  start!: Position
+  end!: Position
 }

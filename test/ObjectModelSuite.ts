@@ -41,7 +41,7 @@ describe('X12ObjectModel', () => {
 
     if (
       noElement !== null ||
-      noInsert !== null ||
+      noInsert !== false ||
       typeof noneToRemove !== 'boolean' ||
       defaultVal !== '2' ||
       segment.elements.length !== 1 ||

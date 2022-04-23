@@ -121,8 +121,8 @@ export class X12ValidationEngine {
     }
 
     if (actual instanceof X12Interchange && expected instanceof X12InterchangeRule) {
-      const groupId = actual.functionalGroups[0].header.valueOf(1)
-      const groupNumber = parseFloat(actual.functionalGroups[0].header.valueOf(6, '0'))
+      const groupId = actual.functionalGroups[0].header.valueOf(1) ?? ''
+      const groupNumber = parseFloat(actual.functionalGroups[0].header.valueOf(6, '0') ?? '0')
       const transactionCount = actual.functionalGroups[0].transactions.length
 
       setReport(expected.assert?.(actual) ?? {})
@@ -135,8 +135,8 @@ export class X12ValidationEngine {
     }
 
     if (actual instanceof X12FunctionalGroup && expected instanceof X12GroupRule) {
-      const groupId = actual.header.valueOf(1)
-      const groupNumber = parseFloat(actual.header.valueOf(6, '0'))
+      const groupId = actual.header.valueOf(1) ?? ''
+      const groupNumber = parseFloat(actual.header.valueOf(6, '0') ?? '0')
       const transactionCount = actual.transactions.length
 
       setReport(expected.assert?.(actual, groupNumber) ?? {})
@@ -145,7 +145,7 @@ export class X12ValidationEngine {
     }
 
     if (actual instanceof X12Transaction && expected instanceof X12TransactionRule) {
-      const transactionNumber = parseFloat(actual.header.valueOf(2, '0'))
+      const transactionNumber = parseFloat(actual.header.valueOf(2, '0') ?? '0')
 
       setReport(expected.assert?.(actual, transactionNumber) ?? {})
     }

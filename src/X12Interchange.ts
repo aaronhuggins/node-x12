@@ -148,6 +148,6 @@ export class X12Interchange {
   private _setTrailer (): void {
     this.trailer = new X12Segment(ISASegmentHeader.trailer, this.options)
 
-    this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13)])
+    this.trailer.setElements([`${this.functionalGroups.length}`, this.header.valueOf(13) ?? ''])
   }
 }

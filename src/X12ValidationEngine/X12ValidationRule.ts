@@ -111,7 +111,7 @@ export class X12InterchangeRule extends X12ValidationRule {
       report.interchange = { header: headerResult }
     }
 
-    const groupNumber = parseFloat(interchange.functionalGroups[0].header.valueOf(6, '0'))
+    const groupNumber = parseFloat(interchange.functionalGroups[0].header.valueOf(6, '0') ?? '0')
     const groupReport = this.group.assert?.(interchange.functionalGroups[0], groupNumber) ?? {}
 
     if (groupReport !== true) {
@@ -197,7 +197,7 @@ export class X12GroupRule extends X12ValidationRule {
     }
 
     for (const transaction of group.transactions) {
-      const transactionNumber = parseFloat(transaction.header.valueOf(2, '0'))
+      const transactionNumber = parseFloat(transaction.header.valueOf(2, '0') ?? '0')
       const report = this.transaction.assert?.(transaction, transactionNumber)
 
       if (report !== true) transactionReports.push(report ?? {})
@@ -206,8 +206,8 @@ export class X12GroupRule extends X12ValidationRule {
     const trailerResult = this.trailer.assert?.(group.trailer)
 
     if (trailerResult === true) {
-      const transactionCount = parseFloat(group.trailer.valueOf(1, '0'))
-      const trailerControlNumber = parseFloat(group.trailer.valueOf(2, '0'))
+      const transactionCount = parseFloat(group.trailer.valueOf(1, '0') ?? '0')
+      const trailerControlNumber = parseFloat(group.trailer.valueOf(2, '0') ?? '0')
 
       if (trailerControlNumber !== controlNumber) {
         errors.push(errorLookup(this.ruleType, '4', controlNumber))
@@ -221,7 +221,7 @@ export class X12GroupRule extends X12ValidationRule {
     if (transactionReports.length > 0 || errors.length > 0) {
       return {
         group: {
-          groupId: group.header.valueOf(1),
+          groupId: group.header.valueOf(1) ?? '',
           groupNumber: controlNumber,
           transactionCount: group.transactions.length,
           errors
@@ -366,8 +366,8 @@ export class X12TransactionRule extends X12ValidationRule {
     const trailerResult = this.trailer.assert?.(transaction.trailer, transaction.segments.length + 2)
 
     if (trailerResult === true) {
-      const segmentCount = parseFloat(transaction.trailer.valueOf(1, '0'))
-      const trailerControlNumber = parseFloat(transaction.trailer.valueOf(2, '0'))
+      const segmentCount = parseFloat(transaction.trailer.valueOf(1, '0') ?? '0')
+      const trailerControlNumber = parseFloat(transaction.trailer.valueOf(2, '0') ?? '0')
 
       if (trailerControlNumber !== controlNumber) {
         errors.push(errorLookup(this.ruleType, '3', controlNumber))
@@ -387,7 +387,7 @@ export class X12TransactionRule extends X12ValidationRule {
     return (
       errors.length === 0 || {
         transaction: {
-          transactionId: transaction.header.valueOf(1),
+          transactionId: transaction.header.valueOf(1) ?? '',
           transactionNumber: controlNumber,
           errors
         },

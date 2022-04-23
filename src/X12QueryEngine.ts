@@ -188,7 +188,7 @@ export class X12QueryEngine {
       const segment = transaction.segments[i]
 
       if (qualified && segment.tag === 'HL') {
-        const parentIndex = parseInt(segment.valueOf(2, '-1'))
+        const parentIndex = parseInt(segment.valueOf(2, '-1') ?? '-1')
 
         if (parentIndex !== lastParentIndex) {
           j = 0
@@ -197,7 +197,7 @@ export class X12QueryEngine {
       }
 
       if (!qualified && transaction.segments[i].tag === 'HL' && transaction.segments[i].valueOf(3) === pathParts[j]) {
-        lastParentIndex = parseInt(segment.valueOf(2, '-1'))
+        lastParentIndex = parseInt(segment.valueOf(2, '-1') ?? '-1')
         j++
 
         if (j === pathParts.length) {

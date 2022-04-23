@@ -105,6 +105,6 @@ export class X12FunctionalGroup {
   private _setTrailer (): void {
     this.trailer = new X12Segment(GSSegmentHeader.trailer, this.options)
 
-    this.trailer.setElements([`${this.transactions.length}`, this.header.valueOf(6)])
+    this.trailer.setElements([`${this.transactions.length}`, this.header.valueOf(6) ?? ''])
   }
 }

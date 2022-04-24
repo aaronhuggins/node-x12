@@ -1,4 +1,4 @@
-// deno-lint-ignore-file constructor-super ban-types
+// deno-lint-ignore-file ban-types
 'use strict'
 
 import { JSEDINotation } from './JSEDINotation.ts'
@@ -12,10 +12,10 @@ export class X12FatInterchange extends Array<X12Interchange> {
    * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
   constructor (items?: X12Interchange[] | X12SerializationOptions, options?: X12SerializationOptions) {
+    super()
     if (Array.isArray(items)) {
-      super(...items)
+      super.push(...items)
     } else {
-      super()
       options = items
     }
 

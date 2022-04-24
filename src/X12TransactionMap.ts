@@ -455,7 +455,7 @@ export class X12TransactionMap {
       if (typeof macroObj === 'object') {
         for (const [name, func] of Object.entries(macroObj)) {
           if (typeof name === 'string' && typeof func === 'function') {
-            engine.registerFilter(name, func)
+            engine.registerFilter(name, func as any)
           }
         }
       }

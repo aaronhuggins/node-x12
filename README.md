@@ -62,9 +62,7 @@ See the [API](/docs/API.md) for more information.
 
 #### Future
 
-Version 2.x series is being actively developed. Minor versions _should not_ cause breaking changes, but major releases _will break_.
-
-The next major version has lots of things planned in order to more completely describe ASC X12 and perform more of the heavy lifting in terms of parsing and handling X12 EDI documents. To view and track all issues in the 2.x series: [milestone 'Version 2.0.0'](https://github.com/ahuggins-nhs/node-x12/milestone/1)
+This library is in [maintenance mode as of 2021](https://github.com/aaronhuggins/node-x12/issues/24). Development of a next-generation ASC X12 parser is taking place in [js-edi](https://github.com/aaronhuggins/js-edi). This new library will support both ASC X12 and EDIFACT, as well as a more fleshed-out query language, by leveraging Antler4 grammars which closely follow publicly-provided details of their specs.
 
 ### Query Language
 

@@ -1,6 +1,6 @@
 'use strict'
 
-import { Range } from './Positioning'
+import { Range } from './Positioning.ts'
 
 export class X12Element {
   /**

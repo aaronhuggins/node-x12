@@ -8,8 +8,8 @@ export class Position {
     }
   }
 
-  line: number
-  character: number
+  line!: number
+  character!: number
 }
 
 export class Range {
@@ -25,6 +25,6 @@ export class Range {
     }
   }
 
-  start: Position
-  end: Position
+  start!: Position
+  end!: Position
 }

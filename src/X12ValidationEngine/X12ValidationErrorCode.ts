@@ -1,4 +1,5 @@
-import { ValidationType, ValidationError } from './Interfaces'
+// deno-lint-ignore-file no-explicit-any
+import { ValidationType, ValidationError } from './Interfaces.ts'
 
 // Error codes taken from publicly available documentation
 // at https://docs.microsoft.com/en-us/biztalk/core/x12-997-acknowledgment-error-codes
@@ -211,10 +212,10 @@ export const X12ValidationErrorCode: Record<string, (...args: any[]) => Validati
   }
 }
 
-export function errorLookup (codeType: 'group', code: string, position?: number): ValidationError
-export function errorLookup (codeType: 'transaction', code: string, position?: number): ValidationError
-export function errorLookup (codeType: 'segment', code: string, position?: number): ValidationError
-export function errorLookup (codeType: 'element', code: string, position?: number, dataSample?: string): ValidationError
+export function errorLookup (codeType?: 'group', code?: string, position?: number): ValidationError
+export function errorLookup (codeType?: 'transaction', code?: string, position?: number): ValidationError
+export function errorLookup (codeType?: 'segment', code?: string, position?: number): ValidationError
+export function errorLookup (codeType?: 'element', code?: string, position?: number, dataSample?: string): ValidationError
 /**
  * @description Look up a validation error by type and code.
  * @param {ValidationType} codeType - The type of validation being performed.
@@ -224,10 +225,10 @@ export function errorLookup (codeType: 'element', code: string, position?: numbe
  * @returns {ValidationError} The validation error for the lookup.
  */
 export function errorLookup (
-  codeType: ValidationType,
-  code: string,
+  codeType?: ValidationType,
+  code?: string,
   position?: number,
   dataSample?: string
 ): ValidationError {
-  return X12ValidationErrorCode[codeType](code, position, dataSample)
+  return X12ValidationErrorCode[codeType ?? 'segment'](code, position, dataSample)
 }

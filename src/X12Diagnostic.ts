@@ -1,6 +1,6 @@
 'use strict'
 
-import { Range } from './Positioning'
+import { Range } from './Positioning.ts'
 
 export enum X12DiagnosticLevel {
   Info = 0,
@@ -12,7 +12,7 @@ export class X12Diagnostic {
   constructor (level?: X12DiagnosticLevel, message?: string, range?: Range) {
     this.level = level === undefined ? X12DiagnosticLevel.Error : level
     this.message = message === undefined ? '' : message
-    this.range = range
+    this.range = range ?? new Range()
   }
 
   level: X12DiagnosticLevel

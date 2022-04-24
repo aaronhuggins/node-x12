@@ -1,10 +1,11 @@
+// deno-lint-ignore-file ban-types
 'use strict'
 
-import { JSEDIFunctionalGroup } from './JSEDINotation'
-import { X12Segment } from './X12Segment'
-import { GSSegmentHeader } from './X12SegmentHeader'
-import { X12Transaction } from './X12Transaction'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { JSEDIFunctionalGroup } from './JSEDINotation.ts'
+import { X12Segment } from './X12Segment.ts'
+import { GSSegmentHeader } from './X12SegmentHeader.ts'
+import { X12Transaction } from './X12Transaction.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
 
 export class X12FunctionalGroup {
   /**
@@ -16,8 +17,8 @@ export class X12FunctionalGroup {
     this.options = defaultSerializationOptions(options)
   }
 
-  header: X12Segment
-  trailer: X12Segment
+  header!: X12Segment;
+  trailer!: X12Segment
 
   transactions: X12Transaction[]
 
@@ -104,6 +105,6 @@ export class X12FunctionalGroup {
   private _setTrailer (): void {
     this.trailer = new X12Segment(GSSegmentHeader.trailer, this.options)
 
-    this.trailer.setElements([`${this.transactions.length}`, this.header.valueOf(6)])
+    this.trailer.setElements([`${this.transactions.length}`, this.header.valueOf(6) ?? ''])
   }
 }

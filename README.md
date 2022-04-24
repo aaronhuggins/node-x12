@@ -2,42 +2,23 @@
 
 An ASC X12 parser, generator, query engine, and mapper written for NodeJS. Parsing supports reading from streams to conserve resources in memory-intensive operations.
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/standard/eslint-config-standard-with-typescript)
-[![codecov](https://codecov.io/gh/ahuggins-nhs/node-x12/branch/master/graph/badge.svg)](https://codecov.io/gh/ahuggins-nhs/node-x12)
-![GitHub last commit](https://img.shields.io/github/last-commit/ahuggins-nhs/node-x12)
-![GitHub contributors](https://img.shields.io/github/contributors/ahuggins-nhs/node-x12)
+[![Denoland/X Module](https://shield.deno.dev/x/x12)](https://deno.land/x/x12)
+![GitHub last commit](https://img.shields.io/github/last-commit/aaronhuggins/node-x12)
+![GitHub contributors](https://img.shields.io/github/contributors/aaronhuggins/node-x12)
 ![npm collaborators](https://img.shields.io/npm/collaborators/node-x12)<br />
-![GitHub top language](https://img.shields.io/github/languages/top/ahuggins-nhs/node-x12)
-![npm bundle size](https://img.shields.io/bundlephobia/min/node-x12)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ahuggins-nhs/node-x12)
+![GitHub top language](https://img.shields.io/github/languages/top/aaronhuggins/node-x12)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/aaronhuggins/node-x12)
 ![npm](https://img.shields.io/npm/dw/node-x12)
 ![NPM](https://img.shields.io/npm/l/node-x12)<br />
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=alert_status)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=security_rating)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=ncloc)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
 
-## Usage
+## Installing
 
-Install it from the [npm repository](https://www.npmjs.com/package/node-x12):
+Simply import into your runtime: [Deno](https://deno.land/x/x12), browser, [Node ESM, or Node CommonJS](https://www.npmjs.com/package/node-x12). Browser imports can be handled via your favorite bundler, or using Skypack CDN.
 
-```console
-npm install --save node-x12
-```
-
-Then require it in your project:
-
-```js
-const { X12Parser } = require('node-x12')
-```
-
-The TypeScript code is compiled to JavaScript and distributed via NPM. If you wish to use the TypeScript code directly you can [download the zip](https://github.com/ahuggins-nhs/node-x12/releases/latest) and unpack it locally.
-
-Then import it in your project:
-
-```typescript
-import { X12Parser } from './node-x12/core.ts'
-```
+For NPM: `npm i node-x12`
 
 ## Features
 
@@ -62,9 +43,7 @@ See the [API](/docs/API.md) for more information.
 
 #### Future
 
-Version 2.x series is being actively developed. Minor versions _should not_ cause breaking changes, but major releases _will break_.
-
-The next major version has lots of things planned in order to more completely describe ASC X12 and perform more of the heavy lifting in terms of parsing and handling X12 EDI documents. To view and track all issues in the 2.x series: [milestone 'Version 2.0.0'](https://github.com/ahuggins-nhs/node-x12/milestone/1)
+This library is in [maintenance mode as of 2021](https://github.com/aaronhuggins/node-x12/issues/24). Development of a next-generation ASC X12 parser is taking place in [js-edi](https://github.com/aaronhuggins/js-edi). This new library will support both ASC X12 and EDIFACT, as well as a more fleshed-out query language, by leveraging Antler4 grammars which closely follow publicly-provided details of their specs.
 
 ### Query Language
 

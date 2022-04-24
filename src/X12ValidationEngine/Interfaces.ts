@@ -1,5 +1,5 @@
-import { X12Segment } from '../X12Segment'
-import { X12SerializationOptions } from '../X12SerializationOptions'
+import { X12Segment } from '../X12Segment.ts'
+import { X12SerializationOptions } from '../X12SerializationOptions.ts'
 
 export type GroupResponseCode = 'A' | 'E' | 'P' | 'R' | 'M' | 'W' | 'X'
 
@@ -13,6 +13,7 @@ export interface ValidationEngineOptions {
     handling?: 'reject' | 'note_errors' | 'allow_partial'
   }
   throwError?: boolean
+  // deno-lint-ignore no-explicit-any
   ackMap?: any
 }
 

@@ -1,17 +1,17 @@
+// deno-lint-ignore-file no-explicit-any
 'use strict'
 
-import 'mocha'
-import { X12Parser, X12Transaction, X12TransactionMap, X12Interchange } from '../core'
-import * as fs from 'fs'
-import * as assert from 'assert'
+import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
+import { X12Parser, X12Transaction, X12TransactionMap, X12Interchange } from '../mod.ts'
+import * as assert from "https://deno.land/std@0.133.0/node/assert.ts";
 
-const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
-const edi855 = fs.readFileSync('test/test-data/855.edi', 'utf8')
-const mapJson = fs.readFileSync('test/test-data/850_map.json', 'utf8')
-const resultJson = fs.readFileSync('test/test-data/850_map_result.json', 'utf8')
-const transactionJson = fs.readFileSync('test/test-data/Transaction_map.json', 'utf8')
-const transactionJsonLiquid = fs.readFileSync('test/test-data/Transaction_map_liquidjs.json', 'utf8')
-const transactionData = fs.readFileSync('test/test-data/Transaction_data.json', 'utf8')
+const edi = Deno.readTextFileSync('test/test-data/850.edi')
+const edi855 = Deno.readTextFileSync('test/test-data/855.edi')
+const mapJson = Deno.readTextFileSync('test/test-data/850_map.json')
+const resultJson = Deno.readTextFileSync('test/test-data/850_map_result.json')
+const transactionJson = Deno.readTextFileSync('test/test-data/Transaction_map.json')
+const transactionJsonLiquid = Deno.readTextFileSync('test/test-data/Transaction_map_liquidjs.json')
+const transactionData = Deno.readTextFileSync('test/test-data/Transaction_data.json')
 
 describe('X12Mapping', () => {
   it('should map transaction to data', () => {

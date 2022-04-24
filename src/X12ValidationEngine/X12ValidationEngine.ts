@@ -1,10 +1,10 @@
-import { X12Segment } from '../X12Segment'
-import { X12Element } from '../X12Element'
-import { X12Transaction } from '../X12Transaction'
-import { X12FunctionalGroup } from '../X12FunctionalGroup'
-import { X12Interchange } from '../X12Interchange'
-import { X12SerializationOptions } from '../X12SerializationOptions'
-import { ValidationEngineOptions, ValidationReport, GroupResponseCode } from './Interfaces'
+import { X12Segment } from '../X12Segment.ts'
+import { X12Element } from '../X12Element.ts'
+import { X12Transaction } from '../X12Transaction.ts'
+import { X12FunctionalGroup } from '../X12FunctionalGroup.ts'
+import { X12Interchange } from '../X12Interchange.ts'
+import { X12SerializationOptions } from '../X12SerializationOptions.ts'
+import { ValidationEngineOptions, ValidationReport, GroupResponseCode } from './Interfaces.ts'
 import {
   X12ElementRule,
   X12SegmentRule,
@@ -12,7 +12,7 @@ import {
   X12GroupRule,
   X12InterchangeRule,
   X12ValidationRule
-} from './X12ValidationRule'
+} from './X12ValidationRule.ts'
 
 const simpleAckMap = {
   header: ['997', '{{ macro | random }}'],
@@ -80,6 +80,7 @@ export class X12ValidationEngine {
   acknowledgement?: X12Interchange
   hardErrors?: Error[]
   throwError: boolean
+  // deno-lint-ignore no-explicit-any
   private readonly ackMap: any
 
   private setAcknowledgement (isa?: X12Segment, gs?: X12Segment, options?: X12SerializationOptions): void {
@@ -104,7 +105,8 @@ export class X12ValidationEngine {
     expected: X12InterchangeRule,
     groupResponse?: GroupResponseCode
   ): true | ValidationReport
-  assert (actual: any, expected: X12ValidationRule, groupResponse?: GroupResponseCode): true | ValidationReport {
+  // deno-lint-ignore no-explicit-any
+  assert (actual: any, expected: X12ValidationRule, _groupResponse?: GroupResponseCode): true | ValidationReport {
     const setReport = (results: true | ValidationReport): void => {
       if (results !== true) {
         this.pass = false
@@ -119,11 +121,11 @@ export class X12ValidationEngine {
     }
 
     if (actual instanceof X12Interchange && expected instanceof X12InterchangeRule) {
-      const groupId = actual.functionalGroups[0].header.valueOf(1)
-      const groupNumber = parseFloat(actual.functionalGroups[0].header.valueOf(6, '0'))
+      const groupId = actual.functionalGroups[0].header.valueOf(1) ?? ''
+      const groupNumber = parseFloat(actual.functionalGroups[0].header.valueOf(6, '0') ?? '0')
       const transactionCount = actual.functionalGroups[0].transactions.length
 
-      setReport(expected.assert(actual))
+      setReport(expected.assert?.(actual) ?? {})
 
       if (this.pass) {
         this.report = {
@@ -133,37 +135,37 @@ export class X12ValidationEngine {
     }
 
     if (actual instanceof X12FunctionalGroup && expected instanceof X12GroupRule) {
-      const groupId = actual.header.valueOf(1)
-      const groupNumber = parseFloat(actual.header.valueOf(6, '0'))
+      const groupId = actual.header.valueOf(1) ?? ''
+      const groupNumber = parseFloat(actual.header.valueOf(6, '0') ?? '0')
       const transactionCount = actual.transactions.length
 
-      setReport(expected.assert(actual, groupNumber))
+      setReport(expected.assert?.(actual, groupNumber) ?? {})
 
       if (this.pass) this.report = passingReport(groupId, groupNumber, transactionCount)
     }
 
     if (actual instanceof X12Transaction && expected instanceof X12TransactionRule) {
-      const transactionNumber = parseFloat(actual.header.valueOf(2, '0'))
+      const transactionNumber = parseFloat(actual.header.valueOf(2, '0') ?? '0')
 
-      setReport(expected.assert(actual, transactionNumber))
+      setReport(expected.assert?.(actual, transactionNumber) ?? {})
     }
 
     if (actual instanceof X12Segment && expected instanceof X12SegmentRule) {
-      setReport(expected.assert(actual))
+      setReport(expected.assert?.(actual) ?? {})
     }
 
     if (actual instanceof X12Element && expected instanceof X12ElementRule) {
-      setReport(expected.assert(actual))
+      setReport(expected.assert?.(actual) ?? {})
     }
 
     if (this.throwError && !this.pass) {
-      throw new ValidationEngineError('The actual X12 document did not meet the expected validation.', this.report)
+      throw new ValidationEngineError('The actual X12 document did not meet the expected validation.', this.report ?? {})
     }
 
-    return this.pass || this.report
+    return this.pass || (this.report ?? {})
   }
 
-  acknowledge (isa?: X12Segment, gs?: X12Segment, options?: X12SerializationOptions): X12Interchange {
+  acknowledge (isa?: X12Segment, gs?: X12Segment, options?: X12SerializationOptions): X12Interchange | undefined {
     this.setAcknowledgement(isa, gs, options)
 
     if (

@@ -1,8 +1,8 @@
+// deno-lint-ignore-file no-explicit-any
 'use strict'
 
-import 'mocha'
-import * as fs from 'fs'
-import * as assert from 'assert'
+import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
+import * as assert from "https://deno.land/std@0.133.0/node/assert.ts";
 import {
   X12Parser,
   X12ValidationEngine,
@@ -10,7 +10,7 @@ import {
   X12Segment,
   errorLookup,
   X12ValidationErrorCode
-} from '../core'
+} from '../mod.ts'
 import {
   X12GroupRule,
   X12InterchangeRule,
@@ -18,13 +18,13 @@ import {
   X12TransactionRule,
   X12SegmentRule,
   X12ElementRule
-} from '../src/X12ValidationEngine'
+} from '../src/X12ValidationEngine/index.ts'
 
-const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
-const edi2 = fs.readFileSync('test/test-data/856.edi', 'utf8')
-const validationRule850 = fs.readFileSync('test/test-data/850_validation.rule.json', 'utf8')
-const validationRuleSimple850 = fs.readFileSync('test/test-data/850_validation_simple.rule.json', 'utf8')
-const validationRuleNoHeader850 = fs.readFileSync('test/test-data/850_validation_no_headers.rule.json', 'utf8')
+const edi = Deno.readTextFileSync('test/test-data/850.edi')
+const edi2 = Deno.readTextFileSync('test/test-data/856.edi')
+const validationRule850 = Deno.readTextFileSync('test/test-data/850_validation.rule.json')
+const validationRuleSimple850 = Deno.readTextFileSync('test/test-data/850_validation_simple.rule.json')
+const validationRuleNoHeader850 = Deno.readTextFileSync('test/test-data/850_validation_no_headers.rule.json')
 
 describe('X12ValidationEngine', () => {
   it('should create validation rule', () => {

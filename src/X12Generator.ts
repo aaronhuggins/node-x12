@@ -1,9 +1,9 @@
 'use strict'
 
-import { JSEDINotation } from './JSEDINotation'
-import { X12Interchange } from './X12Interchange'
-import { X12Parser } from './X12Parser'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { JSEDINotation } from './JSEDINotation.ts'
+import { X12Interchange } from './X12Interchange.ts'
+import { X12Parser } from './X12Parser.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
 
 export class X12Generator {
   /**
@@ -14,11 +14,9 @@ export class X12Generator {
   constructor (jsen?: JSEDINotation, options?: X12SerializationOptions) {
     this.jsen = jsen === undefined ? new JSEDINotation() : jsen
 
-    if (typeof jsen === 'object' && jsen.options !== undefined) {
+    if (typeof jsen === 'object' && jsen.options !== undefined && options === undefined) {
       this.options = defaultSerializationOptions(jsen.options)
-    }
-
-    if (options !== undefined || this.options === undefined) {
+    } else {
       this.options = defaultSerializationOptions(options)
     }
 

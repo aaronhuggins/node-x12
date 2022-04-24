@@ -1,11 +1,12 @@
+// deno-lint-ignore-file no-explicit-any ban-types
 'use strict'
 
-import { JSEDITransaction } from './JSEDINotation'
-import { X12Segment } from './X12Segment'
-import { STSegmentHeader } from './X12SegmentHeader'
-import { X12TransactionMap } from './X12TransactionMap'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
-import type { X12QueryMode } from './X12QueryEngine'
+import { JSEDITransaction } from './JSEDINotation.ts'
+import { X12Segment } from './X12Segment.ts'
+import { STSegmentHeader } from './X12SegmentHeader.ts'
+import { X12TransactionMap } from './X12TransactionMap.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
+import type { X12QueryMode } from './X12QueryEngine.ts'
 
 export class X12Transaction {
   /**
@@ -17,8 +18,8 @@ export class X12Transaction {
     this.options = defaultSerializationOptions(options)
   }
 
-  header: X12Segment
-  trailer: X12Segment
+  header!: X12Segment
+  trailer!: X12Segment
 
   segments: X12Segment[]
 
@@ -130,6 +131,6 @@ export class X12Transaction {
   private _setTrailer (): void {
     this.trailer = new X12Segment(STSegmentHeader.trailer, this.options)
 
-    this.trailer.setElements([`${this.segments.length + 2}`, this.header.valueOf(2)])
+    this.trailer.setElements([`${this.segments.length + 2}`, this.header?.valueOf(2) ?? ''])
   }
 }

@@ -1,5 +1,5 @@
 'use strict'
-import { X12SegmentHeader, GSSegmentHeader, ISASegmentHeader, STSegmentHeader } from './X12SegmentHeader'
+import { X12SegmentHeader, GSSegmentHeader, ISASegmentHeader, STSegmentHeader } from './X12SegmentHeader.ts'
 
 export type TxEngine = 'liquidjs' | 'internal'
 

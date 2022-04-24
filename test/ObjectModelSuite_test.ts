@@ -1,11 +1,10 @@
 'use strict'
 
-import 'mocha'
-import { JSEDINotation, X12Parser, X12Interchange, X12FatInterchange, X12Segment } from '../core'
-import { JSEDIFunctionalGroup, JSEDITransaction } from '../src/JSEDINotation'
-import * as fs from 'fs'
+import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
+import { JSEDINotation, X12Parser, X12Interchange, X12FatInterchange, X12Segment } from '../mod.ts'
+import { JSEDIFunctionalGroup, JSEDITransaction } from '../src/JSEDINotation.ts'
 
-const edi = fs.readFileSync('test/test-data/850.edi', 'utf8')
+const edi = Deno.readTextFileSync('test/test-data/850.edi')
 
 describe('X12ObjectModel', () => {
   it('should create X12Interchange with string delimiters', () => {
@@ -42,7 +41,7 @@ describe('X12ObjectModel', () => {
 
     if (
       noElement !== null ||
-      noInsert !== null ||
+      noInsert !== false ||
       typeof noneToRemove !== 'boolean' ||
       defaultVal !== '2' ||
       segment.elements.length !== 1 ||

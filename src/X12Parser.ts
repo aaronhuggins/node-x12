@@ -1,17 +1,17 @@
+// deno-lint-ignore-file no-inferrable-types no-explicit-any ban-types
 'use strict'
 
-import { Transform } from 'stream'
-import { StringDecoder } from 'string_decoder'
-import { ArgumentNullError, ParserError } from './Errors'
-import { Range, Position } from './Positioning'
-import { X12Diagnostic, X12DiagnosticLevel } from './X12Diagnostic'
-import { X12FatInterchange } from './X12FatInterchange'
-import { X12Interchange } from './X12Interchange'
-import { X12FunctionalGroup } from './X12FunctionalGroup'
-import { X12Transaction } from './X12Transaction'
-import { X12Segment } from './X12Segment'
-import { X12Element } from './X12Element'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions'
+import { Transform, StringDecoder } from '../deps.ts'
+import { ArgumentNullError, ParserError } from './Errors.ts'
+import { Range, Position } from './Positioning.ts'
+import { X12Diagnostic, X12DiagnosticLevel } from './X12Diagnostic.ts'
+import { X12FatInterchange } from './X12FatInterchange.ts'
+import { X12Interchange } from './X12Interchange.ts'
+import { X12FunctionalGroup } from './X12FunctionalGroup.ts'
+import { X12Transaction } from './X12Transaction.ts'
+import { X12Segment } from './X12Segment.ts'
+import { X12Element } from './X12Element.ts'
+import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
 
 const DOCUMENT_MIN_LENGTH: number = 113 // ISA = 106, IEA > 7
 const SEGMENT_TERMINATOR_POS: number = 105
@@ -53,7 +53,7 @@ export class X12Parser extends Transform {
     })
     this.diagnostics = new Array<X12Diagnostic>()
     this._strict = strict
-    this._options = options
+    this._options = options as any
     this._decoder = new StringDecoder(encoding)
     this._parsedISA = false
     this._flushing = false
@@ -63,14 +63,14 @@ export class X12Parser extends Transform {
 
   private readonly _strict: boolean
   private readonly _decoder: StringDecoder
-  private _options: X12SerializationOptions
+  private _options: Required<X12SerializationOptions>
   private _dataCache: string
   private _parsedISA: boolean
   private _flushing: boolean
-  private _fatInterchange: X12FatInterchange
-  private _interchange: X12Interchange
-  private _group: X12FunctionalGroup
-  private _transaction: X12Transaction
+  private _fatInterchange!: X12FatInterchange
+  private _interchange!: X12Interchange
+  private _group!: X12FunctionalGroup
+  private _transaction!: X12Transaction
   private _segmentCounter: number
   diagnostics: X12Diagnostic[]
 
@@ -116,7 +116,7 @@ export class X12Parser extends Transform {
     segments: X12Segment[],
     options?: X12SerializationOptions
   ): X12Interchange | X12FatInterchange {
-    this._options = options === undefined ? this._options : defaultSerializationOptions(options)
+    this._options = options === undefined ? this._options : defaultSerializationOptions(options) as any
 
     segments.forEach(segment => {
       this._processSegment(segment)
@@ -168,7 +168,7 @@ export class X12Parser extends Transform {
     const elementDelimiter = edi.charAt(ELEMENT_DELIMITER_POS)
     const subElementDelimiter = edi.charAt(SUBELEMENT_DELIMITER_POS)
     const repetitionDelimiter = edi.charAt(REPETITION_DELIMITER_POS)
-    let endOfLine = edi.charAt(END_OF_LINE_POS)
+    let endOfLine: string | undefined = edi.charAt(END_OF_LINE_POS)
     let format = false
 
     if (options === undefined) {
@@ -189,9 +189,9 @@ export class X12Parser extends Transform {
         repetitionDelimiter,
         endOfLine,
         format
-      })
+      }) as any
     } else {
-      this._options = defaultSerializationOptions(options)
+      this._options = defaultSerializationOptions(options) as any
     }
   }
 
@@ -199,10 +199,8 @@ export class X12Parser extends Transform {
     const segments = new Array<X12Segment>()
 
     let tagged = false
-    let currentSegment: X12Segment
-    let currentElement: X12Element
-
-    currentSegment = new X12Segment()
+    let currentSegment: X12Segment = new X12Segment()
+    let currentElement: X12Element = new X12Element()
 
     for (let i = 0, l = 0, c = 0; i < edi.length; i++) {
       // segment not yet named and not whitespace or delimiter - begin naming segment
@@ -311,7 +309,7 @@ export class X12Parser extends Transform {
       }
 
       this._processGE(this._group, seg)
-      this._group = undefined
+      this._group = undefined as any
     } else if (seg.tag === 'ST') {
       if (this._group === undefined) {
         const errorMessage = `X12 Standard: ${seg.tag} segment cannot appear outside of a functional group.`
@@ -349,7 +347,7 @@ export class X12Parser extends Transform {
       }
 
       this._processSE(this._transaction, seg)
-      this._transaction = undefined
+      this._transaction = undefined as any
     } else {
       if (this._group === undefined) {
         const errorMessage = `X12 Standard: ${seg.tag} segment cannot appear outside of a functional group.`
@@ -382,7 +380,7 @@ export class X12Parser extends Transform {
   private _processIEA (interchange: X12Interchange, segment: X12Segment): void {
     interchange.trailer = segment
 
-    if (parseInt(segment.valueOf(1)) !== interchange.functionalGroups.length) {
+    if (parseInt(segment.valueOf(1) ?? '') !== interchange.functionalGroups.length) {
       const errorMessage = `X12 Standard: The value in IEA01 (${segment.valueOf(
         1
       )}) does not match the number of GS segments in the interchange (${interchange.functionalGroups.length}).`
@@ -414,7 +412,7 @@ export class X12Parser extends Transform {
   private _processGE (group: X12FunctionalGroup, segment: X12Segment): void {
     group.trailer = segment
 
-    if (parseInt(segment.valueOf(1)) !== group.transactions.length) {
+    if (parseInt(segment.valueOf(1) ?? '') !== group.transactions.length) {
       const errorMessage = `X12 Standard: The value in GE01 (${segment.valueOf(
         1
       )}) does not match the number of ST segments in the functional group (${group.transactions.length}).`
@@ -448,7 +446,7 @@ export class X12Parser extends Transform {
 
     const expectedNumberOfSegments = transaction.segments.length + 2
 
-    if (parseInt(segment.valueOf(1)) !== expectedNumberOfSegments) {
+    if (parseInt(segment.valueOf(1) ?? '') !== expectedNumberOfSegments) {
       const errorMessage = `X12 Standard: The value in SE01 (${segment.valueOf(
         1
       )}) does not match the number of segments in the transaction (${expectedNumberOfSegments}).`
@@ -475,7 +473,7 @@ export class X12Parser extends Transform {
 
   private _consumeChunk (chunk: string): void {
     chunk = this._dataCache + chunk
-    let rawSegments: string[]
+    let rawSegments: string[] | undefined
 
     if (!this._parsedISA && chunk.length >= DOCUMENT_MIN_LENGTH) {
       this._detectOptions(chunk, this._options)
@@ -537,7 +535,7 @@ export class X12Parser extends Transform {
    * @param {string} encoding - Chunk enoding.
    * @param {Function} callback - Callback signalling chunk is processed and instance is ready for next chunk.
    */
-  public _transform (chunk: any, encoding: string, callback: Function): void {
+  public _transform (chunk: any, _encoding: string, callback: Function): void {
     this._consumeChunk(this._decoder.write(chunk))
 
     callback()

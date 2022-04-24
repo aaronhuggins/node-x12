@@ -1,15 +1,15 @@
 // deno-lint-ignore-file no-explicit-any
-'use strict'
+"use strict";
 
 export interface X12SegmentHeader {
-  tag: string
-  trailer?: string
-  layout: any
+  tag: string;
+  trailer?: string;
+  layout: any;
 }
 
 export const ISASegmentHeader: X12SegmentHeader = {
-  tag: 'ISA',
-  trailer: 'IEA',
+  tag: "ISA",
+  trailer: "IEA",
   layout: {
     ISA01: 2,
     ISA02: 10,
@@ -28,13 +28,13 @@ export const ISASegmentHeader: X12SegmentHeader = {
     ISA15: 1,
     ISA16: 1,
     COUNT: 16,
-    PADDING: true
-  }
-}
+    PADDING: true,
+  },
+};
 
 export const GSSegmentHeader: X12SegmentHeader = {
-  tag: 'GS',
-  trailer: 'GE',
+  tag: "GS",
+  trailer: "GE",
   layout: {
     GS01: 2,
     GS02: 15,
@@ -51,13 +51,13 @@ export const GSSegmentHeader: X12SegmentHeader = {
     GS08: 12,
     GS08_MIN: 1,
     COUNT: 8,
-    PADDING: false
-  }
-}
+    PADDING: false,
+  },
+};
 
 export const STSegmentHeader: X12SegmentHeader = {
-  tag: 'ST',
-  trailer: 'SE',
+  tag: "ST",
+  trailer: "SE",
   layout: {
     ST01: 3,
     ST02: 9,
@@ -66,6 +66,6 @@ export const STSegmentHeader: X12SegmentHeader = {
     ST03_MIN: 1,
     COUNT: 3,
     COUNT_MIN: 2,
-    PADDING: false
-  }
-}
+    PADDING: false,
+  },
+};

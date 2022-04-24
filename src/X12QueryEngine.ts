@@ -1,15 +1,15 @@
 // deno-lint-ignore-file no-explicit-any
-'use strict'
+"use strict";
 
-import { QuerySyntaxError } from './Errors.ts'
-import { X12Parser } from './X12Parser.ts'
-import { X12Interchange } from './X12Interchange.ts'
-import { X12FunctionalGroup } from './X12FunctionalGroup.ts'
-import { X12Transaction } from './X12Transaction.ts'
-import { X12Segment } from './X12Segment.ts'
-import { X12Element } from './X12Element.ts'
+import { QuerySyntaxError } from "./Errors.ts";
+import { X12Parser } from "./X12Parser.ts";
+import { X12Interchange } from "./X12Interchange.ts";
+import { X12FunctionalGroup } from "./X12FunctionalGroup.ts";
+import { X12Transaction } from "./X12Transaction.ts";
+import { X12Segment } from "./X12Segment.ts";
+import { X12Element } from "./X12Element.ts";
 
-export type X12QueryMode = 'strict' | 'loose'
+export type X12QueryMode = "strict" | "loose";
 
 export class X12QueryEngine {
   /**
@@ -17,15 +17,18 @@ export class X12QueryEngine {
    * @param {X12Parser|boolean} [parser] - Pass an external parser or set the strictness of the internal parser.
    * @param {'strict'|'loose'} [mode='strict'] - Sets the mode of the query engine, defaults to classic 'strict'; adds new behavior of 'loose', which will return an empty value for a missing element so long as the segment exists.
    */
-  constructor (parser: X12Parser | boolean = true, mode: X12QueryMode = 'strict') {
-    this._parser = typeof parser === 'boolean' ? new X12Parser(parser) : parser
-    this._mode = mode
+  constructor(
+    parser: X12Parser | boolean = true,
+    mode: X12QueryMode = "strict",
+  ) {
+    this._parser = typeof parser === "boolean" ? new X12Parser(parser) : parser;
+    this._mode = mode;
   }
 
-  private readonly _parser: X12Parser
-  private readonly _mode: X12QueryMode
-  private readonly _forEachPattern: RegExp = /FOREACH\([A-Z0-9]{2,3}\)=>.+/g
-  private readonly _concatPattern: RegExp = /CONCAT\(.+,.+\)=>.+/g
+  private readonly _parser: X12Parser;
+  private readonly _mode: X12QueryMode;
+  private readonly _forEachPattern: RegExp = /FOREACH\([A-Z0-9]{2,3}\)=>.+/g;
+  private readonly _concatPattern: RegExp = /CONCAT\(.+,.+\)=>.+/g;
 
   /**
    * @description Query all references in an EDI document.
@@ -34,44 +37,57 @@ export class X12QueryEngine {
    * @param {string} [defaultValue=null] - A default value to return if result not found.
    * @returns {X12QueryResult[]} An array of results from the EDI document.
    */
-  query (rawEdi: string | X12Interchange, reference: string, defaultValue: string | null = null): X12QueryResult[] {
-    const interchange = typeof rawEdi === 'string' ? (this._parser.parse(rawEdi) as X12Interchange) : rawEdi
+  query(
+    rawEdi: string | X12Interchange,
+    reference: string,
+    defaultValue: string | null = null,
+  ): X12QueryResult[] {
+    const interchange = typeof rawEdi === "string"
+      ? (this._parser.parse(rawEdi) as X12Interchange)
+      : rawEdi;
 
-    const forEachMatch = reference.match(this._forEachPattern) // ex. FOREACH(LX)=>MAN02
+    const forEachMatch = reference.match(this._forEachPattern); // ex. FOREACH(LX)=>MAN02
 
     if (forEachMatch !== null) {
-      reference = this._evaluateForEachQueryPart(forEachMatch[0])
+      reference = this._evaluateForEachQueryPart(forEachMatch[0]);
     }
 
-    const concathMatch = reference.match(this._concatPattern) // ex. CONCAT(MAN01,-)=>MAN02
-    let concat: any
+    const concathMatch = reference.match(this._concatPattern); // ex. CONCAT(MAN01,-)=>MAN02
+    let concat: any;
 
     if (concathMatch !== null) {
-      concat = this._evaluateConcatQueryPart(interchange, concathMatch[0])
-      reference = concat.query
+      concat = this._evaluateConcatQueryPart(interchange, concathMatch[0]);
+      reference = concat.query;
     }
 
-    const hlPathMatch = reference.match(/HL\+(\w\+?)+[+-]/g) // ex. HL+O+P+I
-    const segPathMatch = reference.match(/((?<!\+)[A-Z0-9]{2,3}-)+/g) // ex. PO1-N9-
-    const elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^[]?/g) // ex. REF02; need to remove trailing ":" if exists
-    const qualMatch = reference.match(/:[A-Z0-9]{2,3}[0-9]{2,}\[["'][^[\]"']+["']\]/g) // ex. :REF01["PO"]
+    const hlPathMatch = reference.match(/HL\+(\w\+?)+[+-]/g); // ex. HL+O+P+I
+    const segPathMatch = reference.match(/((?<!\+)[A-Z0-9]{2,3}-)+/g); // ex. PO1-N9-
+    const elmRefMatch = reference.match(/[A-Z0-9]{2,3}[0-9]{2}[^[]?/g); // ex. REF02; need to remove trailing ":" if exists
+    const qualMatch = reference.match(
+      /:[A-Z0-9]{2,3}[0-9]{2,}\[["'][^[\]"']+["']\]/g,
+    ); // ex. :REF01["PO"]
 
-    const results = new Array<X12QueryResult>()
+    const results = new Array<X12QueryResult>();
 
     for (const group of interchange.functionalGroups) {
       for (const txn of group.transactions) {
-        let segments = txn.segments
+        let segments = txn.segments;
 
         if (hlPathMatch !== null) {
-          segments = this._evaluateHLQueryPart(txn, hlPathMatch[0])
+          segments = this._evaluateHLQueryPart(txn, hlPathMatch[0]);
         }
 
         if (segPathMatch !== null) {
-          segments = this._evaluateSegmentPathQueryPart(segments, segPathMatch[0])
+          segments = this._evaluateSegmentPathQueryPart(
+            segments,
+            segPathMatch[0],
+          );
         }
 
         if (elmRefMatch === null) {
-          throw new QuerySyntaxError('Element reference queries must contain an element reference!')
+          throw new QuerySyntaxError(
+            "Element reference queries must contain an element reference!",
+          );
         }
 
         const txnResults = this._evaluateElementReferenceQueryPart(
@@ -84,24 +100,24 @@ export class X12QueryEngine {
             txn.header,
             txn.trailer,
             group.trailer,
-            interchange.trailer
+            interchange.trailer,
           ]),
           elmRefMatch[0],
           qualMatch as string[],
-          defaultValue
-        )
+          defaultValue,
+        );
 
-        txnResults.forEach(res => {
+        txnResults.forEach((res) => {
           if (concat !== undefined) {
-            res.value = `${concat.value}${concat.separator}${res.value}`
+            res.value = `${concat.value}${concat.separator}${res.value}`;
           }
 
-          results.push(res)
-        })
+          results.push(res);
+        });
       }
     }
 
-    return results
+    return results;
   }
 
   /**
@@ -111,211 +127,256 @@ export class X12QueryEngine {
    * @param {string} [defaultValue=null] - A default value to return if result not found.
    * @returns {X12QueryResult} A result from the EDI document.
    */
-  querySingle (rawEdi: string | X12Interchange, reference: string, _defaultValue: string | null = null): X12QueryResult | null {
-    const results = this.query(rawEdi, reference)
+  querySingle(
+    rawEdi: string | X12Interchange,
+    reference: string,
+    _defaultValue: string | null = null,
+  ): X12QueryResult | null {
+    const results = this.query(rawEdi, reference);
 
     if (reference.match(this._forEachPattern) !== null) {
-      const values = results.map(result => result.value)
+      const values = results.map((result) => result.value);
 
       if (values.length !== 0) {
-        results[0].value = null
-        results[0].values = values
+        results[0].value = null;
+        results[0].values = values;
       }
     }
 
-    return results.length === 0 ? null : results[0]
+    return results.length === 0 ? null : results[0];
   }
 
-  private _getMacroParts (macroQuery: string): any {
-    const macroPart = macroQuery.substr(0, macroQuery.indexOf('=>'))
-    const queryPart = macroQuery.substr(macroQuery.indexOf('=>') + 2)
-    const parameters = macroPart.substr(macroPart.indexOf('(') + 1, macroPart.length - macroPart.indexOf('(') - 2)
+  private _getMacroParts(macroQuery: string): any {
+    const macroPart = macroQuery.substr(0, macroQuery.indexOf("=>"));
+    const queryPart = macroQuery.substr(macroQuery.indexOf("=>") + 2);
+    const parameters = macroPart.substr(
+      macroPart.indexOf("(") + 1,
+      macroPart.length - macroPart.indexOf("(") - 2,
+    );
 
     return {
       macroPart,
       queryPart,
-      parameters
-    }
+      parameters,
+    };
   }
 
-  private _evaluateForEachQueryPart (forEachSegment: string): string {
-    const { queryPart, parameters } = this._getMacroParts(forEachSegment)
+  private _evaluateForEachQueryPart(forEachSegment: string): string {
+    const { queryPart, parameters } = this._getMacroParts(forEachSegment);
 
-    return `${parameters}-${queryPart}`
+    return `${parameters}-${queryPart}`;
   }
 
-  private _evaluateConcatQueryPart (interchange: X12Interchange, concatSegment: string): any {
-    const { queryPart, parameters } = this._getMacroParts(concatSegment)
+  private _evaluateConcatQueryPart(
+    interchange: X12Interchange,
+    concatSegment: string,
+  ): any {
+    const { queryPart, parameters } = this._getMacroParts(concatSegment);
 
-    let value = ''
+    let value = "";
 
-    const expandedParams = parameters.split(',')
+    const expandedParams = parameters.split(",");
 
     if (expandedParams.length === 3) {
-      expandedParams[1] = ','
+      expandedParams[1] = ",";
     }
 
-    const result = this.querySingle(interchange, expandedParams[0])
+    const result = this.querySingle(interchange, expandedParams[0]);
 
     if (result !== null) {
       if (result.value !== null && result.value !== undefined) {
-        value = result.value
+        value = result.value;
       } else if (Array.isArray(result.values)) {
-        value = result.values.join(expandedParams[1])
+        value = result.values.join(expandedParams[1]);
       }
     }
 
     return {
       value,
       separator: expandedParams[1],
-      query: queryPart
-    }
+      query: queryPart,
+    };
   }
 
-  private _evaluateHLQueryPart (transaction: X12Transaction, hlPath: string): X12Segment[] {
-    let qualified = false
+  private _evaluateHLQueryPart(
+    transaction: X12Transaction,
+    hlPath: string,
+  ): X12Segment[] {
+    let qualified = false;
     const pathParts = hlPath
-      .replace('-', '')
-      .split('+')
+      .replace("-", "")
+      .split("+")
       .filter((value) => {
-        return value !== 'HL' && value !== '' && value !== null
-      })
-    const matches = new Array<X12Segment>()
+        return value !== "HL" && value !== "" && value !== null;
+      });
+    const matches = new Array<X12Segment>();
 
-    let lastParentIndex = -1
+    let lastParentIndex = -1;
 
     for (let i = 0, j = 0; i < transaction.segments.length; i++) {
-      const segment = transaction.segments[i]
+      const segment = transaction.segments[i];
 
-      if (qualified && segment.tag === 'HL') {
-        const parentIndex = parseInt(segment.valueOf(2, '-1') ?? '-1')
+      if (qualified && segment.tag === "HL") {
+        const parentIndex = parseInt(segment.valueOf(2, "-1") ?? "-1");
 
         if (parentIndex !== lastParentIndex) {
-          j = 0
-          qualified = false
+          j = 0;
+          qualified = false;
         }
       }
 
-      if (!qualified && transaction.segments[i].tag === 'HL' && transaction.segments[i].valueOf(3) === pathParts[j]) {
-        lastParentIndex = parseInt(segment.valueOf(2, '-1') ?? '-1')
-        j++
+      if (
+        !qualified && transaction.segments[i].tag === "HL" &&
+        transaction.segments[i].valueOf(3) === pathParts[j]
+      ) {
+        lastParentIndex = parseInt(segment.valueOf(2, "-1") ?? "-1");
+        j++;
 
         if (j === pathParts.length) {
-          qualified = true
+          qualified = true;
         }
       }
 
       if (qualified) {
-        matches.push(transaction.segments[i])
+        matches.push(transaction.segments[i]);
       }
     }
 
-    return matches
+    return matches;
   }
 
-  private _evaluateSegmentPathQueryPart (segments: X12Segment[], segmentPath: string): X12Segment[] {
-    let qualified = false
-    const pathParts = segmentPath.split('-').filter((value) => {
+  private _evaluateSegmentPathQueryPart(
+    segments: X12Segment[],
+    segmentPath: string,
+  ): X12Segment[] {
+    let qualified = false;
+    const pathParts = segmentPath.split("-").filter((value) => {
       // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-      return !!value
-    })
-    const matches = new Array<X12Segment>()
+      return !!value;
+    });
+    const matches = new Array<X12Segment>();
 
     for (let i = 0, j = 0; i < segments.length; i++) {
-      if (qualified && (segments[i].tag === 'HL' || pathParts.indexOf(segments[i].tag) > -1)) {
-        j = 0
-        qualified = false
+      if (
+        qualified &&
+        (segments[i].tag === "HL" || pathParts.indexOf(segments[i].tag) > -1)
+      ) {
+        j = 0;
+        qualified = false;
       }
 
       if (!qualified && segments[i].tag === pathParts[j]) {
-        j++
+        j++;
 
         if (j === pathParts.length) {
-          qualified = true
+          qualified = true;
         }
       }
 
       if (qualified) {
-        matches.push(segments[i])
+        matches.push(segments[i]);
       }
     }
 
-    return matches
+    return matches;
   }
 
-  private _evaluateElementReferenceQueryPart (
+  private _evaluateElementReferenceQueryPart(
     interchange: X12Interchange,
     functionalGroup: X12FunctionalGroup,
     transaction: X12Transaction,
     segments: X12Segment[],
     elementReference: string,
     qualifiers: string[],
-    defaultValue: string | null = null
+    defaultValue: string | null = null,
   ): X12QueryResult[] {
-    const reference = elementReference.replace(':', '')
-    const tag = reference.substr(0, reference.length - 2)
-    const pos = reference.substr(reference.length - 2, 2)
-    const posint = parseInt(pos)
+    const reference = elementReference.replace(":", "");
+    const tag = reference.substr(0, reference.length - 2);
+    const pos = reference.substr(reference.length - 2, 2);
+    const posint = parseInt(pos);
 
-    const results = new Array<X12QueryResult>()
+    const results = new Array<X12QueryResult>();
 
     for (const segment of segments) {
       if (segment === null || segment === undefined) {
-        continue
+        continue;
       }
 
       if (segment.tag !== tag) {
-        continue
+        continue;
       }
 
-      const value = segment.valueOf(posint, defaultValue ?? undefined)
+      const value = segment.valueOf(posint, defaultValue ?? undefined);
 
       if (this._testQualifiers(transaction, segment, qualifiers)) {
-        if ((typeof value !== 'undefined' && value !== null)) {
+        if ((typeof value !== "undefined" && value !== null)) {
           results.push(
-            new X12QueryResult(interchange, functionalGroup, transaction, segment, segment.elements[posint - 1], value)
-          )
-        } else if (this._mode === 'loose') {
+            new X12QueryResult(
+              interchange,
+              functionalGroup,
+              transaction,
+              segment,
+              segment.elements[posint - 1],
+              value,
+            ),
+          );
+        } else if (this._mode === "loose") {
           results.push(
-            new X12QueryResult(interchange, functionalGroup, transaction, segment, new X12Element(), undefined)
-          )
+            new X12QueryResult(
+              interchange,
+              functionalGroup,
+              transaction,
+              segment,
+              new X12Element(),
+              undefined,
+            ),
+          );
         }
       }
     }
 
-    return results
+    return results;
   }
 
-  private _testQualifiers (transaction: X12Transaction, segment: X12Segment, qualifiers: string[]): boolean {
+  private _testQualifiers(
+    transaction: X12Transaction,
+    segment: X12Segment,
+    qualifiers: string[],
+  ): boolean {
     if (qualifiers === undefined || qualifiers === null) {
-      return true
+      return true;
     }
 
     for (const qualifierValue of qualifiers) {
-      const qualifier = qualifierValue.substr(1)
-      const elementReference = qualifier.substring(0, qualifier.indexOf('['))
-      const elementValue = qualifier.substring(qualifier.indexOf('[') + 2, qualifier.lastIndexOf(']') - 1)
-      const tag = elementReference.substr(0, elementReference.length - 2)
-      const pos = elementReference.substr(elementReference.length - 2, 2)
-      const posint = parseInt(pos)
+      const qualifier = qualifierValue.substr(1);
+      const elementReference = qualifier.substring(0, qualifier.indexOf("["));
+      const elementValue = qualifier.substring(
+        qualifier.indexOf("[") + 2,
+        qualifier.lastIndexOf("]") - 1,
+      );
+      const tag = elementReference.substr(0, elementReference.length - 2);
+      const pos = elementReference.substr(elementReference.length - 2, 2);
+      const posint = parseInt(pos);
 
       for (let j = transaction.segments.indexOf(segment); j > -1; j--) {
-        const seg = transaction.segments[j]
-        const value = seg.valueOf(posint)
+        const seg = transaction.segments[j];
+        const value = seg.valueOf(posint);
 
-        if (seg.tag === tag && seg.tag === segment.tag && value !== elementValue) {
-          return false
+        if (
+          seg.tag === tag && seg.tag === segment.tag && value !== elementValue
+        ) {
+          return false;
         } else if (seg.tag === tag && value === elementValue) {
-          break
+          break;
         }
 
         if (j === 0) {
-          return false
+          return false;
         }
       }
     }
 
-    return true
+    return true;
   }
 }
 
@@ -332,28 +393,30 @@ export class X12QueryEngine {
  */
 
 export class X12QueryResult {
-  constructor (
+  constructor(
     interchange?: X12Interchange,
     functionalGroup?: X12FunctionalGroup,
     transaction?: X12Transaction,
     segment?: X12Segment,
     element?: X12Element,
-    value?: string
+    value?: string,
   ) {
-    this.interchange = interchange
-    this.functionalGroup = functionalGroup
-    this.transaction = transaction
-    this.segment = segment
-    this.element = element
-    this.value = value === null || value === undefined ? element?.value ?? null : value
-    this.values = new Array<string | string[]>()
+    this.interchange = interchange;
+    this.functionalGroup = functionalGroup;
+    this.transaction = transaction;
+    this.segment = segment;
+    this.element = element;
+    this.value = value === null || value === undefined
+      ? element?.value ?? null
+      : value;
+    this.values = new Array<string | string[]>();
   }
 
-  interchange?: X12Interchange
-  functionalGroup?: X12FunctionalGroup
-  transaction?: X12Transaction
-  segment?: X12Segment
-  element?: X12Element
-  value: string | null
-  values: Array<string | null | string[]>
+  interchange?: X12Interchange;
+  functionalGroup?: X12FunctionalGroup;
+  transaction?: X12Transaction;
+  segment?: X12Segment;
+  element?: X12Element;
+  value: string | null;
+  values: Array<string | null | string[]>;
 }

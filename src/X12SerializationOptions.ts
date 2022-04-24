@@ -1,7 +1,12 @@
-'use strict'
-import { X12SegmentHeader, GSSegmentHeader, ISASegmentHeader, STSegmentHeader } from './X12SegmentHeader.ts'
+"use strict";
+import {
+  GSSegmentHeader,
+  ISASegmentHeader,
+  STSegmentHeader,
+  X12SegmentHeader,
+} from "./X12SegmentHeader.ts";
 
-export type TxEngine = 'liquidjs' | 'internal'
+export type TxEngine = "liquidjs" | "internal";
 
 /**
  * @description Options for serializing to and from EDI.
@@ -19,32 +24,41 @@ export type TxEngine = 'liquidjs' | 'internal'
  * Class instance wrapper for serialization options.
  */
 export class X12SerializationOptions {
-  constructor (options: X12SerializationOptions = {}) {
-    this.elementDelimiter = options.elementDelimiter === undefined ? '*' : options.elementDelimiter
-    this.endOfLine = options.endOfLine === undefined ? '\n' : options.endOfLine
-    this.format = options.format === undefined ? false : options.format
-    this.segmentTerminator = options.segmentTerminator === undefined ? '~' : options.segmentTerminator
-    this.subElementDelimiter = options.subElementDelimiter === undefined ? '>' : options.subElementDelimiter
-    this.repetitionDelimiter = options.repetitionDelimiter === undefined ? '^' : options.repetitionDelimiter
-    this.segmentHeaders =
-      options.segmentHeaders === undefined
-        ? [GSSegmentHeader, ISASegmentHeader, STSegmentHeader]
-        : options.segmentHeaders
-    this.txEngine = options.txEngine === undefined ? 'internal' : options.txEngine
+  constructor(options: X12SerializationOptions = {}) {
+    this.elementDelimiter = options.elementDelimiter === undefined
+      ? "*"
+      : options.elementDelimiter;
+    this.endOfLine = options.endOfLine === undefined ? "\n" : options.endOfLine;
+    this.format = options.format === undefined ? false : options.format;
+    this.segmentTerminator = options.segmentTerminator === undefined
+      ? "~"
+      : options.segmentTerminator;
+    this.subElementDelimiter = options.subElementDelimiter === undefined
+      ? ">"
+      : options.subElementDelimiter;
+    this.repetitionDelimiter = options.repetitionDelimiter === undefined
+      ? "^"
+      : options.repetitionDelimiter;
+    this.segmentHeaders = options.segmentHeaders === undefined
+      ? [GSSegmentHeader, ISASegmentHeader, STSegmentHeader]
+      : options.segmentHeaders;
+    this.txEngine = options.txEngine === undefined
+      ? "internal"
+      : options.txEngine;
 
-    if (this.segmentTerminator === '\n') {
-      this.endOfLine = ''
+    if (this.segmentTerminator === "\n") {
+      this.endOfLine = "";
     }
   }
 
-  elementDelimiter?: string
-  endOfLine?: string
-  format?: boolean
-  segmentTerminator?: string
-  subElementDelimiter?: string
-  repetitionDelimiter?: string
-  segmentHeaders?: X12SegmentHeader[]
-  txEngine?: TxEngine
+  elementDelimiter?: string;
+  endOfLine?: string;
+  format?: boolean;
+  segmentTerminator?: string;
+  subElementDelimiter?: string;
+  repetitionDelimiter?: string;
+  segmentHeaders?: X12SegmentHeader[];
+  txEngine?: TxEngine;
 }
 
 /**
@@ -52,6 +66,8 @@ export class X12SerializationOptions {
  * @param {X12SerializationOptions} [options] - Options for serializing to and from EDI.
  * @returns {X12SerializationOptions} Serialization options with defaults filled in.
  */
-export function defaultSerializationOptions (options?: X12SerializationOptions): X12SerializationOptions {
-  return new X12SerializationOptions(options)
+export function defaultSerializationOptions(
+  options?: X12SerializationOptions,
+): X12SerializationOptions {
+  return new X12SerializationOptions(options);
 }

@@ -1,14 +1,23 @@
 ## JavaScript EDI Notation
 
-Node-X12 defines a simplified hierarchical object model for EDI objects called **JavaScript EDI Notation**. This object model is used for generating valid EDI in the `X12Generator` class, and for calling `JSON.stringify` on members of the X12 object model. The major difference is that the X12 object model is a **complete** description of an EDI file, while this notation only retains the data necessary to exchange EDI to and from JSON.
+Node-X12 defines a simplified hierarchical object model for EDI objects called
+**JavaScript EDI Notation**. This object model is used for generating valid EDI
+in the `X12Generator` class, and for calling `JSON.stringify` on members of the
+X12 object model. The major difference is that the X12 object model is a
+**complete** description of an EDI file, while this notation only retains the
+data necessary to exchange EDI to and from JSON.
 
-A complete interface for this notation can be found at [src/JSEDINotation.ts](/src/JSEDINotation.ts).
+A complete interface for this notation can be found at
+[src/JSEDINotation.ts](/src/JSEDINotation.ts).
 
 ### Format
 
-Each level in the hierarchy has two properties. A container object will have two array properties. At the bottom level of the hierarchy are the segments of a transaction set; these segments have a tag and a string array.
+Each level in the hierarchy has two properties. A container object will have two
+array properties. At the bottom level of the hierarchy are the segments of a
+transaction set; these segments have a tag and a string array.
 
-The top level of the hierarchy also optionally allows to define the control characters.
+The top level of the hierarchy also optionally allows to define the control
+characters.
 
 ### Hierarchy
 
@@ -36,7 +45,8 @@ The hierarchy of JavaScript EDI Notation closely follows the X12 object model.
 
 ### ASC X12 Headers and Trailers
 
-The following ASC X12 headers are interpreted to and from headers in the hierarchy. Trailers are dynamically generated based on properties of the level.
+The following ASC X12 headers are interpreted to and from headers in the
+hierarchy. Trailers are dynamically generated based on properties of the level.
 
 - ISA: Root level
 - GS: FunctionalGroup level
@@ -75,7 +85,16 @@ A sample 856 generated from test [document](/test/test-data/856.edi).
   },
   "functionalGroups": [
     {
-      "header": ["SH", "4405197800", "999999999", "20111206", "1045", "49", "X", "004060"],
+      "header": [
+        "SH",
+        "4405197800",
+        "999999999",
+        "20111206",
+        "1045",
+        "49",
+        "X",
+        "004060"
+      ],
       "transactions": [
         {
           "header": ["856", "0008"],

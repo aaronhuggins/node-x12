@@ -1,12 +1,15 @@
 // deno-lint-ignore-file ban-types no-explicit-any
-'use strict'
+"use strict";
 
-import { JSEDISegment } from './JSEDINotation.ts'
-import { Range } from './Positioning.ts'
-import { X12Element } from './X12Element.ts'
-import { defaultSerializationOptions, X12SerializationOptions } from './X12SerializationOptions.ts'
-import { ISASegmentHeader } from './X12SegmentHeader.ts'
-import { GeneratorError } from './Errors.ts'
+import { JSEDISegment } from "./JSEDINotation.ts";
+import { Range } from "./Positioning.ts";
+import { X12Element } from "./X12Element.ts";
+import {
+  defaultSerializationOptions,
+  X12SerializationOptions,
+} from "./X12SerializationOptions.ts";
+import { ISASegmentHeader } from "./X12SegmentHeader.ts";
+import { GeneratorError } from "./Errors.ts";
 
 export class X12Segment {
   /**
@@ -14,24 +17,24 @@ export class X12Segment {
    * @param {string} tag - The tag for this segment.
    * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    */
-  constructor (tag: string = '', options?: X12SerializationOptions) {
-    this.tag = tag
-    this.elements = new Array<X12Element>()
-    this.range = new Range()
-    this.options = defaultSerializationOptions(options)
+  constructor(tag: string = "", options?: X12SerializationOptions) {
+    this.tag = tag;
+    this.elements = new Array<X12Element>();
+    this.range = new Range();
+    this.options = defaultSerializationOptions(options);
   }
 
-  tag: string
-  elements: X12Element[]
-  range: Range
-  options: X12SerializationOptions
+  tag: string;
+  elements: X12Element[];
+  range: Range;
+  options: X12SerializationOptions;
 
   /**
    * @description Set the tag name for the segment if not provided when constructed.
    * @param {string} tag - The tag for this segment.
    */
-  setTag (tag: string): void {
-    this.tag = tag
+  setTag(tag: string): void {
+    this.tag = tag;
   }
 
   /**
@@ -39,14 +42,14 @@ export class X12Segment {
    * @param {string[]} values - An array of element values.
    * @returns {X12Segment} The current instance of X12Segment.
    */
-  setElements (values: string[]): X12Segment {
-    this._formatValues(values)
-    this.elements = new Array<X12Element>()
-    values.forEach(value => {
-      this.elements.push(new X12Element(value))
-    })
+  setElements(values: string[]): X12Segment {
+    this._formatValues(values);
+    this.elements = new Array<X12Element>();
+    values.forEach((value) => {
+      this.elements.push(new X12Element(value));
+    });
 
-    return this
+    return this;
   }
 
   /**
@@ -54,12 +57,12 @@ export class X12Segment {
    * @param {string} value - A string value.
    * @returns {X12Element} The element that was added to this segment.
    */
-  addElement (value = ''): X12Element {
-    const element = new X12Element(value)
+  addElement(value = ""): X12Element {
+    const element = new X12Element(value);
 
-    this.elements.push(element)
+    this.elements.push(element);
 
-    return element
+    return element;
   }
 
   /**
@@ -68,16 +71,16 @@ export class X12Segment {
    * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
    * @returns {X12Element} The new element if successful, or a null if failed.
    */
-  replaceElement (value: string, segmentPosition: number): X12Element | null {
-    const index = segmentPosition - 1
+  replaceElement(value: string, segmentPosition: number): X12Element | null {
+    const index = segmentPosition - 1;
 
     if (this.elements.length <= index) {
-      return null
+      return null;
     } else {
-      this.elements[index] = new X12Element(value)
+      this.elements[index] = new X12Element(value);
     }
 
-    return this.elements[index]
+    return this.elements[index];
   }
 
   /**
@@ -86,14 +89,14 @@ export class X12Segment {
    * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
    * @returns {boolean} True if successful, or false if failed.
    */
-  insertElement (value = '', segmentPosition = 1): boolean {
-    const index = segmentPosition - 1
+  insertElement(value = "", segmentPosition = 1): boolean {
+    const index = segmentPosition - 1;
 
     if (this.elements.length <= index) {
-      return false
+      return false;
     }
 
-    return this.elements.splice(index, 0, new X12Element(value)).length === 1
+    return this.elements.splice(index, 0, new X12Element(value)).length === 1;
   }
 
   /**
@@ -101,14 +104,14 @@ export class X12Segment {
    * @param {number} segmentPosition - A 1-based number indicating the position in the segment.
    * @returns {boolean} True if successful.
    */
-  removeElement (segmentPosition: number): boolean {
-    const index = segmentPosition - 1
+  removeElement(segmentPosition: number): boolean {
+    const index = segmentPosition - 1;
 
     if (this.elements.length <= index) {
-      return false
+      return false;
     }
 
-    return this.elements.splice(index, 1).length === 1
+    return this.elements.splice(index, 1).length === 1;
   }
 
   /**
@@ -117,18 +120,16 @@ export class X12Segment {
    * @param {string} [defaultValue] - A default value to return if there is no element found.
    * @returns {string} If no element is at this position, null or the default value will be returned.
    */
-  valueOf (segmentPosition: number, defaultValue?: string): string | null {
-    const index = segmentPosition - 1
+  valueOf(segmentPosition: number, defaultValue?: string): string | null {
+    const index = segmentPosition - 1;
 
     if (this.elements.length <= index) {
-      return defaultValue === undefined ? null : defaultValue
+      return defaultValue === undefined ? null : defaultValue;
     }
 
     return this.elements[index].value === undefined
-      ? defaultValue === undefined
-        ? null
-        : defaultValue
-      : this.elements[index].value
+      ? defaultValue === undefined ? null : defaultValue
+      : this.elements[index].value;
   }
 
   /**
@@ -136,34 +137,40 @@ export class X12Segment {
    * @param {X12SerializationOptions} [options] - Options for serializing back to EDI.
    * @returns {string} This segment converted to an EDI string.
    */
-  toString (options?: X12SerializationOptions): string {
-    options = options !== undefined ? defaultSerializationOptions(options) : this.options
+  toString(options?: X12SerializationOptions): string {
+    options = options !== undefined
+      ? defaultSerializationOptions(options)
+      : this.options;
 
-    let edi = this.tag
+    let edi = this.tag;
 
     for (let i = 0; i < this.elements.length; i++) {
-      edi += options.elementDelimiter
-      if ((this.tag === 'ISA' && i === 12) || (this.tag === 'IEA' && i === 1)) {
-        edi += String.prototype.padStart.call(this.elements[i].value, 9, '0') as string
+      edi += options.elementDelimiter;
+      if ((this.tag === "ISA" && i === 12) || (this.tag === "IEA" && i === 1)) {
+        edi += String.prototype.padStart.call(
+          this.elements[i].value,
+          9,
+          "0",
+        ) as string;
       } else {
-        edi += this.elements[i].value
+        edi += this.elements[i].value;
       }
     }
 
-    edi += options.segmentTerminator
+    edi += options.segmentTerminator;
 
-    return edi
+    return edi;
   }
 
   /**
    * @description Serialize transaction set to JSON object.
    * @returns {object} This segment converted to an object.
    */
-  toJSON (): object {
+  toJSON(): object {
     return new JSEDISegment(
       this.tag,
-      this.elements.map(x => x.value)
-    ) as object
+      this.elements.map((x) => x.value),
+    ) as object;
   }
 
   /**
@@ -171,12 +178,12 @@ export class X12Segment {
    * @description Check to see if segment is predefined.
    * @returns {boolean} True if segment is predefined.
    */
-  private _checkSupportedSegment (): boolean {
+  private _checkSupportedSegment(): boolean {
     return (
-      (this.options.segmentHeaders?.findIndex(sh => {
-        return sh.tag === this.tag
+      (this.options.segmentHeaders?.findIndex((sh) => {
+        return sh.tag === this.tag;
       }) ?? -1) > -1
-    )
+    );
   }
 
   /**
@@ -184,15 +191,17 @@ export class X12Segment {
    * @description Get the definition of this segment.
    * @returns {object} The definition of this segment.
    */
-  private _getX12Enumerable (): any {
-    const match = this.options.segmentHeaders?.find(sh => {
-      return sh.tag === this.tag
-    })
+  private _getX12Enumerable(): any {
+    const match = this.options.segmentHeaders?.find((sh) => {
+      return sh.tag === this.tag;
+    });
 
     if (match !== undefined) {
-      return match.layout
+      return match.layout;
     } else {
-      throw Error(`Unable to find segment header for tag '${this.tag}' even though it should be supported.`)
+      throw Error(
+        `Unable to find segment header for tag '${this.tag}' even though it should be supported.`,
+      );
     }
   }
 
@@ -201,51 +210,66 @@ export class X12Segment {
    * @description Format and validate the element values according the segment definition.
    * @param {string[]} values - An array of element values.
    */
-  private _formatValues (values: string[]): void {
+  private _formatValues(values: string[]): void {
     if (this._checkSupportedSegment()) {
-      const enumerable = this._getX12Enumerable()
+      const enumerable = this._getX12Enumerable();
 
-      if (this.tag === ISASegmentHeader.tag && (this.options as any).subElementDelimiter.length === 1) {
-        values[15] = (this.options as any).subElementDelimiter
+      if (
+        this.tag === ISASegmentHeader.tag &&
+        (this.options as any).subElementDelimiter.length === 1
+      ) {
+        values[15] = (this.options as any).subElementDelimiter;
       }
 
-      if (values.length === enumerable.COUNT || values.length === enumerable.COUNT_MIN) {
+      if (
+        values.length === enumerable.COUNT ||
+        values.length === enumerable.COUNT_MIN
+      ) {
         for (let i = 0; i < values.length; i++) {
-          const name = `${this.tag}${String.prototype.padStart.call(i + 1, 2, '0')}`
-          const max = enumerable[name]
-          const min = enumerable[`${name}_MIN`] === undefined ? 0 : enumerable[`${name}_MIN`]
+          const name = `${this.tag}${
+            String.prototype.padStart.call(i + 1, 2, "0")
+          }`;
+          const max = enumerable[name];
+          const min = enumerable[`${name}_MIN`] === undefined
+            ? 0
+            : enumerable[`${name}_MIN`];
 
-          values[i] = `${values[i]}`
+          values[i] = `${values[i]}`;
 
           if (values[i].length > max && values[i].length !== 0) {
             throw new GeneratorError(
-              `Segment element "${name}" with value of "${values[i]}" exceeds maximum of ${max} characters.`
-            )
+              `Segment element "${name}" with value of "${
+                values[i]
+              }" exceeds maximum of ${max} characters.`,
+            );
           }
 
           if (values[i].length < min && values[i].length !== 0) {
             throw new GeneratorError(
-              `Segment element "${name}" with value of "${values[i]}" does not meet minimum of ${min} characters.`
-            )
+              `Segment element "${name}" with value of "${
+                values[i]
+              }" does not meet minimum of ${min} characters.`,
+            );
           }
 
           if (
             (enumerable.PADDING as boolean) &&
-            ((values[i].length < max && values[i].length > min) || values[i].length === 0)
+            ((values[i].length < max && values[i].length > min) ||
+              values[i].length === 0)
           ) {
-            if (name === 'ISA13') {
-              values[i] = String.prototype.padStart.call(values[i], max, '0')
+            if (name === "ISA13") {
+              values[i] = String.prototype.padStart.call(values[i], max, "0");
             } else {
-              values[i] = String.prototype.padEnd.call(values[i], max, ' ')
+              values[i] = String.prototype.padEnd.call(values[i], max, " ");
             }
           }
         }
       } else {
         throw new GeneratorError(
-          typeof enumerable.COUNT_MIN === 'number'
+          typeof enumerable.COUNT_MIN === "number"
             ? `Segment "${this.tag}" with ${values.length} elements does not meet the required count of min ${enumerable.COUNT_MIN} or max ${enumerable.COUNT}.`
-            : `Segment "${this.tag}" with ${values.length} elements does not meet the required count of ${enumerable.COUNT}.`
-        )
+            : `Segment "${this.tag}" with ${values.length} elements does not meet the required count of ${enumerable.COUNT}.`,
+        );
       }
     }
   }

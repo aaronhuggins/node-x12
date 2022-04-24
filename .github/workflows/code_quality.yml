@@ -6,7 +6,7 @@ on:
     paths:
       - 'src/**/*.ts'
       - 'mod.ts'
-      - 'polyfill.ts'
+      - 'deps.ts'
   pull_request_target:
     types:
       - opened

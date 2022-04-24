@@ -1,0 +1,14 @@
+{
+  "tasks": {
+    // Allows shorthand test command with permissions baked in.
+    "test": "deno test --unstable --allow-read --coverage=coverage",
+    "lcov": "deno coverage coverage --lcov --output=coverage/report.lcov",
+    "cover": "deno task clean && deno task test && deno task lcov && genhtml -o coverage/html coverage/report.lcov",
+    // Command to build for npm.
+    "build": "deno run -A scripts/build_npm.ts",
+    // Command to publish to npm repository.
+    "publish": "cd ./npm && npm publish",
+    // Clean up the npm dir arbitrarily.
+    "clean": "rm -rf ./npm ./coverage"
+  }
+}

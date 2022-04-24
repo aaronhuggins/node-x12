@@ -18,6 +18,8 @@ An ASC X12 parser, generator, query engine, and mapper written for NodeJS. Parsi
 
 Simply import into your runtime: [Deno](https://deno.land/x/x12), browser, [Node ESM, or Node CommonJS](https://www.npmjs.com/package/node-x12). Browser imports can be handled via your favorite bundler, or using Skypack CDN.
 
+For NPM: `npm i node-x12`
+
 ## Features
 
 Contributions by TrueCommerce up to April 2016:

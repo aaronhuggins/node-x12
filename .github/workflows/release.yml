@@ -1,0 +1,90 @@
+name: Cut release
+on:
+  pull_request_target:
+    branches:
+      - prerelease
+      - release
+    types:
+      - closed
+env:
+  VERSION_FLAG: ''
+  VERSION_NUM: ''
+  VERSION_TAG: latest
+jobs:
+  release:
+    if: github.event.pull_request.merged
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Setup Node (required for dnt)
+        uses: actions/setup-node@v3
+        with:
+         node-version: '17.x'
+         registry-url: 'https://registry.npmjs.org'
+      - name: Check major version
+        if: contains(github.event.pull_request.labels.*.name, 'version_major')
+        run: |
+          echo "VERSION_FLAG=major" >> $GITHUB_ENV
+      - name: Check minor version
+        if: contains(github.event.pull_request.labels.*.name, 'version_minor')
+        run: |
+          echo "VERSION_FLAG=minor" >> $GITHUB_ENV
+      - name: Check patch version
+        if: contains(github.event.pull_request.labels.*.name, 'version_patch')
+        run: |
+          echo "VERSION_FLAG=patch" >> $GITHUB_ENV
+      - name: Check premajor version
+        if: contains(github.event.pull_request.labels.*.name, 'version_premajor')
+        run: |
+          echo "VERSION_FLAG=premajor" >> $GITHUB_ENV
+      - name: Check preminor version
+        if: contains(github.event.pull_request.labels.*.name, 'version_preminor')
+        run: |
+          echo "VERSION_FLAG=preminor" >> $GITHUB_ENV
+      - name: Check prepatch version
+        if: contains(github.event.pull_request.labels.*.name, 'version_prepatch')
+        run: |
+          echo "VERSION_FLAG=prepatch" >> $GITHUB_ENV
+      - name: Check prerelease version
+        if: contains(github.event.pull_request.labels.*.name, 'version_prerelease')
+        run: |
+          echo "VERSION_FLAG=prerelease" >> $GITHUB_ENV
+      - name: Build for NPM using dnt
+        if: env.VERSION_FLAG != ''
+        run: |
+          deno task build -- --${{ env.VERSION_FLAG }}
+          echo "VERSION_NUM=$(cat .version)" >> $GITHUB_ENV
+      - name: Setup NPM tag
+        if: env.VERSION_FLAG == 'premajor' || env.VERSION_FLAG == 'preminor' || env.VERSION_FLAG == 'prepatch' || env.VERSION_FLAG == 'prerelease'
+        run: |
+          echo "VERSION_TAG=prerelease" >> $GITHUB_ENV
+      - name: Add NPMRC file
+        if: env.VERSION_FLAG != '' && env.VERSION_NUM != ''
+        run: |
+          echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ./npm/.npmrc
+      - name: Publish code to NPM
+        if: env.VERSION_FLAG != '' && env.VERSION_NUM != ''
+        run: |
+          cd ./npm
+          npm publish --tag=${{ env.VERSION_TAG }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Commit new version number to ${{ github.event.pull_request.base.ref }}
+        if: env.VERSION_FLAG != '' && env.VERSION_NUM != ''
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.event.pull_request.base.ref }}
+          tagging_message: ${{ env.VERSION_NUM }}
+      - name: Merge branch ${{ github.event.pull_request.base.ref }} into main
+        if: env.VERSION_FLAG != '' && env.VERSION_NUM != ''
+        uses: devmasx/merge-branch@1.4.0
+        with:
+          type: now
+          from_branch: ${{ github.event.pull_request.base.ref }}
+          target_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}

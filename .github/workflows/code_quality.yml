@@ -1,0 +1,43 @@
+name: Run Code Quality
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**/*.ts'
+      - 'mod.ts'
+      - 'polyfill.ts'
+  pull_request_target:
+    types:
+      - opened
+      - ready_for_review
+    branches:
+      - main
+      - prerelease
+      - release
+jobs:
+  cover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout codebase
+        uses: actions/checkout@v3
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - name: Setup Node (required for SonarCloud)
+        uses: actions/setup-node@v3
+        with:
+         node-version: '17.x'
+         registry-url: 'https://registry.npmjs.org'
+      - name: Setup LCOV
+        run: sudo apt install -y lcov
+      - name: Run tests and coverage
+        run: deno task cover
+      - name: Fix LCOV output for SonarCloud
+        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage/report.lcov
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

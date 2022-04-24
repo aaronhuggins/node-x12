@@ -116,7 +116,7 @@ export class X12TransactionMap {
     map = map === undefined ? this._map : map
 
     const clone = JSON.parse(JSON.stringify(map))
-    const clones: object[] = []
+    let clones: any = null
     const engine = new X12QueryEngine(false, this._mode)
     const interchange = new X12Interchange()
     interchange.setHeader([
@@ -193,6 +193,11 @@ export class X12TransactionMap {
                 clones.forEach((cloned: any) => {
                   cloned[key as unknown as number] = this.helper(key, result.value, map[key], callback)
                 })
+              } else {
+                if (!Array.isArray(clones)) {
+                  clones = []
+                }
+
                 result.values.forEach((value, index) => {
                   if (clones[index] === undefined) {
                     clones[index] = JSON.parse(JSON.stringify(clone))

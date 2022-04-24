@@ -10,7 +10,7 @@ import {
   X12Segment,
   errorLookup,
   X12ValidationErrorCode
-} from '../core.ts'
+} from '../mod.ts'
 import {
   X12GroupRule,
   X12InterchangeRule,

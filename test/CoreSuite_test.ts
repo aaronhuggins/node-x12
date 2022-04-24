@@ -3,7 +3,7 @@
 import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
 import { ArgumentNullError, GeneratorError, ParserError, QuerySyntaxError } from '../src/Errors.ts'
 import { X12Diagnostic } from '../src/X12Diagnostic.ts'
-import * as core from '../core.ts'
+import * as core from '../mod.ts'
 
 describe('X12Core', () => {
   it('should export members', () => {

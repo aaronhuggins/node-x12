@@ -1,7 +1,7 @@
 'use strict'
 
 import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
-import { JSEDINotation, X12Generator, X12Parser, ISASegmentHeader, GSSegmentHeader, X12Interchange } from '../core.ts'
+import { JSEDINotation, X12Generator, X12Parser, ISASegmentHeader, GSSegmentHeader, X12Interchange } from '../mod.ts'
 
 describe('X12Generator', () => {
   it('should create X12Generator', () => {

@@ -2,7 +2,7 @@
 
 import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
 import { X12FatInterchange } from '../src/X12FatInterchange.ts'
-import { X12Interchange, X12Parser, X12SerializationOptions } from '../core.ts'
+import { X12Interchange, X12Parser, X12SerializationOptions } from '../mod.ts'
 
 describe('X12Formatting', () => {
   it('should replicate the source data unless changes are made', () => {

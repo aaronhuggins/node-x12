@@ -1,7 +1,7 @@
 'use strict'
 
 import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
-import { X12Parser, X12QueryEngine } from '../core.ts'
+import { X12Parser, X12QueryEngine } from '../mod.ts'
 
 describe('X12QueryEngine', () => {
   it('should handle basic element references', () => {

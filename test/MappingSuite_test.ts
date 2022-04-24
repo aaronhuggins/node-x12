@@ -2,7 +2,7 @@
 'use strict'
 
 import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
-import { X12Parser, X12Transaction, X12TransactionMap, X12Interchange } from '../core.ts'
+import { X12Parser, X12Transaction, X12TransactionMap, X12Interchange } from '../mod.ts'
 import * as assert from "https://deno.land/std@0.133.0/node/assert.ts";
 
 const edi = Deno.readTextFileSync('test/test-data/850.edi')

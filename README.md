@@ -36,7 +36,7 @@ The TypeScript code is compiled to JavaScript and distributed via NPM. If you wi
 Then import it in your project:
 
 ```typescript
-import { X12Parser } from './node-x12/core.ts'
+import { X12Parser } from './node-x12/mod.ts'
 ```
 
 ## Features

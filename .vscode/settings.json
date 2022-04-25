@@ -6,5 +6,19 @@
     "**/*.js": {
       "when": "$(basename).ts"
     }
+  },
+  "editor.tabSize": 2,
+  "deno.enable": true,
+  "deno.codeLens.test": true,
+  "deno.codeLens.testArgs": [
+    "--allow-all"
+  ],
+  "deno.lint": true,
+  "deno.suggest.autoImports": true,
+  "deno.suggest.imports.autoDiscover": true,
+  "deno.suggest.paths": true,
+  "deno.unstable": true,
+  "deno.suggest.imports.hosts": {
+    "https://deno.land": true
   }
 }

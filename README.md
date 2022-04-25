@@ -1,8 +1,8 @@
 # Node-X12
 
-An ASC X12 parser, generator, query engine, and mapper written for NodeJS.
-Parsing supports reading from streams to conserve resources in memory-intensive
-operations.
+An ASC X12 parser, generator, query engine, and mapper written for NodeJS and
+Deno. Parsing supports reading from Node streams to conserve resources in
+memory-intensive operations.
 
 [![Denoland/X Module](https://shield.deno.dev/x/x12)](https://deno.land/x/x12)
 [![npm version](https://badge.fury.io/js/node-x12.svg)](https://badge.fury.io/js/node-x12)

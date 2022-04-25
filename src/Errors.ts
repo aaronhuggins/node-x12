@@ -1,37 +1,37 @@
-'use strict'
+"use strict";
 
 export class ArgumentNullError extends Error {
-  constructor (argumentName: string) {
-    super(`The argument, '${argumentName}', cannot be null.`)
-    this.name = 'ArgumentNullError'
+  constructor(argumentName: string) {
+    super(`The argument, '${argumentName}', cannot be null.`);
+    this.name = "ArgumentNullError";
   }
 
-  name: string
+  name: string;
 }
 
 export class GeneratorError extends Error {
-  constructor (message?: string) {
-    super(message)
-    this.name = 'GeneratorError'
+  constructor(message?: string) {
+    super(message);
+    this.name = "GeneratorError";
   }
 
-  name: string
+  name: string;
 }
 
 export class ParserError extends Error {
-  constructor (message?: string) {
-    super(message)
-    this.name = 'ParserError'
+  constructor(message?: string) {
+    super(message);
+    this.name = "ParserError";
   }
 
-  name: string
+  name: string;
 }
 
 export class QuerySyntaxError extends Error {
-  constructor (message?: string) {
-    super(message)
-    this.name = 'QuerySyntaxError'
+  constructor(message?: string) {
+    super(message);
+    this.name = "QuerySyntaxError";
   }
 
-  name: string
+  name: string;
 }

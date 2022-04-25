@@ -1,9 +1,21 @@
 {
   "header": ["940", "{{ macro | random }}"],
   "segments": [
-    { "tag": "W05", "elements": ["N", "{{ input.internalOrderId }}", "{{ input.orderId }}"] },
-    { "tag": "N1", "elements": ["ST", "{{ input.shippingFirstName }} {{ input.shippingLastName }}"] },
-    { "tag": "N3", "elements": ["{{ input.shippingStreet1 }}", "{{ input.shippingStreet2 }}"] },
+    {
+      "tag": "W05",
+      "elements": ["N", "{{ input.internalOrderId }}", "{{ input.orderId }}"]
+    },
+    {
+      "tag": "N1",
+      "elements": [
+        "ST",
+        "{{ input.shippingFirstName }} {{ input.shippingLastName }}"
+      ]
+    },
+    {
+      "tag": "N3",
+      "elements": ["{{ input.shippingStreet1 }}", "{{ input.shippingStreet2 }}"]
+    },
     {
       "tag": "N4",
       "elements": [
@@ -22,7 +34,10 @@
     { "tag": "N9", "elements": ["12", "987654321"] },
     { "tag": "N9", "elements": ["23", "12345"] },
     { "tag": "G62", "elements": ["37", "{{ macro | edi_date }}"] },
-    { "tag": "W66", "elements": ["PP", "M", "", "", "GR", "", "", "", "", "UPSN"] },
+    {
+      "tag": "W66",
+      "elements": ["PP", "M", "", "", "GR", "", "", "", "", "UPSN"]
+    },
     {
       "tag": "LX",
       "elements": ["{{ 'LX' | sequence }}"],
@@ -41,7 +56,9 @@
     },
     {
       "tag": "G69",
-      "elements": ["{{ input.orderItems | json_parse | map: 'title' | truncate: 45 | in_loop }}"],
+      "elements": [
+        "{{ input.orderItems | json_parse | map: 'title' | truncate: 45 | in_loop }}"
+      ],
       "loopEnd": true
     },
     {

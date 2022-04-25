@@ -90,6 +90,25 @@ await build({
 });
 
 // post build steps
+class Appender {
+  encoder = new TextEncoder();
+  file: Promise<Deno.FsFile>;
+  constructor(file: string) {
+    this.file = Deno.open(file, { append: true });
+  }
+  async write(line: string) {
+    (await this.file).write(this.encoder.encode(line + "\n"));
+  }
+  async close() {
+    (await this.file).close();
+  }
+}
+
+const npmignore = new Appender("npm/.npmignore");
+await npmignore.write("esm/test/test-data/**");
+await npmignore.write("script/test/test-data/**");
+await npmignore.close();
+
 await Deno.copyFile("LICENSE.md", "npm/LICENSE.md");
 await Deno.copyFile("README.md", "npm/README.md");
 

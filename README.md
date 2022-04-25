@@ -16,6 +16,7 @@ operations.
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=aaronhuggins_node-x12&metric=alert_status)](https://sonarcloud.io/dashboard?id=aaronhuggins_node-x12)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=aaronhuggins_node-x12&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=aaronhuggins_node-x12)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=aaronhuggins_node-x12&metric=security_rating)](https://sonarcloud.io/dashboard?id=aaronhuggins_node-x12)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=aaronhuggins_node-x12&metric=coverage)](https://sonarcloud.io/summary/new_code?id=aaronhuggins_node-x12)
 
 ## Installing
 

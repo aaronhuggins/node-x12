@@ -1,6 +1,6 @@
 "use strict";
 
-import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
+import { describe, it } from "https://deno.land/std@0.136.0/testing/bdd.ts";
 import { X12Parser, X12QueryEngine } from "../mod.ts";
 
 describe("X12QueryEngine", () => {

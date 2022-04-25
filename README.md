@@ -5,16 +5,17 @@ Parsing supports reading from streams to conserve resources in memory-intensive
 operations.
 
 [![Denoland/X Module](https://shield.deno.dev/x/x12)](https://deno.land/x/x12)
-![GitHub last commit](https://img.shields.io/github/last-commit/aaronhuggins/node-x12)
-![GitHub contributors](https://img.shields.io/github/contributors/aaronhuggins/node-x12)
-![npm collaborators](https://img.shields.io/npm/collaborators/node-x12)<br />
-![GitHub top language](https://img.shields.io/github/languages/top/aaronhuggins/node-x12)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/aaronhuggins/node-x12)
-![npm](https://img.shields.io/npm/dw/node-x12)
-![NPM](https://img.shields.io/npm/l/node-x12)<br />
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=alert_status)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
-[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=ahuggins-nhs_node-x12&metric=security_rating)](https://sonarcloud.io/dashboard?id=ahuggins-nhs_node-x12)
+[![npm version](https://badge.fury.io/js/node-x12.svg)](https://badge.fury.io/js/node-x12)
+[![GitHub last commit](https://img.shields.io/github/last-commit/aaronhuggins/node-x12)]()
+[![GitHub contributors](https://img.shields.io/github/contributors/aaronhuggins/node-x12)]()<br />
+[![npm collaborators](https://img.shields.io/npm/collaborators/node-x12)]()
+[![GitHub top language](https://img.shields.io/github/languages/top/aaronhuggins/node-x12)]()
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/aaronhuggins/node-x12)]()
+[![npm](https://img.shields.io/npm/dw/node-x12)]()
+[![NPM](https://img.shields.io/npm/l/node-x12)]()<br />
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=aaronhuggins_node-x12&metric=alert_status)](https://sonarcloud.io/dashboard?id=aaronhuggins_node-x12)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=aaronhuggins_node-x12&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=aaronhuggins_node-x12)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=aaronhuggins_node-x12&metric=security_rating)](https://sonarcloud.io/dashboard?id=aaronhuggins_node-x12)
 
 ## Installing
 

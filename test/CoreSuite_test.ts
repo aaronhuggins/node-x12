@@ -1,6 +1,6 @@
 "use strict";
 
-import "https://raw.githubusercontent.com/aaronhuggins/deno_mocha/e6c179156821c626354a8c792518958625078a82/global_mocha.ts";
+import { describe, it } from "https://deno.land/x/deno_mocha@0.3.0/mod.ts"
 import {
   ArgumentNullError,
   GeneratorError,
